@@ -1,0 +1,83 @@
+<content>
+
+	<!-- Textual description Content -->
+	<collection>collection1</collection>
+	<collectionURL>url1</collectionURL>
+	<hasBaseTitle>true</hasBaseTitle>
+	<baseTitle>basetitle</baseTitle>
+	<abstractText>abstract</abstractText>
+	<purpose>purpose</purpose>
+	<methodology>methodology</methodology>
+	<supplementaryInfo>suppInfo</supplementaryInfo>
+	<license>license</license>
+	<disclaimer>disclaimer</disclaimer>
+	
+	<!-- List of Thesaurus -->
+	<thesaurusList>
+		<thesaurus>
+			<name>General</name>
+			<keywords>
+				<string>keyword1</string>
+				<string>keyword2</string>
+			</keywords>
+		</thesaurus>
+		<thesaurus>
+			<name>INSPIRE</name>
+			<keywords>
+				<string>theme1</string>
+				<string>theme2</string>
+			</keywords>
+		</thesaurus>
+	</thesaurusList>
+	
+	<!-- Topic Categories -->
+	<!-- See  http://gcmd.nasa.gov/add/difguide/iso_topics.html -->
+	<topicCategories>
+		<string>BOUNDARIES</string>
+		<string>OCEAN</string>
+		<string>BIOTA</string>
+	</topicCategories>
+	
+	<!-- Contacts -->
+	<organizationContact>
+		<acronym>ORG</acronym>
+		<name>ORGANIZATION</name>
+		<organizationName>ORGANIZATION</organizationName>
+		<url>http://www.organization.org</url>
+		<address>address</address>
+		<city>TheCity</city>
+		<postalCode>78</postalCode>
+		<country>TheCountry</country>
+	</organizationContact>
+	<individualContacts>
+		<contact>
+			<name>ORGANIZATION</name>
+			<url>http://www.organization.org</url>
+			<address>address</address>
+			<city>TheCity</city>
+			<postalCode>78</postalCode>
+			<country>TheCountry</country>
+			<mainEmail>someone@organization.org</mainEmail>
+			<mainPhone>999</mainPhone>
+			<fax>777</fax>
+			<individualName>Some One</individualName>
+			<organizationName>ORGANIZATION</organizationName>
+			<positionName>His Position</positionName>
+		</contact>
+		<contact>
+			<name>ORGANIZATION</name>
+			<url>http://www.organization.org</url>
+			<address>address</address>
+			<city>TheCity</city>
+			<postalCode>78</postalCode>
+			<country>TheCountry</country>
+			<mainEmail>someone2@organization.org</mainEmail>
+			<mainPhone>999-2</mainPhone>
+			<fax>777-2</fax>
+			<individualName>Some One2</individualName>
+			<organizationName>ORGANIZATION</organizationName>
+			<positionName>His Position2</positionName>
+		</contact>
+	</individualContacts>
+	
+</content>

@@ -1,0 +1,143 @@
+<configuration>
+
+	<!-- ============= -->
+	<!--    SETTINGS   -->
+	<!-- ============= -->
+	<settings>
+		<!-- Geographic Server settings -->
+		<geographicServerSettings>
+			<url>http://www.organization.org/geoserver</url> 	<!-- Geographic server base url -->
+			<user>user</user>									<!-- Geographic server User -->
+			<password>pwd</password>							<!-- Geographic server password -->
+			<sourceWorkspace>sourceWS</sourceWorkspace>			<!-- workspace where to find the GIS source data collection layer -->
+			<sourceLayer>layer</sourceLayer>					<!-- GIS data collection layer name -->
+			<sourceAttribute>att</sourceAttribute>				<!-- attribute name on which to build the filter -->
+			<targetWorkspace>targetWS</targetWorkspace>			<!-- target workspace where to publish the single GIS layers -->
+			<targetDatastore>targetDS</targetDatastore>			<!-- target datastore where to publish the single GIS layers -->
+			<targetLayerPrefix>someprefix</targetLayerPrefix>	<!-- some prefix to use for the target layer names -->
+			<baseLayerWorkspace>baselayerWS</baseLayerWorkspace><!-- workspace of the baselayer to use as graphic overview background -->
+			<baseLayerName>baselayerName</baseLayerName>		<!-- name of the baselayer to use as graphic overview background -->
+			<method>SHAPEFILE</method>							<!-- the method to publish the resource (if SHAPEFILE, all "source" settings will be ignored)-->
+			<shapefileURL>someURL</shapefileURL>				<!-- the url where to find the shapefile -->			
+		</geographicServerSettings>
+
+		<!-- Metadata catalogue settings -->
+		<metadataCatalogueSettings>								
+			<url>http://www.organization.org/catalogue</url>	<!-- Metadata catalogue base url-->
+			<user>user</user>									<!-- Metadata catalogue user-->
+			<password>pwd</password>							<!-- Metadata catalogue password-->
+		</metadataCatalogueSettings>
+
+		<!-- Publication settings -->
+		<publicationSettings>
+
+			<!-- actions -->
+			<action>PUBLISH</action>
+			<forceData>true</forceData>							<!-- force the data publication -->
+			<forceMetadata>true</forceMetadata>					<!-- force the metadata publication -->
+			<unpublishData>true</unpublishData>					<!-- unpublish data (if action == PUBLISH) -->
+			<unpublishMetadata>true</unpublishMetadata>			<!-- unpublish metadata (if action == PUBLISH) -->
+
+			<!-- reference list for batch process -->
+			<codelistURL>http://www.organization.org/codelist</codelistURL>
+
+			<!-- publication parameters -->
+			<collectionType>mycollection</collectionType>		<!-- reference collection name -->
+			<date>2013-10-31</date>								<!-- publication date -->
+			<version>1.0</version>								<!-- version -->
+			<buffer>2</buffer>									<!-- numeric buffer value (in degrees) to set a geographic buffer for map bounding box -->
+			<style>somestyle</style>							<!-- style to apply to the published layer -->
+			<test>true</test>									<!-- true will publish only one layer/metadata - TO USE INITIALLY to test the publication -->
+			<figis>true</figis>									<!-- if it is a FIGIS data collection -->
+
+		</publicationSettings>
+
+	</settings>
+	
+	<!-- ============= -->
+	<!--    CONTENT    -->
+	<!-- ============= -->
+	<content>
+
+		<!-- Textual description Content -->
+		<collection>collection1</collection>
+		<collectionURL>url1</collectionURL>
+		<hasBaseTitle>true</hasBaseTitle>
+		<baseTitle>basetitle</baseTitle>
+		<abstractText>abstract</abstractText>
+		<purpose>purpose</purpose>
+		<methodology>methodology</methodology>
+		<supplementaryInfo>suppInfo</supplementaryInfo>
+		<license>license</license>
+		<disclaimer>disclaimer</disclaimer>
+
+		<!-- List of Thesaurus -->
+		<thesaurusList>
+			<thesaurus>
+				<name>General</name>
+				<keywords>
+					<string>keyword1</string>
+					<string>keyword2</string>
+				</keywords>
+			</thesaurus>
+			<thesaurus>
+				<name>INSPIRE</name>
+				<keywords>
+					<string>theme1</string>
+					<string>theme2</string>
+				</keywords>
+			</thesaurus>
+		</thesaurusList>
+
+		<!-- Topic Categories -->
+		<!-- See http://gcmd.nasa.gov/add/difguide/iso_topics.html -->
+		<topicCategories>
+			<string>BOUNDARIES</string>
+			<string>OCEAN</string>
+			<string>BIOTA</string>
+		</topicCategories>
+
+		<!-- Contacts -->
+		<organizationContact>
+			<acronym>ORG</acronym>
+			<name>ORGANIZATION</name>
+			<organizationName>ORGANIZATION</organizationName>
+			<url>http://www.organization.org</url>
+			<address>address</address>
+			<city>TheCity</city>
+			<postalCode>78</postalCode>
+			<country>TheCountry</country>
+		</organizationContact>
+		<individualContacts>
+			<contact>
+				<name>ORGANIZATION</name>
+				<url>http://www.organization.org</url>
+				<address>address</address>
+				<city>TheCity</city>
+				<postalCode>78</postalCode>
+				<country>TheCountry</country>
+				<mainEmail>someone@organization.org</mainEmail>
+				<mainPhone>999</mainPhone>
+				<fax>777</fax>
+				<individualName>Some One</individualName>
+				<organizationName>ORGANIZATION</organizationName>
+				<positionName>His Position</positionName>
+			</contact>
+			<contact>
+				<name>ORGANIZATION</name>
+				<url>http://www.organization.org</url>
+				<address>address</address>
+				<city>TheCity</city>
+				<postalCode>78</postalCode>
+				<country>TheCountry</country>
+				<mainEmail>someone2@organization.org</mainEmail>
+				<mainPhone>999-2</mainPhone>
+				<fax>777-2</fax>
+				<individualName>Some One2</individualName>
+				<organizationName>ORGANIZATION</organizationName>
+				<positionName>His Position2</positionName>
+			</contact>
+		</individualContacts>
+
+	</content>
+</configuration>

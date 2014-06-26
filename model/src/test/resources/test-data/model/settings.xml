@@ -1,0 +1,50 @@
+<settings>
+	<!-- Geographic Server settings -->
+	<geographicServerSettings>
+		<url>http://www.organization.org/geoserver</url>
+		<user>user</user>
+		<password>pwd</password>
+		<sourceWorkspace>sourceWS</sourceWorkspace>
+		<sourceLayer>layer</sourceLayer>
+		<sourceAttribute>att</sourceAttribute>
+		<targetWorkspace>targetWS</targetWorkspace>
+		<targetDatastore>targetDS</targetDatastore>
+		<targetLayerPrefix>someprefix</targetLayerPrefix>
+		<baseLayerWorkspace>baselayerWS</baseLayerWorkspace>
+		<baseLayerName>baselayerName</baseLayerName>
+		<method>SHAPEFILE</method>
+		<shapefileURL>someURL</shapefileURL>
+	</geographicServerSettings>
+	
+	<!-- Metadata catalogue settings -->
+	<metadataCatalogueSettings>
+		<url>http://www.organization.org/catalogue</url>
+		<user>user</user>
+		<password>pwd</password>
+	</metadataCatalogueSettings>
+	
+	<!-- Publication settings -->
+	<publicationSettings>
+
+		<!-- actions -->
+		<action>PUBLISH</action>
+		<forceData>true</forceData>
+		<forceMetadata>true</forceMetadata>
+		<unpublishData>true</unpublishData>
+		<unpublishMetadata>true</unpublishMetadata>
+
+		<!-- reference list for batch process -->
+		<codelistURL>http://www.organization.org/codelist</codelistURL>
+
+		<!-- publication parameters -->
+		<collectionType>mycollection</collectionType>
+		<date>2013-10-31</date>
+		<version>1.0</version>
+		<buffer>2</buffer>
+		<style>somestyle</style>
+		<test>true</test>
+		<figis>true</figis>
+		
+	</publicationSettings>
+
+</settings>

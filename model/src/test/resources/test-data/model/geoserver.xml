@@ -1,0 +1,15 @@
+<GeographicServer>
+	<url>http://www.organization.org/geoserver</url>
+	<user>user</user>
+	<password>pwd</password>
+	<sourceWorkspace>sourceWS</sourceWorkspace>
+	<sourceLayer>layer</sourceLayer>
+	<sourceAttribute>att</sourceAttribute>
+	<targetWorkspace>targetWS</targetWorkspace>
+	<targetDatastore>targetDS</targetDatastore>
+	<targetLayerPrefix>someprefix</targetLayerPrefix>
+	<baseLayerWorkspace>baselayerWS</baseLayerWorkspace>
+	<baseLayerName>baselayerName</baseLayerName>
+	<method>SHAPEFILE</method>
+	<shapefileURL>someURL</shapefileURL>
+</GeographicServer>

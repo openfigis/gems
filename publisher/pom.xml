@@ -1,0 +1,47 @@
+<?xml version="1.0"?>
+<project
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
+	xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<artifactId>gems</artifactId>
+		<groupId>org.fao.fi</groupId>
+		<version>1.0-SNAPSHOT</version>
+	</parent>
+	
+	<groupId>org.fao.fi</groupId>
+	<artifactId>gems-publisher</artifactId>
+	
+	<name>GEMS data and metadata publisher</name>
+
+	<dependencies>
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-simple</artifactId>
+		</dependency>
+
+		<!-- Geoserver manager -->
+		<dependency>
+			<groupId>it.geosolutions</groupId>
+			<artifactId>geoserver-manager</artifactId>
+		</dependency>
+		<!-- Geonetwork manager -->
+		<dependency>
+			<groupId>it.geosolutions</groupId>
+			<artifactId>geonetwork-manager</artifactId>
+		</dependency>
+
+		<!-- GEMS modules -->
+		<dependency>
+			<groupId>org.fao.fi</groupId>
+			<artifactId>gems-main</artifactId>
+		</dependency>
+		
+		<!-- Junit -->
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<scope>test</scope>
+		</dependency>
+	</dependencies>
+</project>

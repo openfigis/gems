@@ -1,0 +1,22 @@
+<Publication>
+	
+	<!-- actions -->
+	<action>PUBLISH</action>
+	<forceData>true</forceData>
+	<forceMetadata>true</forceMetadata>
+	<unpublishData>true</unpublishData>
+	<unpublishMetadata>true</unpublishMetadata>
+	
+	<!-- reference list for batch process -->
+	<codelistURL>http://www.organization.org/codelist</codelistURL>
+	
+	<!-- publication parameters -->
+	<collectionType>mycollection</collectionType>
+	<date>2013-10-31</date>
+	<version>1.0</version>
+	<buffer>2</buffer>
+	<style>somestyle</style>
+	<test>true</test>
+	<figis>true</figis>
+	
+</Publication>
