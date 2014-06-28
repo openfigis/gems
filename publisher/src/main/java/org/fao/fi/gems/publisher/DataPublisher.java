@@ -209,7 +209,7 @@ public class DataPublisher {
 		fte.addMetadataLinkInfo(mde2);
 
 		// layer
-		final GSLayerEncoder layerEncoder = new GSLayerEncoder21();
+		final GSLayerEncoder layerEncoder = new GSLayerEncoder();
 		layerEncoder.setDefaultStyle(style);
 
 		// add authorityURL & identifiers
