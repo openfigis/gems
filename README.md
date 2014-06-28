@@ -1,4 +1,4 @@
 gems
 ====
 
-GEMS - GIS Enforcing Metadata and Semantic tool
+GEMS - GIS Enforcing Metadata and Semantics tool
