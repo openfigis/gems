@@ -1,24 +1,23 @@
-package org.fao.fi.gems.authority;
+package org.fao.fi.gems.entity;
 /**
  * An enum of Authority Entity
  * 
- * @author Utilisateur
+ * @author eblondel
  *
  */
-public enum AuthorityEntity {
+public enum EntityAuthority {
 
 	FAO("FAO", "http://www.fao.org/fi"),
 	FIGIS("FIGIS", "http://www.fao.org/figis"),
 	FLOD("FLOD", "http://www.fao.org/figis/flod"),
 	ASFIS("ASFIS", "http://www.fao.org/fishery/collection/asfis"),
 	VLIZ("VLIZ", "http://www.vliz.be"),
-	WORMS("WORMS", "http://www.marinespecies.org"),
-	HABITAT("HABITAT", null);
+	WORMS("WORMS", "http://www.marinespecies.org");
 
 	private final String propertyName;
 	private final String href;
 
-	AuthorityEntity(String propertyName, String href) {
+	EntityAuthority(String propertyName, String href) {
 		this.propertyName = propertyName;
 		this.href = href;
 	}

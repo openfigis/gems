@@ -5,8 +5,6 @@ import java.util.List;
 import java.util.Map;
 
 import org.fao.fi.gems.association.GeographicMetaObjectProperty;
-import org.fao.fi.gems.model.MetadataConfig;
-import org.fao.fi.gems.model.content.MetadataContent;
 import org.fao.fi.gems.util.Utils;
 
 /**
@@ -16,25 +14,29 @@ import org.fao.fi.gems.util.Utils;
  * @author eblondel
  *
  */
-public abstract class GeographicEntityImpl implements GeographicEntity {
+public class GeographicEntityImpl implements GeographicEntity {
 
+	private String owner;
+	private String collection;
 	private String code;
-	private String refName;
-	private String metaIdentifier;
-	private Map<EntityAddin,String> addins;
-	private MetadataConfig config;
-	
+	private String refName;	
 	private Map<GeographicMetaObjectProperty, List<String>> specificProperties;
+	private String metaIdentifier;
 	
+	//FIGIS specific
 	private String figisDomain;
 	private String figisId;
 	private String figisViewerId;
  
-	public GeographicEntityImpl(String code, Map<EntityAddin,String> addins, MetadataConfig config) throws URISyntaxException {
+	public GeographicEntityImpl(String owner, String collection,
+								String code, String refName,
+								Map<GeographicMetaObjectProperty, List<String>> properties) throws URISyntaxException {
+		this.owner = owner;
+		this.collection = collection;
 		this.code = code;
-		this.setAddins(addins);
-		this.config = config;
-		this.setMetaIdentifier();
+		this.refName = refName;
+		this.specificProperties = properties;
+		this.setMetaIdentifier(Utils.buildMetadataIdentifier(this.owner, this.collection, this.code));
 	}
 	
 	/**
@@ -65,32 +67,36 @@ public abstract class GeographicEntityImpl implements GeographicEntity {
 		this.refName = refName;
 	}
 	
+	/**
+	 * Get the owner id
+	 */
+	public String getOwner() {
+		return this.owner;
+	}
 	
 	/**
-	 * @return the metaIdentifier
+	 * Set the owner
+	 * 
+	 * @param owner
 	 */
-	public String getMetaIdentifier() {
-		return metaIdentifier;
+	public void setOwner(String owner){
+		this.owner = owner;
 	}
 
 	/**
+	 * Get the collection id
 	 */
-	public void setMetaIdentifier() {
-		this.metaIdentifier = Utils.buildMetadataIdentifier(this);
+	public String getCollection() {
+		return this.collection;
 	}
-
+	
 	/**
-	 * @return the addins
+	 * Set the collection id
+	 * 
+	 * @param collection
 	 */
-	public Map<EntityAddin,String> getAddins() {
-		return addins;
-	}
-
-	/**
-	 * @param addins the addins to set
-	 */
-	public void setAddins(Map<EntityAddin,String> addins) {
-		this.addins = addins;
+	public void setCollection(String collection){
+		this.collection = collection;
 	}
 
 	/**
@@ -106,22 +112,26 @@ public abstract class GeographicEntityImpl implements GeographicEntity {
 	public void setSpecificProperties(Map<GeographicMetaObjectProperty, List<String>> specificProperties) {
 		this.specificProperties = specificProperties;
 	}
-
-
+	
 	/**
-	 * @return the config
+	 * Get the meta identifier
+	 * 
 	 */
-	public MetadataConfig getConfig() {
-		return config;
+	public String getMetaIdentifier(){
+		return this.metaIdentifier;
 	}
 
 	/**
-	 * @param template the template to set
+	 * Set the meta Identifier
+	 * @param metaIdentifier
 	 */
-	public void setConfig(MetadataConfig config) {
-		this.config = config;
+	public void setMetaIdentifier(String metaIdentifier){
+		this.metaIdentifier = metaIdentifier;
 	}
-
+	
+	//FIGIS stuff
+	
+	
 	/**
 	 * @return the figisDomain
 	 */
@@ -163,6 +173,5 @@ public abstract class GeographicEntityImpl implements GeographicEntity {
 	public void setFigisViewerId(String figisViewerId) {
 		this.figisViewerId = figisViewerId;
 	}
-
 
 }

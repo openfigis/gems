@@ -5,6 +5,7 @@ import it.geosolutions.geoserver.rest.GeoServerRESTReader;
 import it.geosolutions.geoserver.rest.HTTPUtils;
 import it.geosolutions.geoserver.rest.decoder.RESTDataStore.DBType;
 import it.geosolutions.geoserver.rest.encoder.GSLayerEncoder;
+import it.geosolutions.geoserver.rest.encoder.GSLayerEncoder21;
 import it.geosolutions.geoserver.rest.encoder.GSResourceEncoder.ProjectionPolicy;
 import it.geosolutions.geoserver.rest.encoder.authorityurl.GSAuthorityURLInfoEncoder;
 import it.geosolutions.geoserver.rest.encoder.feature.GSFeatureTypeEncoder;
@@ -25,6 +26,7 @@ import org.apache.commons.httpclient.NameValuePair;
 import org.apache.commons.io.FileUtils;
 import org.fao.fi.gems.association.GeographicMetaObject;
 import org.fao.fi.gems.association.GeographicMetaObjectProperty;
+import org.fao.fi.gems.entity.EntityAuthority;
 import org.fao.fi.gems.model.settings.GeographicServerSettings;
 import org.fao.fi.gems.model.settings.MetadataCatalogueSettings;
 import org.fao.fi.gems.util.Utils;
@@ -152,11 +154,11 @@ public class DataPublisher {
 
 		for (Entry<GeographicMetaObjectProperty, List<String>> entry : object
 				.getSpecificProperties().entrySet()) {
-			if (entry.getKey().isThesaurus()) {
+			if (entry.getKey().isAuthority() && entry.getKey().isThesaurus()) {
 				if (!entry.getKey().containsURIs()) {
 					for (String kw : entry.getValue()) {
 						String keyword = kw + " ("
-								+ entry.getKey().authority().name() + ")";
+								+ ((EntityAuthority) entry.getKey().getObject()).name() + ")";
 						fte.addKeyword(keyword);
 					}
 				}
@@ -180,7 +182,7 @@ public class DataPublisher {
 			//determine the geometry name
 			String geometryName = "the_geom";
 			DBType storeType = this.GSReader.getDatastore(this.trgWorkspace, this.trgDatastore).getType();
-			if(storeType.name().matches("oracle")){
+			if(storeType.name().matches("ORACLE")){
 				LOGGER.info("Oracle datastore - set the_geom to uppercase");
 				geometryName = geometryName.toUpperCase();
 			}
@@ -207,7 +209,7 @@ public class DataPublisher {
 		fte.addMetadataLinkInfo(mde2);
 
 		// layer
-		final GSLayerEncoder layerEncoder = new GSLayerEncoder();
+		final GSLayerEncoder layerEncoder = new GSLayerEncoder21();
 		layerEncoder.setDefaultStyle(style);
 
 		// add authorityURL & identifiers
@@ -216,12 +218,12 @@ public class DataPublisher {
 			if (entry.getKey().isThesaurus()) {
 				if (entry.getKey().containsURIs()) {
 					layerEncoder.addAuthorityURL(new GSAuthorityURLInfoEncoder(
-							entry.getKey().authority().name(), entry.getKey()
-									.authority().href()));
+							((EntityAuthority) entry.getKey().getObject()).name(),
+							((EntityAuthority) entry.getKey().getObject()).href()));
 					for (String identifier : entry.getValue()) {
 						layerEncoder.addIdentifier(new GSIdentifierInfoEncoder(
-								entry.getKey().authority().name(), identifier));
-								LOGGER.debug("add "+entry.getKey().authority().name()+" identifier: "+identifier);
+								((EntityAuthority) entry.getKey().getObject()).name(), identifier));
+								LOGGER.debug("add "+((EntityAuthority) entry.getKey().getObject()).name()+" identifier: "+identifier);
 					}
 				}
 			}

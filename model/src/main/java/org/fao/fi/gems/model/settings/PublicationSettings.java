@@ -27,7 +27,10 @@ public class PublicationSettings{
 	private String version;
 	private String style;
 	private double buffer;
+	
 	private boolean test;
+	private String testCode;
+	
 	private boolean figis;
 
 	/**
@@ -228,6 +231,22 @@ public class PublicationSettings{
 	 */
 	public void setTest(boolean test) {
 		this.test = test;
+	}
+
+
+	/**
+	 * @return the testCode
+	 */
+	public String getTestCode() {
+		return testCode;
+	}
+
+
+	/**
+	 * @param testCode the testCode to set
+	 */
+	public void setTestCode(String testCode) {
+		this.testCode = testCode;
 	}
 
 

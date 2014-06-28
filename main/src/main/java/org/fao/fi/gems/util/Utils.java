@@ -2,6 +2,7 @@ package org.fao.fi.gems.util;
 
 import java.util.List;
 
+import org.fao.fi.gems.association.GeographicMetaObject;
 import org.fao.fi.gems.entity.GeographicEntity;
 import org.geotoolkit.xml.Namespaces;
 
@@ -58,34 +59,33 @@ public final class Utils {
 	}
 	
 	/**
-	 * Builds a metadata identifier for an entity
+	 * Builds a simple meta Identifier
 	 * 
-	 * @param entity
-	 * @return the metadata identifier
+	 * @param owner
+	 * @param collection
+	 * @param code
+	 * @return
 	 */
-	public static String buildMetadataIdentifier(GeographicEntity entity){
-		String metaId = null;
-		if(entity.getConfig() != null){
-			metaId = entity.getConfig().getContent().getOrganizationContact().getAcronym().toLowerCase() +"-"+
-					  entity.getConfig().getSettings().getPublicationSettings().getCollectionType().toLowerCase() + "-map-"+
-					  entity.getCode().toLowerCase();
-		}
+	public static String buildMetadataIdentifier(String owner, String collection, String code){
+		String metaId = owner.toLowerCase() + "-" + collection.toLowerCase() + "-map-" + code.toLowerCase();
 		return metaId;
 	}
 	
 	/**
 	 * Builds a metadata identifier for a list of entities
 	 * 
-	 * @param entity
+	 * @param owner
+	 * @param collection
+	 * @param entities
 	 * @return the metadata identifier
 	 */
-	public static String buildMetadataIdentifier(List<GeographicEntity> entities, String org, String collectionType){
-		String metaId = org.toLowerCase() +"-"+collectionType.toLowerCase() + "-map-";
+	public static String buildMetadataIdentifier(String owner, String collection, List<GeographicEntity> entities){
+		String metaId = null;
 		for(int i=0;i<entities.size();i++){
 			GeographicEntity entity = entities.get(i);
-			String ref = entity.getConfig().getSettings().getPublicationSettings().getCollectionType()+"-"+entity.getCode().toLowerCase();
+			String ref = entity.getMetaIdentifier();
 			if(i==0){
-				metaId += ref;
+				metaId = ref;
 			}else{
 				metaId += "_x_"+ref;
 			}

@@ -50,8 +50,9 @@
 			<dependency>
 				<groupId>it.geosolutions</groupId>
 				<artifactId>geoserver-manager</artifactId>
-				<version>1.6-SNAPSHOT</version>
+				<version>1.7-SNAPSHOT</version>
 			</dependency>
+			
 			<!-- Geonetwork manager -->
 			<dependency>
 				<groupId>it.geosolutions</groupId>
@@ -133,6 +134,13 @@
 			
 		</dependencies>
 	</dependencyManagement>
+	
+	<dependencies>
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-simple</artifactId>
+		</dependency>
+	</dependencies>
 
 	<!-- Repositories -->
 	<repositories>

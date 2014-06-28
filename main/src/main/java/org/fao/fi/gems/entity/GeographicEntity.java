@@ -20,11 +20,13 @@ public interface GeographicEntity {
 
 	String getRefName();
 	
+	String getOwner();
+	
+	String getCollection();
+	
 	String getMetaIdentifier();
 
 	Map<GeographicMetaObjectProperty, List<String>> getSpecificProperties();
-
-	MetadataConfig getConfig();
 	
 	//specific to FIGIS
 	

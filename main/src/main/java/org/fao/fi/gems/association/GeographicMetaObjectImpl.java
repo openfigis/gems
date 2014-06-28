@@ -54,21 +54,17 @@ public class GeographicMetaObjectImpl implements GeographicMetaObject {
 	
  
 	/**
-	 * Constructs a geographic Association
+	 * Constructs a Geographic Meta object association from one or more GeographicEntity
 	 * 
 	 * @param entities
-	 * @param template
+	 * @param objectProperties
 	 * @param geoproperties
-	 * @param addins
-	 * @param gsSettings
-	 * @param metaSettings
-	 * @param domain
-	 * @param vieweridentifier
+	 * @param config
 	 * @throws URISyntaxException
 	 */
 	public GeographicMetaObjectImpl(List<GeographicEntity> entities,
-			Map<FeatureTypeProperty, Object> geoproperties, Map<GeographicMetaObjectProperty, List<String>> objectProperties,
-			Map<EntityAddin, String> addins,
+			Map<GeographicMetaObjectProperty, List<String>> objectProperties,
+			Map<FeatureTypeProperty, Object> geoproperties,
 			MetadataConfig config) throws URISyntaxException {
 
 		//settings
@@ -86,7 +82,6 @@ public class GeographicMetaObjectImpl implements GeographicMetaObject {
 		this.setMetaIdentifier();
 		this.setMetaTitle();
 		
-		this.addins = addins;
 		this.setSpecificProperties(entities, objectProperties);
 		this.setTargetLayername(this.gsSettings.getTargetLayerPrefix());
 		
@@ -257,15 +252,11 @@ public class GeographicMetaObjectImpl implements GeographicMetaObject {
 	 * 
 	 * @param entities
 	 */
-	public void setMetaIdentifier(){
-		if(entities.size() > 1){
-			this.metaId = Utils.buildMetadataIdentifier(entities, this.getTemplate().getOrganizationContact().getAcronym(), this.collection);
-		}else{
-			this.metaId = Utils.buildMetadataIdentifier(entities.get(0));
-		}
-		
+	public void setMetaIdentifier() {
+		this.metaId = Utils.buildMetadataIdentifier(this.getTemplate()
+				.getOrganizationContact().getAcronym(), this.collection,
+				entities);
 	}
-
 	
 	/**
 	 * Get Ref Name

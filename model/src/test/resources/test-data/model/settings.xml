@@ -43,6 +43,7 @@
 		<buffer>2</buffer>
 		<style>somestyle</style>
 		<test>true</test>
+		<testCode>thecode</testCode>
 		<figis>true</figis>
 		
 	</publicationSettings>

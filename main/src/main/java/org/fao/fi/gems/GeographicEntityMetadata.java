@@ -18,6 +18,7 @@ import java.util.UUID;
 
 import org.fao.fi.gems.association.GeographicMetaObject;
 import org.fao.fi.gems.association.GeographicMetaObjectProperty;
+import org.fao.fi.gems.entity.EntityAuthority;
 import org.fao.fi.gems.model.content.MetadataContact;
 import org.fao.fi.gems.model.content.MetadataThesaurus;
 import org.fao.fi.gems.util.Utils;
@@ -600,7 +601,7 @@ public class GeographicEntityMetadata extends DefaultMetadata {
 		// add object-based thesaurus
 		for (Entry<GeographicMetaObjectProperty, List<String>> objectType : object
 				.getSpecificProperties().entrySet()) {
-			if (objectType.getKey().isThesaurus()) {
+			if (objectType.getKey().isAuthority() && objectType.getKey().isThesaurus()) {
 
 				DefaultKeywords keywords = new DefaultKeywords();
 				keywords.setType(KeywordType.THEME);
@@ -610,8 +611,7 @@ public class GeographicEntityMetadata extends DefaultMetadata {
 				kwCitationDate.setDate(this.getRevisionDate());
 				kwCitationDate.setDateType(DateType.REVISION);
 				kwCitation.setDates(Arrays.asList(kwCitationDate));
-				kwCitation.setTitle(new SimpleInternationalString(objectType
-						.getKey().authority().name()));
+				kwCitation.setTitle(new SimpleInternationalString(((EntityAuthority) objectType.getKey().getObject()).name()));
 				keywords.setThesaurusName(kwCitation);
 
 				if (objectType.getKey().containsURIs()) {

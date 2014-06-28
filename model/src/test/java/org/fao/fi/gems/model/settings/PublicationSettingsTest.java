@@ -36,6 +36,7 @@ public class PublicationSettingsTest {
 		Assert.assertEquals(2, settings.getBuffer(), 0);
 		Assert.assertEquals("somestyle", settings.getStyle());
 		Assert.assertTrue(settings.isTest());
+		Assert.assertEquals("thecode", settings.getTestCode());
 		Assert.assertTrue(settings.isFigis());
 
 	}
