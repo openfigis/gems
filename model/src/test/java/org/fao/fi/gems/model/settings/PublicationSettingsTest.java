@@ -29,6 +29,7 @@ public class PublicationSettingsTest {
 		Assert.assertTrue(settings.isUnpublishMetadata());
 		
 		Assert.assertEquals("http://www.organization.org/codelist", settings.getCodelistURL());
+		Assert.assertEquals("org.fao.fi.gems.collection.anobject.parser", settings.getCodelistParser());
 		
 		Assert.assertEquals("mycollection", settings.getCollectionType());
 		Assert.assertEquals("2013-10-31", settings.getDate());

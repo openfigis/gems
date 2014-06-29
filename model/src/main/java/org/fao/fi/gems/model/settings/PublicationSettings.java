@@ -21,6 +21,7 @@ public class PublicationSettings{
 	private boolean unpublishMetadata;
 	
 	private String codelistURL;
+	private String codelistParser;
 
 	private String collectionType;
 	private String date;
@@ -135,6 +136,22 @@ public class PublicationSettings{
 	 */
 	public void setCodelistURL(String codelistURL) {
 		this.codelistURL = codelistURL;
+	}
+
+
+	/**
+	 * @return the codelistParser
+	 */
+	public String getCodelistParser() {
+		return codelistParser;
+	}
+
+
+	/**
+	 * @param codelistParser the codelistParser to set
+	 */
+	public void setCodelistParser(String codelistParser) {
+		this.codelistParser = codelistParser;
 	}
 
 

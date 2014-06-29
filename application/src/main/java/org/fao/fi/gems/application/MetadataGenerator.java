@@ -12,9 +12,6 @@ import org.fao.fi.gems.association.GeographicMetaObject;
 import org.fao.fi.gems.association.GeographicMetaObjectImpl;
 import org.fao.fi.gems.association.GeographicMetaObjectProperty;
 import org.fao.fi.gems.codelist.CodelistParser;
-import org.fao.fi.gems.collection.eez.EezCodelistParser;
-import org.fao.fi.gems.collection.rfb.RfbCodelistParser;
-import org.fao.fi.gems.collection.species.SpeciesCodelistParser;
 import org.fao.fi.gems.feature.FeatureTypeProperty;
 import org.fao.fi.gems.entity.EntityAddin;
 import org.fao.fi.gems.entity.GeographicEntity;
@@ -56,15 +53,12 @@ public class MetadataGenerator {
 		String codelistUrl = config.getSettings().getPublicationSettings().getCodelistURL().replaceAll("&amp;","&");
 		LOGGER.info("Codelist URL = "+codelistUrl);
 		
-		CodelistParser codelistParser = null;
-		if(collectionType.matches("species")){
-			codelistParser = new SpeciesCodelistParser();
-		}else if(collectionType.matches("rfb")){
-			codelistParser = new RfbCodelistParser();
-		}else if(collectionType.matches("eez")){
-			codelistParser = new EezCodelistParser();
-		}
+		//load the codelist parser
+		ClassLoader loader = ClassLoader.getSystemClassLoader();
+		Class<?> parserClass = loader.loadClass(config.getSettings().getPublicationSettings().getCodelistParser());
+		CodelistParser codelistParser = (CodelistParser) parserClass.newInstance();
 		set = codelistParser.getCodelist(owner, collectionType, codelistUrl);
+		LOGGER.info("Codelist parser = "+config.getSettings().getPublicationSettings().getCodelistParser());
 		
 		//only for test (apply to the first element)
 		if(config.getSettings().getPublicationSettings().isTest()){
