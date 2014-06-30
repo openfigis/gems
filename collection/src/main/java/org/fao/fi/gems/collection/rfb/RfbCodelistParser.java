@@ -132,8 +132,8 @@ public class RfbCodelistParser implements CodelistParser{
 					
 					//Figis stuff
 					entity.setFigisDomain("rfbs");
-					entity.setFigisId(fid);
-					entity.setFigisViewerId(fid);
+					entity.setFigisId(rfb.toLowerCase());
+					entity.setFigisViewerId(rfb);
 					
 					//add geographic entity
 					rfbCodelist.add(entity);
