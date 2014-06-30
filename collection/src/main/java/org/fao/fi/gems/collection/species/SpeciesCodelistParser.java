@@ -82,9 +82,7 @@ public class SpeciesCodelistParser implements CodelistParser{
 		//available styles
 		Random styleRandomizer = new Random();
 		String[] styleColors = { "852D36", "A60314", "FF031C", "FA485B",
-				"F58E98", "CC8914", "FAA616", "FAC002", "F0E92E", "FAFA5F",
-				"B5B7CF", "9B9EBF", "C3CBDF", "8B92DF", "D4D1EF", "B8B5CF",
-				"B7AFFF", "BFBFBF", "9FB9FF", "8F98FF" };
+				"F58E98", "CC8914", "FAA616", "FAC002", "F0E92E", "FAFA5F"};
 		List<String> styleColorList = Arrays.asList(styleColors);
 		
 		//parse codelist
