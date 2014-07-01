@@ -25,6 +25,7 @@ public class GeographicServerSettingsTest {
 		Assert.assertEquals("http://www.organization.org/geoserver", server.getUrl());
 		Assert.assertEquals("user", server.getUser());
 		Assert.assertEquals("pwd", server.getPassword());
+		Assert.assertEquals("2.1", server.getVersion());
 		Assert.assertEquals("sourceWS", server.getSourceWorkspace());
 		Assert.assertEquals("layer", server.getSourceLayer());
 		Assert.assertEquals("att", server.getSourceAttribute());

@@ -50,6 +50,7 @@ public class DataPublisher {
 	String geoserverBaseURL;
 	String gsUser;
 	String gsPwd;
+	String gsVersion;
 
 	public GeoServerRESTReader GSReader;
 	public GeoServerRESTPublisher GSPublisher;
@@ -76,6 +77,7 @@ public class DataPublisher {
 		this.geoserverBaseURL = settings.getUrl();
 		this.gsUser = settings.getUser();
 		this.gsPwd = settings.getPassword();
+		this.gsVersion = settings.getVersion();
 
 		this.GSReader = new GeoServerRESTReader(geoserverBaseURL, gsUser, gsPwd);
 		this.GSPublisher = new GeoServerRESTPublisher(geoserverBaseURL, gsUser, gsPwd);
@@ -209,7 +211,13 @@ public class DataPublisher {
 		fte.addMetadataLinkInfo(mde2);
 
 		// layer
-		final GSLayerEncoder layerEncoder = new GSLayerEncoder();
+		GSLayerEncoder layerEncoder = null;
+		if(this.gsVersion.startsWith("2.1") || this.gsVersion.matches("2.1")){
+			layerEncoder = new GSLayerEncoder21();
+		}else{
+			layerEncoder = new GSLayerEncoder();
+		}
+		
 		layerEncoder.setDefaultStyle(style);
 
 		// add authorityURL & identifiers

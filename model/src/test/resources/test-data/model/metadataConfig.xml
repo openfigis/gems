@@ -9,6 +9,7 @@
 			<url>http://www.organization.org/geoserver</url>
 			<user>user</user>
 			<password>pwd</password>
+			<version>2.1</version>
 			<sourceWorkspace>sourceWS</sourceWorkspace>
 			<sourceLayer>layer</sourceLayer>
 			<sourceAttribute>att</sourceAttribute>

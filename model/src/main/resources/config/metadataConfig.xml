@@ -9,6 +9,7 @@
 			<url>http://www.organization.org/geoserver</url> 	<!-- Geographic server base url -->
 			<user>user</user>									<!-- Geographic server User -->
 			<password>pwd</password>							<!-- Geographic server password -->
+			<version>2.1</version>								<!-- Geoserver version (used to distinguish behaviors of REST Geoserver Java client) -->
 			<sourceWorkspace>sourceWS</sourceWorkspace>			<!-- workspace where to find the GIS source data collection layer -->
 			<sourceLayer>layer</sourceLayer>					<!-- GIS data collection layer name -->
 			<sourceAttribute>att</sourceAttribute>				<!-- attribute name on which to build the filter -->

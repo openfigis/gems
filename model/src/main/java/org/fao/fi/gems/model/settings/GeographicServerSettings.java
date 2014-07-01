@@ -18,6 +18,7 @@ public class GeographicServerSettings{
 	private String url;
 	private String user;
 	private String password;
+	private String version;
 	private String sourceWorkspace;
 	private String sourceLayer;
 	private String sourceAttribute;
@@ -75,6 +76,20 @@ public class GeographicServerSettings{
 	 */
 	public void setPassword(String password) {
 		this.password = password;
+	}
+
+	/**
+	 * @return the version
+	 */
+	public String getVersion() {
+		return version;
+	}
+
+	/**
+	 * @param version the version to set
+	 */
+	public void setVersion(String version) {
+		this.version = version;
 	}
 
 	/**
