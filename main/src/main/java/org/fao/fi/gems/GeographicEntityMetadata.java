@@ -601,7 +601,7 @@ public class GeographicEntityMetadata extends DefaultMetadata {
 		// add object-based thesaurus
 		for (Entry<GeographicMetaObjectProperty, List<String>> objectType : object
 				.getSpecificProperties().entrySet()) {
-			if (objectType.getKey().isAuthority() && objectType.getKey().isThesaurus()) {
+			if (objectType.getKey().isThesaurus()) {
 
 				DefaultKeywords keywords = new DefaultKeywords();
 				keywords.setType(KeywordType.THEME);
