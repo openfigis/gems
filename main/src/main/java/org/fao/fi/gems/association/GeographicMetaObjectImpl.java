@@ -470,7 +470,7 @@ public class GeographicMetaObjectImpl implements GeographicMetaObject {
 			
 			String resource = null;
 			if (bbox != null) {
-				resource = "http://www.fao.org/figis/geoserver/factsheets/" + figisDomain
+				resource = this.gsSettings.getUrl()+"/factsheets/" + figisDomain
 						+ ".html?" + this.collection + "=" + this.entities.get(0).getFigisViewerId()
 						+ "&extent=" + bbox.getMinX() + "," + bbox.getMinY() + ","
 						+ bbox.getMaxX() + "," + bbox.getMaxY() + "&prj=4326"; 
