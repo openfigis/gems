@@ -20,5 +20,6 @@
 	<test>true</test>
 	<testCode>thecode</testCode>
 	<figis>true</figis>
+	<figisFactsheetUrl>http://www.fao.org/fishery</figisFactsheetUrl>
 	
 </Publication>

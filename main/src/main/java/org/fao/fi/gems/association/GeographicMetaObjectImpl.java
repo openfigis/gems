@@ -495,9 +495,11 @@ public class GeographicMetaObjectImpl implements GeographicMetaObject {
 		this.factsheet = null;
 		
 		//only apply to figis collections
-		if(figis){
+		if (figis) {
 			String figisViewerDomain = this.collection;
-			this.factsheet = "http://www.fao.org/fishery/"+figisViewerDomain + "/" + this.entities.get(0).getFigisId();
+			this.factsheet = this.pubSettings.getFigisFactsheetUrl() + "/"
+							+ figisViewerDomain + "/"
+							+ this.entities.get(0).getFigisId();
 		}
 	}
 	

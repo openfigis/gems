@@ -33,6 +33,7 @@ public class PublicationSettings{
 	private String testCode;
 	
 	private boolean figis;
+	private String figisFactsheetUrl;
 
 	/**
 	 * Constructor
@@ -280,6 +281,22 @@ public class PublicationSettings{
 	 */
 	public void setFigis(boolean fromFigis) {
 		this.figis = fromFigis;
+	}
+
+
+	/**
+	 * @return the figisFactsheetUrl
+	 */
+	public String getFigisFactsheetUrl() {
+		return figisFactsheetUrl;
+	}
+
+
+	/**
+	 * @param figisFactsheetUrl the figisFactsheetUrl to set
+	 */
+	public void setFigisFactsheetUrl(String figisFactsheetUrl) {
+		this.figisFactsheetUrl = figisFactsheetUrl;
 	}
 
 
