@@ -2,6 +2,7 @@ package org.fao.fi.gems.model.settings;
 
 import java.io.File;
 import java.net.URISyntaxException;
+import java.util.List;
 
 
 import org.fao.fi.gems.model.settings.GeographicServerSettings;
@@ -32,8 +33,13 @@ public class GeographicServerSettingsTest {
 		Assert.assertEquals("targetWS", server.getTargetWorkspace());
 		Assert.assertEquals("targetDS", server.getTargetDatastore());
 		Assert.assertEquals("someprefix", server.getTargetLayerPrefix());
-		Assert.assertEquals("baselayerWS", server.getBaseLayerWorkspace());
-		Assert.assertEquals("baselayerName", server.getBaseLayerName());
+		
+		List<BaseLayer> baseLayers = server.getBaseLayerList();
+		Assert.assertEquals("baselayerWS1", baseLayers.get(0).getWorkspace());
+		Assert.assertEquals("baselayerName1", baseLayers.get(0).getName());
+		Assert.assertEquals("baselayerWS2", baseLayers.get(1).getWorkspace());
+		Assert.assertEquals("baselayerName2", baseLayers.get(1).getName());
+		
 		Assert.assertEquals("SHAPEFILE", server.getMethod());
 		Assert.assertEquals("someURL",server.getShapefileURL());
 

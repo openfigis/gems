@@ -2,6 +2,7 @@ package org.fao.fi.gems.model.settings;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.List;
 
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.io.xml.StaxDriver;
@@ -25,8 +26,7 @@ public class GeographicServerSettings{
 	private String targetWorkspace;
 	private String targetDatastore;
 	private String targetLayerPrefix;
-	private String baseLayerWorkspace;
-	private String baseLayerName;
+	private List<BaseLayer> baseLayerList;
 	private String method;
 	private String shapefileURL;
 
@@ -182,32 +182,19 @@ public class GeographicServerSettings{
 		this.targetLayerPrefix = targetLayerPrefix;
 	}
 
+
 	/**
-	 * @return the baseLayerWorkspace
+	 * @return the baseLayerList
 	 */
-	public String getBaseLayerWorkspace() {
-		return baseLayerWorkspace;
+	public List<BaseLayer> getBaseLayerList() {
+		return baseLayerList;
 	}
 
 	/**
-	 * @param baseLayerWorkspace the baseLayerWorkspace to set
+	 * @param baseLayers the baseLayerList to set
 	 */
-	public void setBaseLayerWorkspace(String baseLayerWorkspace) {
-		this.baseLayerWorkspace = baseLayerWorkspace;
-	}
-
-	/**
-	 * @return the baseLayerName
-	 */
-	public String getBaseLayerName() {
-		return baseLayerName;
-	}
-
-	/**
-	 * @param baseLayerName the baseLayerName to set
-	 */
-	public void setBaseLayerName(String baseLayerName) {
-		this.baseLayerName = baseLayerName;
+	public void setBaseLayerList(List<BaseLayer> baseLayerList) {
+		this.baseLayerList = baseLayerList;
 	}
 
 	/**
@@ -248,9 +235,9 @@ public class GeographicServerSettings{
 	public static GeographicServerSettings fromXML(File file) {
 
 		XStream xstream = new XStream(new StaxDriver());
-		xstream.aliasType("GeographicServer",
-				GeographicServerSettings.class);
-
+		xstream.aliasType("GeographicServer", GeographicServerSettings.class);
+		xstream.aliasType("baseLayer", BaseLayer.class);
+		
 		GeographicServerSettings settings = (GeographicServerSettings) xstream
 				.fromXML(file);
 

@@ -9,8 +9,16 @@
 	<targetWorkspace>targetWS</targetWorkspace>
 	<targetDatastore>targetDS</targetDatastore>
 	<targetLayerPrefix>someprefix</targetLayerPrefix>
-	<baseLayerWorkspace>baselayerWS</baseLayerWorkspace>
-	<baseLayerName>baselayerName</baseLayerName>
+	<baseLayerList>
+		<baseLayer>
+			<workspace>baselayerWS1</workspace>
+			<name>baselayerName1</name>
+		</baseLayer>
+		<baseLayer>
+			<workspace>baselayerWS2</workspace>
+			<name>baselayerName2</name>
+		</baseLayer>
+	</baseLayerList>
 	<method>SHAPEFILE</method>
 	<shapefileURL>someURL</shapefileURL>
 </GeographicServer>

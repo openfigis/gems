@@ -11,6 +11,7 @@ import org.fao.fi.gems.entity.GeographicEntity;
 import org.fao.fi.gems.feature.FeatureTypeProperty;
 import org.fao.fi.gems.model.MetadataConfig;
 import org.fao.fi.gems.model.content.MetadataContent;
+import org.fao.fi.gems.model.settings.BaseLayer;
 import org.fao.fi.gems.model.settings.GeographicServerSettings;
 import org.fao.fi.gems.model.settings.MetadataCatalogueSettings;
 import org.fao.fi.gems.model.settings.PublicationSettings;
@@ -422,12 +423,21 @@ public class GeographicMetaObjectImpl implements GeographicMetaObject {
 		}
 
 		// build the layer preview URI
-		String completeBaseLayerName = this.gsSettings.getBaseLayerWorkspace() +":"+this.gsSettings.getBaseLayerName();
-		String completeLayerName = this.gsSettings.getTargetWorkspace() + ":"
-				+ this.targetLayername;
+		String baselayers = null;
+		int i = 0;
+		for(BaseLayer baselayer : this.gsSettings.getBaseLayerList()){
+			if(i == 0){
+				baselayers = baselayer.getWorkspace() +":"+ baselayer.getName();
+			}else{
+				baselayers += "," + baselayer.getWorkspace() +":"+ baselayer.getName(); 
+			}
+			i++;
+		}
+
+		String completeLayerName = this.gsSettings.getTargetWorkspace() + ":" + this.targetLayername;
 		String graphicLink = this.gsSettings.getUrl()
 				+ "/wms?service=WMS&version=1.1.0&request=GetMap" + "&layers="
-				+ completeBaseLayerName+"," + completeLayerName + "&bbox=" + minX
+				+ baselayers+"," + completeLayerName + "&bbox=" + minX
 				+ "," + minY + "," + maxX + "," + maxY + "&width=" + width
 				+ "&height=" + height + "&srs=EPSG:4326" + // for now only
 															// EPSG:4326 as

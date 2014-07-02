@@ -6,6 +6,7 @@ import java.io.IOException;
 import org.fao.fi.gems.model.content.MetadataContact;
 import org.fao.fi.gems.model.content.MetadataContent;
 import org.fao.fi.gems.model.content.MetadataThesaurus;
+import org.fao.fi.gems.model.settings.BaseLayer;
 import org.fao.fi.gems.model.settings.Settings;
 
 import com.thoughtworks.xstream.XStream;
@@ -72,6 +73,7 @@ public class MetadataConfig {
 		xstream.alias("configuration", MetadataConfig.class);
 		xstream.alias("contact", MetadataContact.class);
 		xstream.alias("thesaurus", MetadataThesaurus.class);
+		xstream.alias("baseLayer", BaseLayer.class);
 
 		MetadataConfig config = (MetadataConfig) xstream
 				.fromXML(file);

@@ -16,8 +16,16 @@
 			<targetWorkspace>targetWS</targetWorkspace>			<!-- target workspace where to publish the single GIS layers -->
 			<targetDatastore>targetDS</targetDatastore>			<!-- target datastore where to publish the single GIS layers -->
 			<targetLayerPrefix>someprefix</targetLayerPrefix>	<!-- some prefix to use for the target layer names -->
-			<baseLayerWorkspace>baselayerWS</baseLayerWorkspace><!-- workspace of the baselayer to use as graphic overview background -->
-			<baseLayerName>baselayerName</baseLayerName>		<!-- name of the baselayer to use as graphic overview background -->
+			<baseLayerList>									<!-- Background layers (each background layer should have a valid workspace and layer names -->
+				<baseLayer>
+					<workspace>baselayerWS1</workspace>
+					<name>baselayerName1</name>
+				</baseLayer>
+				<baseLayer>
+					<workspace>baselayerWS2</workspace>
+					<name>baselayerName2</name>
+				</baseLayer>
+			</baseLayerList>
 			<method>SHAPEFILE</method>							<!-- the method to publish the resource (if SHAPEFILE, all "source" settings will be ignored)-->
 			<shapefileURL>someURL</shapefileURL>				<!-- the url where to find the shapefile -->			
 		</geographicServerSettings>

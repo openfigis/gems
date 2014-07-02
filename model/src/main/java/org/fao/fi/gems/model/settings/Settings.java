@@ -79,6 +79,7 @@ public class Settings{
 
 		XStream xstream = new XStream(new StaxDriver());
 		xstream.aliasType("settings", Settings.class);
+		xstream.aliasType("baseLayer", BaseLayer.class);
 
 		Settings settings = (Settings) xstream
 				.fromXML(file);
