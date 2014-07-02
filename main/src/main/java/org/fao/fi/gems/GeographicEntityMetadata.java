@@ -611,7 +611,13 @@ public class GeographicEntityMetadata extends DefaultMetadata {
 				kwCitationDate.setDate(this.getRevisionDate());
 				kwCitationDate.setDateType(DateType.REVISION);
 				kwCitation.setDates(Arrays.asList(kwCitationDate));
-				kwCitation.setTitle(new SimpleInternationalString(((EntityAuthority) objectType.getKey().getObject()).name()));
+				SimpleInternationalString title = null;
+				if(objectType.getKey().getObject() instanceof EntityAuthority){
+					title = new SimpleInternationalString(((EntityAuthority) objectType.getKey().getObject()).name());
+				}else if(objectType.getKey().getObject()instanceof String){
+					title = new SimpleInternationalString((String) objectType.getKey().getObject());
+				}
+				kwCitation.setTitle(title);
 				keywords.setThesaurusName(kwCitation);
 
 				if (objectType.getKey().containsURIs()) {
