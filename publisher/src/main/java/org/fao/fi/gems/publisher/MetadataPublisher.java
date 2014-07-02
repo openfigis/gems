@@ -112,7 +112,6 @@ public class MetadataPublisher {
 		
 		//configure metadata search 
 		GNSearchRequest request = new GNSearchRequest();
-		request.addConfig(Config.similarity, "1");
 		request.addParam("uuid", object.getMetaIdentifier());
 		GNSearchResponse response = client.search(request);
 		GNMetadata metadata = response.getMetadata(0);
