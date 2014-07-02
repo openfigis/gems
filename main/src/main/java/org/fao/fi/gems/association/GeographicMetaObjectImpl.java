@@ -463,7 +463,7 @@ public class GeographicMetaObjectImpl implements GeographicMetaObject {
 		this.viewerResource = null;		
 		
 		//only apply to figis collections
-		if(figis){
+		if(figis && this.entities.get(0).getFigisViewerId() != null){
 
 			Envelope bbox = this.getBBOX();
 			String figisDomain = this.entities.get(0).getFigisDomain();
