@@ -100,7 +100,8 @@ public class GeographicEntityMetadata extends DefaultMetadata {
 	private String lastVersion;
 
 	Collection<? extends Constraints> constraints;
-	DefaultResponsibleParty ORGANIZATION;
+	List<ResponsibleParty> ORGANIZATIONS;
+	MetadataContact OWNER_CONTACT;
 
 	/**
 	 * Constructs a GeographicEntity metadata
@@ -129,8 +130,8 @@ public class GeographicEntityMetadata extends DefaultMetadata {
 		this.setMetadataStandardVersion("1.0"); // version
 		this.getHierarchyLevels().add(ScopeCode.DATASET); // hierarchical level
 
-		this.setOrganization(); // FAO main contact
-		this.setContacts(); // contacts
+		this.setOrganizationContacts(); // organization contacts
+		this.setIndividualContacts(); // individual contacts
 		this.setDataQuality(); // methodology if existing
 		this.setSpatialRepresentation(); // spatial representation
 		this.setReferenceSystemInfo(Arrays.asList(object.getCRS())); // ReferenceSystem
@@ -152,8 +153,12 @@ public class GeographicEntityMetadata extends DefaultMetadata {
 		return this.lastVersion;
 	}
 
-	protected DefaultResponsibleParty getOrganization() {
-		return this.ORGANIZATION;
+	protected List<ResponsibleParty> getOrganizationContacts(){
+		return this.ORGANIZATIONS;
+	}
+	
+	protected MetadataContact getOwnerOrganization() {
+		return this.OWNER_CONTACT;
 	}
 
 	/**
@@ -173,33 +178,42 @@ public class GeographicEntityMetadata extends DefaultMetadata {
 	}
 
 	/**
-	 * set Organization (FAO)
+	 * set Organizations
 	 * 
 	 * @throws URISyntaxException
 	 */
-	private void setOrganization() throws URISyntaxException {
-		// Main responsible party
-		this.ORGANIZATION = new DefaultResponsibleParty();
+	private void setOrganizationContacts() throws URISyntaxException {
+		
+		final List<ResponsibleParty> contacts = new ArrayList<ResponsibleParty>();
+		
+		for(MetadataContact contact : object.getTemplate().getOrganizationContacts()){
+			
+			final DefaultResponsibleParty rp = new DefaultResponsibleParty();
+			
+			// contact info
+			final DefaultContact contactORG = new DefaultContact();
+			final DefaultOnlineResource resourceORG = new DefaultOnlineResource();
+			resourceORG.setName(contact.getName());
+			resourceORG.setLinkage(new URI(contact.getUrl()));
+			contactORG.setOnlineResource(resourceORG);
 
-		// contact info
-		final DefaultContact contactORG = new DefaultContact();
-		final DefaultOnlineResource resourceORG = new DefaultOnlineResource();
-		resourceORG.setName(object.getTemplate().getOrganizationContact().getName());
-		resourceORG.setLinkage(new URI(object.getTemplate().getOrganizationContact().getUrl()));
-		contactORG.setOnlineResource(resourceORG);
+			// Address
+			final DefaultAddress addressORG = new DefaultAddress();
+			addressORG.getDeliveryPoints().add(contact.getAddress()); // deliveryPoint
+			addressORG.setCity(new SimpleInternationalString(contact.getCity())); // city
+			addressORG.setPostalCode(contact.getPostalCode()); // postal code
+			addressORG.setCountry(new SimpleInternationalString(contact.getCountry())); // country
+			contactORG.setAddress(addressORG);
 
-		// Address
-		final DefaultAddress addressORG = new DefaultAddress();
-		addressORG.getDeliveryPoints().add(object.getTemplate().getOrganizationContact().getAddress()); // deliveryPoint
-		addressORG.setCity(new SimpleInternationalString(object.getTemplate().getOrganizationContact().getCity())); // city
-		addressORG.setPostalCode(object.getTemplate().getOrganizationContact().getPostalCode()); // postal code
-		addressORG.setCountry(new SimpleInternationalString(object.getTemplate().getOrganizationContact().getCountry())); // country
-		contactORG.setAddress(addressORG);
-
-		ORGANIZATION.setContactInfo(contactORG);
-		ORGANIZATION.setOrganisationName(new SimpleInternationalString(
-				object.getTemplate().getOrganizationContact().getOrgName()));
-		ORGANIZATION.setRole(Role.OWNER);
+			rp.setContactInfo(contactORG);
+			rp.setOrganisationName(new SimpleInternationalString(contact.getOrgName()));
+			rp.setRole(Role.valueOf(contact.getRole()));
+			contacts.add(rp);
+			
+			if(contact.getRole().matches("OWNER")) this.OWNER_CONTACT = contact;
+		}
+		
+		this.ORGANIZATIONS = contacts;
 	}
 
 	/**
@@ -209,7 +223,7 @@ public class GeographicEntityMetadata extends DefaultMetadata {
 	 * 
 	 * 
 	 */
-	private void setContacts() throws URISyntaxException {
+	private void setIndividualContacts() throws URISyntaxException {
 		
 		final List<ResponsibleParty> contacts = new ArrayList<ResponsibleParty>();
 		
@@ -343,15 +357,14 @@ public class GeographicEntityMetadata extends DefaultMetadata {
 						// Usage for bibliography
 								new SimpleInternationalString(
 										"Usage subject to mandatory citation: "
-												+copyright+" "+object.getTemplate().getOrganizationContact().getAcronym()+", "
+												+copyright+" "+this.OWNER_CONTACT.getAcronym()+", "
 												+ c.get(Calendar.YEAR)+ ". "
 												+ object.getTemplate().getCollection()+ ". "
 												+ object.getMetaTitle()
 												+ " ("+ object.getCode()+ "). "
-												+ "In: "+object.getTemplate().getOrganizationContact().getName()+" [online]. "
-												+ object.getTemplate().getOrganizationContact().getCity()+". [Cited <DATE>] "
-												+ object.getTemplate()
-														.getCollectionURL()),
+												+ "In: "+this.OWNER_CONTACT.getName()+" [online]. "
+												+ this.OWNER_CONTACT.getCity()+". [Cited <DATE>] "
+												+ object.getTemplate().getCollectionURL()),
 
 								// Disclaimer
 								new SimpleInternationalString(object
@@ -441,7 +454,7 @@ public class GeographicEntityMetadata extends DefaultMetadata {
 			// note: in the future we should see to customize the SHAPE-ZIP so
 			// it handles the metadata. This will require Geoserver
 			// developements
-			String shpFileName = object.getTemplate().getOrganizationContact().getAcronym()+"_" + object.getTargetLayerName();
+			String shpFileName = this.getOwnerOrganization().getAcronym()+"_" + object.getTargetLayerName();
 			DefaultOnlineResource wfsResource2 = new DefaultOnlineResource();
 			wfsResource2.setLinkage(new URI(object.getGeographicServerSettings().getUrl() + "/"
 					+ object.getGeographicServerSettings().getTargetWorkspace()
@@ -494,8 +507,7 @@ public class GeographicEntityMetadata extends DefaultMetadata {
 		// citation
 		// --------
 		DefaultCitation citation = new DefaultCitation();
-		citation.setCitedResponsibleParties(Arrays.asList(this
-				.getOrganization()));
+		citation.setCitedResponsibleParties(this.getOrganizationContacts());
 
 		// Identifier
 		DefaultIdentifier identifier = new DefaultIdentifier();

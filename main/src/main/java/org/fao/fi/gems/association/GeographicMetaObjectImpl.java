@@ -10,6 +10,7 @@ import org.fao.fi.gems.entity.EntityAddin;
 import org.fao.fi.gems.entity.GeographicEntity;
 import org.fao.fi.gems.feature.FeatureTypeProperty;
 import org.fao.fi.gems.model.MetadataConfig;
+import org.fao.fi.gems.model.content.MetadataContact;
 import org.fao.fi.gems.model.content.MetadataContent;
 import org.fao.fi.gems.model.settings.BaseLayer;
 import org.fao.fi.gems.model.settings.GeographicServerSettings;
@@ -254,9 +255,14 @@ public class GeographicMetaObjectImpl implements GeographicMetaObject {
 	 * @param entities
 	 */
 	public void setMetaIdentifier() {
-		this.metaId = Utils.buildMetadataIdentifier(this.getTemplate()
-				.getOrganizationContact().getAcronym(), this.collection,
-				entities);
+		MetadataContact owner = null;
+		for(MetadataContact contact : this.getTemplate().getOrganizationContacts()){
+			if(contact.getRole().matches("OWNER")){
+				owner = contact;
+				break;
+			}
+		}
+		this.metaId = Utils.buildMetadataIdentifier(owner.getAcronym(), this.collection, entities);
 	}
 	
 	/**

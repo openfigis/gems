@@ -39,16 +39,30 @@
 	</topicCategories>
 	
 	<!-- Contacts -->
-	<organizationContact>
-		<acronym>ORG</acronym>
-		<name>ORGANIZATION</name>
-		<organizationName>ORGANIZATION</organizationName>
-		<url>http://www.organization.org</url>
-		<address>address</address>
-		<city>TheCity</city>
-		<postalCode>78</postalCode>
-		<country>TheCountry</country>
-	</organizationContact>
+	<organizationContacts>
+		<contact>
+			<acronym>ORG</acronym>
+			<name>ORGANIZATION</name>
+			<organizationName>ORGANIZATION</organizationName>
+			<url>http://www.organization.org</url>
+			<address>address</address>
+			<city>TheCity</city>
+			<postalCode>78</postalCode>
+			<country>TheCountry</country>
+			<role>OWNER</role>
+		</contact>
+		<contact>
+			<acronym>ORG2</acronym>
+			<name>ORGANIZATION2</name>
+			<organizationName>ORGANIZATION2</organizationName>
+			<url>http://www.organization2.org</url>
+			<address>address2</address>
+			<city>TheCity2</city>
+			<postalCode>782</postalCode>
+			<country>TheCountry2</country>
+			<role>POINT_OF_CONTACT</role>
+		</contact>
+	</organizationContacts>
 	<individualContacts>
 		<contact>
 			<name>ORGANIZATION</name>
@@ -63,6 +77,7 @@
 			<individualName>Some One</individualName>
 			<organizationName>ORGANIZATION</organizationName>
 			<positionName>His Position</positionName>
+			<role>POINT_OF_CONTACT</role>
 		</contact>
 		<contact>
 			<name>ORGANIZATION</name>
@@ -77,6 +92,7 @@
 			<individualName>Some One2</individualName>
 			<organizationName>ORGANIZATION</organizationName>
 			<positionName>His Position2</positionName>
+			<role>POINT_OF_CONTACT</role>
 		</contact>
 	</individualContacts>
 	

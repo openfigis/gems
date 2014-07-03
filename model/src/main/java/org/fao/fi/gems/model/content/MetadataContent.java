@@ -28,7 +28,7 @@ public class MetadataContent {
 	private String disclaimer;
 	private List<MetadataThesaurus> thesaurusList;
 	private List<String> topicCategories;
-	private MetadataContact organizationContact;
+	private List<MetadataContact> organizationContacts;
 	private List<MetadataContact> individualContacts;
 	
 	
@@ -139,12 +139,15 @@ public class MetadataContent {
 		return this.supplementaryInfo;
 	}
 	
-	public void setOrganizationContact(MetadataContact contact){
-		this.organizationContact = contact;
+	public void addOrganizationContact(MetadataContact contact){
+		if(this.organizationContacts == null){
+			this.organizationContacts = new ArrayList<MetadataContact>();
+		}
+		this.organizationContacts.add(contact);
 	}
 	
-	public MetadataContact getOrganizationContact(){
-		return this.organizationContact;
+	public List<MetadataContact> getOrganizationContacts(){
+		return this.organizationContacts;
 	}
 	
 	public void addIndividualContact(MetadataContact contact){

@@ -22,6 +22,7 @@ public class MetadataContact {
 	private String individualName;
 	private String positionName;
 	private String organizationName;
+	private String role;
 	
 	/**
 	 * 
@@ -212,6 +213,20 @@ public class MetadataContact {
 	 */
 	public void setOrgName(String orgName) {
 		this.organizationName = orgName;
+	}
+
+	/**
+	 * @return the role
+	 */
+	public String getRole() {
+		return role;
+	}
+
+	/**
+	 * @param role the role to set
+	 */
+	public void setRole(String role) {
+		this.role = role;
 	}
 	
 }

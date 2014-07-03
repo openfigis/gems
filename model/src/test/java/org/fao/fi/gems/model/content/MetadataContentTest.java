@@ -68,18 +68,30 @@ public class MetadataContentTest {
 	}
 
 	@Test
-	public void testOrganizationContact(){
+	public void testOrganizationContacts(){
 		
-		MetadataContact org = content.getOrganizationContact();
-		Assert.assertNotNull(org);
-		Assert.assertEquals("ORG", org.getAcronym());
-		Assert.assertEquals("ORGANIZATION", org.getName());
-		Assert.assertEquals("ORGANIZATION", org.getOrgName());
-		Assert.assertEquals("http://www.organization.org", org.getUrl());
-		Assert.assertEquals("address", org.getAddress());
-		Assert.assertEquals("TheCity", org.getCity());
-		Assert.assertEquals("TheCountry", org.getCountry());
-		Assert.assertEquals("78", org.getPostalCode());
+		List<MetadataContact> orgs = content.getOrganizationContacts();
+		Assert.assertNotNull(orgs);
+		
+		Assert.assertEquals("ORG", orgs.get(0).getAcronym());
+		Assert.assertEquals("ORGANIZATION", orgs.get(0).getName());
+		Assert.assertEquals("ORGANIZATION", orgs.get(0).getOrgName());
+		Assert.assertEquals("http://www.organization.org", orgs.get(0).getUrl());
+		Assert.assertEquals("address", orgs.get(0).getAddress());
+		Assert.assertEquals("TheCity", orgs.get(0).getCity());
+		Assert.assertEquals("TheCountry", orgs.get(0).getCountry());
+		Assert.assertEquals("78", orgs.get(0).getPostalCode());
+		Assert.assertEquals("OWNER", orgs.get(0).getRole());
+		
+		Assert.assertEquals("ORG2", orgs.get(1).getAcronym());
+		Assert.assertEquals("ORGANIZATION2", orgs.get(1).getName());
+		Assert.assertEquals("ORGANIZATION2", orgs.get(1).getOrgName());
+		Assert.assertEquals("http://www.organization2.org", orgs.get(1).getUrl());
+		Assert.assertEquals("address2", orgs.get(1).getAddress());
+		Assert.assertEquals("TheCity2", orgs.get(1).getCity());
+		Assert.assertEquals("TheCountry2", orgs.get(1).getCountry());
+		Assert.assertEquals("782", orgs.get(1).getPostalCode());
+		Assert.assertEquals("POINT_OF_CONTACT", orgs.get(1).getRole());
 		
 	}
 	
@@ -107,6 +119,8 @@ public class MetadataContentTest {
 		Assert.assertEquals("Some One2", contacts.get(1).getIndividualName());
 		Assert.assertEquals("His Position", contacts.get(0).getPositionName());
 		Assert.assertEquals("His Position2", contacts.get(1).getPositionName());
+		Assert.assertEquals("POINT_OF_CONTACT", contacts.get(0).getRole());
+		Assert.assertEquals("POINT_OF_CONTACT", contacts.get(1).getRole());
 		
 	}
 	

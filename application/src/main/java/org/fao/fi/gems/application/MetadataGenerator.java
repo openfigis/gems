@@ -16,6 +16,7 @@ import org.fao.fi.gems.feature.FeatureTypeProperty;
 import org.fao.fi.gems.entity.EntityAddin;
 import org.fao.fi.gems.entity.GeographicEntity;
 import org.fao.fi.gems.model.MetadataConfig;
+import org.fao.fi.gems.model.content.MetadataContact;
 import org.fao.fi.gems.publisher.Publisher;
 import org.fao.fi.gems.util.FeatureTypeUtils;
 import org.slf4j.Logger;
@@ -46,7 +47,13 @@ public class MetadataGenerator {
 		
 		//read the codelists
 		LOGGER.info("(2) Loading the reference list");
-		String owner = config.getContent().getOrganizationContact().getAcronym();
+		String owner = null;
+		for(MetadataContact organization : config.getContent().getOrganizationContacts()){
+			if(organization.getRole().matches("OWNER")){
+				owner = organization.getAcronym();
+				break;
+			}
+		}
 		LOGGER.info("Owner = "+owner);
 		String collectionType = config.getSettings().getPublicationSettings().getCollectionType();
 		LOGGER.info("Collection type = "+collectionType);
