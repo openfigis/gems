@@ -130,8 +130,8 @@
 				<address>address2</address>
 				<city>TheCity2</city>
 				<postalCode>782</postalCode>
-				<role>POINT_OF_CONTACT</role>
 				<country>TheCountry2</country>
+				<role>POINT_OF_CONTACT</role>
 			</contact>
 		</organizationContacts>
 		<individualContacts>
