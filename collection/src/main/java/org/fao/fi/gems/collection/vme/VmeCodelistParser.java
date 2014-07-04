@@ -131,7 +131,7 @@ public class VmeCodelistParser implements CodelistParser{
 						
 						if(addEntity && figisId != null){
 							Map<GeographicMetaObjectProperty, List<String>> properties = new HashMap<GeographicMetaObjectProperty, List<String>>();
-							properties.put(VmeProperty.FAO, Arrays.asList(Utils.buildMetadataIdentifier(owner, collection, vmeId)));
+							//properties.put(VmeProperty.FAO, Arrays.asList(Utils.buildMetadataIdentifier(owner, collection, vmeId)));
 							properties.put(VmeProperty.VME, Arrays.asList(vmeId, localName, globalName));
 							properties.put(VmeProperty.FIGIS, Arrays.asList(figisId));
 								
