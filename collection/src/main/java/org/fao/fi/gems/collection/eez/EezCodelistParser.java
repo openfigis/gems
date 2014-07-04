@@ -13,7 +13,6 @@ import java.util.Set;
 
 import org.fao.fi.gems.association.GeographicMetaObjectProperty;
 import org.fao.fi.gems.codelist.CodelistParser;
-import org.fao.fi.gems.collection.species.SpeciesCodelistParser;
 import org.fao.fi.gems.entity.EntityAuthority;
 import org.fao.fi.gems.entity.GeographicEntity;
 import org.fao.fi.gems.entity.GeographicEntityImpl;
@@ -39,7 +38,9 @@ public class EezCodelistParser implements CodelistParser{
 	public enum EezProperty implements GeographicMetaObjectProperty{
 		
 		VLIZ (EntityAuthority.VLIZ, true, true, true),
-		FLOD (EntityAuthority.FLOD, true, true, true);
+		FLOD (EntityAuthority.FLOD, true, true, true),
+		ISO (EntityAuthority.ISO, true, true, false),
+		MARINEREGIONS(EntityAuthority.MARINEREGIONS, true, true, false);
 		
 		private final Object object;
 		private final boolean isAuthority;
@@ -92,11 +93,16 @@ public class EezCodelistParser implements CodelistParser{
 					JsonObject obj = bindings.get(i).getAsJsonObject().get("properties").getAsJsonObject();
 					String mrgid = obj.get("mrgid").getAsString();
 					String label = obj.get("eez").getAsString();
+					String country = obj.get("country").getAsString();
+					String iso_3digit = obj.get("iso_3digit").getAsString();
 
 					GeographicEntity entity =null;
 					try {
 						Map<GeographicMetaObjectProperty, List<String>> properties = new HashMap<GeographicMetaObjectProperty, List<String>>();
 						properties.put(EezProperty.VLIZ, Arrays.asList(Utils.buildMetadataIdentifier(owner, collection, mrgid)));
+						properties.put(EezProperty.MARINEREGIONS, Arrays.asList(mrgid, country, label));
+						properties.put(EezProperty.ISO, Arrays.asList(iso_3digit));
+						
 						
 						FLODEezEntity flodEntity = new FLODEezEntity(mrgid);
 						if(flodEntity.getFlodContent() != null){

@@ -7,11 +7,13 @@ package org.fao.fi.gems.entity;
  */
 public enum EntityAuthority {
 
+	ISO("ISO", "http://www.iso.org"),
 	FAO("FAO", "http://www.fao.org/fi"),
 	FIGIS("FIGIS", "http://www.fao.org/figis"),
 	FLOD("FLOD", "http://www.fao.org/figis/flod"),
 	ASFIS("ASFIS", "http://www.fao.org/fishery/collection/asfis"),
 	VLIZ("VLIZ", "http://www.vliz.be"),
+	MARINEREGIONS("MARINEREGIONS", "http://www.marineregions.org/"),
 	WORMS("WORMS", "http://www.marinespecies.org");
 
 	private final String propertyName;
