@@ -172,7 +172,7 @@ public class DataPublisher {
 			}
 		}
 
-		Envelope bbox = object.getBBOX();
+		Envelope bbox = object.getActualBBOX();
 		if (bbox != null) {
 			fte.setNativeBoundingBox(bbox.getMinX(), bbox.getMinY(),
 					bbox.getMaxX(), bbox.getMaxY(), "EPSG:4326");

@@ -207,8 +207,18 @@ public final class FeatureTypeUtils {
 					// while bbox == null
 					Envelope bounds = null;
 					if (!(bboxMinX == 0 & bboxMaxX == 0 & bboxMinY == 0 & bboxMaxY == 0)) {
+						
+						//actual bbox
+						bounds = new Envelope(bboxMinX, bboxMaxX, bboxMinY, bboxMaxY);
+						map.put(FeatureTypeProperty.BBOX_ACTUAL, bounds);
 
-						// apply buffer
+						LOGGER.info("Preview Bounding Box");
+						LOGGER.info("min X = "+String.valueOf(bboxMinX));
+						LOGGER.info("max X = "+String.valueOf(bboxMaxX));
+						LOGGER.info("min Y = "+String.valueOf(bboxMinY));
+						LOGGER.info("max Y = "+String.valueOf(bboxMaxY));
+						
+						// Preview bbox (apply buffer)
 						if (!(bboxMinX < -180 + buffer)
 								&& !(bboxMaxX > 180 - buffer)) {
 							bboxMinX = bboxMinX - buffer;
@@ -222,12 +232,10 @@ public final class FeatureTypeUtils {
 							bboxMaxY = bboxMaxY + buffer;
 
 						}
-
-						// build envelope
-						bounds = new Envelope(bboxMinX, bboxMaxX,
-								bboxMinY, bboxMaxY);
-						map.put(FeatureTypeProperty.BBOX, bounds);
-						LOGGER.info("Calculated Bounding Box");
+						bounds = new Envelope(bboxMinX, bboxMaxX, bboxMinY, bboxMaxY);
+						map.put(FeatureTypeProperty.BBOX_PREVIEW, bounds);
+						
+						LOGGER.info("Preview Bounding Box");
 						LOGGER.info("min X = "+String.valueOf(bboxMinX));
 						LOGGER.info("max X = "+String.valueOf(bboxMaxX));
 						LOGGER.info("min Y = "+String.valueOf(bboxMinY));
@@ -348,7 +356,17 @@ public final class FeatureTypeUtils {
 		Envelope bounds = null;
 		if (!(bboxMinX == 0 & bboxMaxX == 0 & bboxMinY == 0 & bboxMaxY == 0)) {
 
-			// apply buffer
+			//actual bbox
+			bounds = new Envelope(bboxMinX, bboxMaxX, bboxMinY, bboxMaxY);
+			map.put(FeatureTypeProperty.BBOX_ACTUAL, bounds);
+
+			LOGGER.info("Preview Bounding Box");
+			LOGGER.info("min X = "+String.valueOf(bboxMinX));
+			LOGGER.info("max X = "+String.valueOf(bboxMaxX));
+			LOGGER.info("min Y = "+String.valueOf(bboxMinY));
+			LOGGER.info("max Y = "+String.valueOf(bboxMaxY));
+			
+			// Preview bbox (apply buffer)
 			if (!(bboxMinX < -180 + buffer)
 					&& !(bboxMaxX > 180 - buffer)) {
 				bboxMinX = bboxMinX - buffer;
@@ -362,10 +380,8 @@ public final class FeatureTypeUtils {
 				bboxMaxY = bboxMaxY + buffer;
 
 			}
-
-			// build envelope
-			bounds = new Envelope(bboxMinX, bboxMaxX,
-					bboxMinY, bboxMaxY);
+			bounds = new Envelope(bboxMinX, bboxMaxX, bboxMinY, bboxMaxY);
+			map.put(FeatureTypeProperty.BBOX_PREVIEW, bounds);
 			LOGGER.info("Calculated Bounding Box");
 			LOGGER.info("min X = "+String.valueOf(bboxMinX));
 			LOGGER.info("max X = "+String.valueOf(bboxMaxX));
@@ -376,7 +392,7 @@ public final class FeatureTypeUtils {
 		
 		map.put(FeatureTypeProperty.CRS, pFC.getFeatureType().getCoordinateReferenceSystem());
 		map.put(FeatureTypeProperty.COUNT, pFC.size());
-		map.put(FeatureTypeProperty.BBOX, bounds);
+		
 
 		return map;
 	}

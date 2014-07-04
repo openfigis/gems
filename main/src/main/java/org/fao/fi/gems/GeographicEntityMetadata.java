@@ -545,7 +545,7 @@ public class GeographicEntityMetadata extends DefaultMetadata {
 		
 		//Geographic bounding box
 		DefaultGeographicBoundingBox boundingBox = new DefaultGeographicBoundingBox();
-		Envelope bbox = object.getBBOX();
+		Envelope bbox = object.getActualBBOX();
 		if (bbox != null) {
 			boundingBox.setWestBoundLongitude(bbox.getMinX());
 			boundingBox.setEastBoundLongitude(bbox.getMaxX());

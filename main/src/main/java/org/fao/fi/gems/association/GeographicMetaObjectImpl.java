@@ -352,11 +352,21 @@ public class GeographicMetaObjectImpl implements GeographicMetaObject {
 	}
 
 	
-	public Envelope getBBOX() {
+	public Envelope getActualBBOX() {
 		Envelope bbox = null;
 		if(this.geoproperties != null){
-			if (this.geoproperties.containsKey(FeatureTypeProperty.BBOX)) {
-				bbox = (Envelope) this.geoproperties.get(FeatureTypeProperty.BBOX);
+			if (this.geoproperties.containsKey(FeatureTypeProperty.BBOX_ACTUAL)) {
+				bbox = (Envelope) this.geoproperties.get(FeatureTypeProperty.BBOX_ACTUAL);
+			}
+		}
+		return bbox;
+	}
+	
+	public Envelope getPreviewBBOX() {
+		Envelope bbox = null;
+		if(this.geoproperties != null){
+			if (this.geoproperties.containsKey(FeatureTypeProperty.BBOX_PREVIEW)) {
+				bbox = (Envelope) this.geoproperties.get(FeatureTypeProperty.BBOX_PREVIEW);
 			}
 		}
 		return bbox;
@@ -419,7 +429,7 @@ public class GeographicMetaObjectImpl implements GeographicMetaObject {
 		int width = 600;
 		int height = 300;
 
-		Envelope bbox = this.getBBOX();
+		Envelope bbox = this.getPreviewBBOX();
 		if (bbox != null) {
 			minX = bbox.getMinX();
 			maxX = bbox.getMaxX();
@@ -492,7 +502,7 @@ public class GeographicMetaObjectImpl implements GeographicMetaObject {
 		//only apply to figis collections
 		if(figis && this.entities.get(0).getFigisViewerId() != null){
 
-			Envelope bbox = this.getBBOX();
+			Envelope bbox = this.getPreviewBBOX();
 			String figisDomain = this.entities.get(0).getFigisDomain();
 			
 			String resource = null;

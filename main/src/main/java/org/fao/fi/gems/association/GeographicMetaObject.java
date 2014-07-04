@@ -49,7 +49,9 @@ public interface GeographicMetaObject {
 	
 	CoordinateReferenceSystem getCRS();
 	
-	Envelope getBBOX();
+	Envelope getActualBBOX();
+	
+	Envelope getPreviewBBOX();
 	
 	TemporalPrimitive getTIME();
 
