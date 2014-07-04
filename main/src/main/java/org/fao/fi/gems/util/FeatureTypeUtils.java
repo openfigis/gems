@@ -114,6 +114,9 @@ public final class FeatureTypeUtils {
 									Date time2 = Date.valueOf(timeNode2.getTextContent());
 									if(endTime == null) endTime = time2;
 									if(time2.after(endTime)) endTime = time2;
+								}else{
+									if(endTime == null) endTime = time1;
+									if(time1.after(endTime)) endTime = time1;
 								}
 							}
 
@@ -165,12 +168,11 @@ public final class FeatureTypeUtils {
 						DefaultInstant endInstant = null;
 						if(endTime != null) endInstant = new DefaultInstant(new DefaultPosition(endTime));
 						DefaultTemporalPrimitive temporalPrimitive = null;
-						if(endInstant != null){
-							temporalPrimitive = new DefaultPeriod(startInstant, endInstant);
-						}else{
+						if(endInstant == null || startTime.equals(endTime)){
 							temporalPrimitive = startInstant;
+						}else{
+							temporalPrimitive = new DefaultPeriod(startInstant, endInstant);
 						}
-						LOGGER.info("Time = "+temporalPrimitive.toString());
 						map.put(FeatureTypeProperty.TIME, temporalPrimitive);
 					}
 
@@ -212,7 +214,7 @@ public final class FeatureTypeUtils {
 						bounds = new Envelope(bboxMinX, bboxMaxX, bboxMinY, bboxMaxY);
 						map.put(FeatureTypeProperty.BBOX_ACTUAL, bounds);
 
-						LOGGER.info("Preview Bounding Box");
+						LOGGER.info("Actual Bounding Box");
 						LOGGER.info("min X = "+String.valueOf(bboxMinX));
 						LOGGER.info("max X = "+String.valueOf(bboxMaxX));
 						LOGGER.info("min Y = "+String.valueOf(bboxMinY));
@@ -360,7 +362,7 @@ public final class FeatureTypeUtils {
 			bounds = new Envelope(bboxMinX, bboxMaxX, bboxMinY, bboxMaxY);
 			map.put(FeatureTypeProperty.BBOX_ACTUAL, bounds);
 
-			LOGGER.info("Preview Bounding Box");
+			LOGGER.info("Actual Bounding Box");
 			LOGGER.info("min X = "+String.valueOf(bboxMinX));
 			LOGGER.info("max X = "+String.valueOf(bboxMaxX));
 			LOGGER.info("min Y = "+String.valueOf(bboxMinY));
@@ -382,7 +384,7 @@ public final class FeatureTypeUtils {
 			}
 			bounds = new Envelope(bboxMinX, bboxMaxX, bboxMinY, bboxMaxY);
 			map.put(FeatureTypeProperty.BBOX_PREVIEW, bounds);
-			LOGGER.info("Calculated Bounding Box");
+			LOGGER.info("Preview Bounding Box");
 			LOGGER.info("min X = "+String.valueOf(bboxMinX));
 			LOGGER.info("max X = "+String.valueOf(bboxMaxX));
 			LOGGER.info("min Y = "+String.valueOf(bboxMinY));
