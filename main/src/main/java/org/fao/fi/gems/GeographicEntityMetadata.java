@@ -37,6 +37,7 @@ import org.geotoolkit.metadata.iso.distribution.DefaultDigitalTransferOptions;
 import org.geotoolkit.metadata.iso.distribution.DefaultDistribution;
 import org.geotoolkit.metadata.iso.extent.DefaultExtent;
 import org.geotoolkit.metadata.iso.extent.DefaultGeographicBoundingBox;
+import org.geotoolkit.metadata.iso.extent.DefaultTemporalExtent;
 import org.geotoolkit.metadata.iso.identification.DefaultBrowseGraphic;
 import org.geotoolkit.metadata.iso.identification.DefaultDataIdentification;
 import org.geotoolkit.metadata.iso.identification.DefaultKeywords;
@@ -46,6 +47,7 @@ import org.geotoolkit.metadata.iso.quality.DefaultDataQuality;
 import org.geotoolkit.metadata.iso.quality.DefaultScope;
 import org.geotoolkit.metadata.iso.spatial.DefaultGeometricObjects;
 import org.geotoolkit.metadata.iso.spatial.DefaultVectorSpatialRepresentation;
+import org.geotoolkit.temporal.object.DefaultTemporalPrimitive;
 import org.geotoolkit.util.SimpleInternationalString;
 import org.opengis.metadata.citation.DateType;
 import org.opengis.metadata.citation.OnLineFunction;
@@ -64,6 +66,7 @@ import org.opengis.metadata.maintenance.MaintenanceFrequency;
 import org.opengis.metadata.maintenance.ScopeCode;
 import org.opengis.metadata.spatial.GeometricObjectType;
 import org.opengis.metadata.spatial.TopologyLevel;
+import org.opengis.temporal.TemporalPrimitive;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -539,6 +542,8 @@ public class GeographicEntityMetadata extends DefaultMetadata {
 		// extent
 		// ------
 		DefaultExtent extent = new DefaultExtent();
+		
+		//Geographic bounding box
 		DefaultGeographicBoundingBox boundingBox = new DefaultGeographicBoundingBox();
 		Envelope bbox = object.getBBOX();
 		if (bbox != null) {
@@ -552,10 +557,19 @@ public class GeographicEntityMetadata extends DefaultMetadata {
 			boundingBox.setSouthBoundLatitude(-90);
 			boundingBox.setNorthBoundLatitude(90);
 		}
-
 		extent.getGeographicElements().add(boundingBox);
-		identification.getExtents().add(extent);
 
+		//Temporal extent
+		TemporalPrimitive time = object.getTIME();
+		if(time != null){
+			DefaultTemporalExtent temporalExtent = new DefaultTemporalExtent();
+			temporalExtent.setExtent(time);
+			extent.getTemporalElements().add(temporalExtent);
+		}
+		
+		//add extents (geograhic + eventual temporal)
+		identification.getExtents().add(extent);
+		
 		// abstract
 		// -------
 		identification.setAbstract(new SimpleInternationalString(object.getMetaTitle()+ ". "+ object.getTemplate().getAbstract()));

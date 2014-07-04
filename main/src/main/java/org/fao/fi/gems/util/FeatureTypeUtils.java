@@ -1,15 +1,13 @@
 package org.fao.fi.gems.util;
 
-import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.sql.Date;
 import java.util.HashMap;
 import java.util.Map;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
-
 import org.fao.fi.gems.feature.FeatureTypeProperty;
 import org.fao.fi.gems.model.settings.GeographicServerSettings;
 import org.geotoolkit.data.FeatureCollection;
@@ -21,6 +19,10 @@ import org.geotoolkit.data.shapefile.ShapefileDataStoreFactory;
 import org.geotoolkit.parameter.Parameters;
 import org.geotoolkit.referencing.crs.DefaultGeographicCRS;
 import org.geotoolkit.storage.DataStoreException;
+import org.geotoolkit.temporal.object.DefaultInstant;
+import org.geotoolkit.temporal.object.DefaultPeriod;
+import org.geotoolkit.temporal.object.DefaultPosition;
+import org.geotoolkit.temporal.object.DefaultTemporalPrimitive;
 import org.opengis.feature.Feature;
 import org.opengis.feature.type.Name;
 import org.opengis.geometry.BoundingBox;
@@ -31,8 +33,6 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
-import org.xml.sax.SAXException;
-
 import com.vividsolutions.jts.geom.Envelope;
 
 public final class FeatureTypeUtils {
@@ -40,6 +40,7 @@ public final class FeatureTypeUtils {
 	private static Logger LOGGER = LoggerFactory.getLogger(FeatureTypeUtils.class);
 	
 	/**
+	 * Compute FeatureType properties from a WFS request
 	 * 
 	 * @param settings
 	 * @param code
@@ -49,7 +50,7 @@ public final class FeatureTypeUtils {
 	public static Map<FeatureTypeProperty, Object> computeFeatureTypeProperties(
 			GeographicServerSettings settings,
 			String code, double buffer) {
-
+		
 		Map<FeatureTypeProperty, Object> map = null;
 
 		// bbox coordinates
@@ -61,6 +62,11 @@ public final class FeatureTypeUtils {
 		double maxNegX = -180;
 		double maxPosX = 180;
 
+		// time
+		boolean hasTime = false;
+		if(settings.getTimeDimension() != null) hasTime = true;
+		Date startTime = null;
+		Date endTime = null;
 		
 		try{
 
@@ -91,10 +97,28 @@ public final class FeatureTypeUtils {
 						if (nNode.getNodeType() == Node.ELEMENT_NODE) {
 
 							Element featureMember = (Element) nNode;
-							Node bbox = (Node) featureMember
-									.getElementsByTagName("gml:Box").item(0);
+							
+							// time information
+							if(hasTime){
+								//Start time
+								String timeAttribute1 = settings.getSourceWorkspace() +":"+ settings.getTimeDimension().getStartTime();
+								Node timeNode1 = (Node) featureMember.getElementsByTagName(timeAttribute1).item(0);
+								Date time1 = Date.valueOf(timeNode1.getTextContent());
+								if(startTime == null) startTime = time1;
+								if(time1.before(startTime)) startTime = time1;
+								
+								//end time
+								if(settings.getTimeDimension().getEndTime() != null){
+									String timeAttribute2 = settings.getSourceWorkspace() +":"+ settings.getTimeDimension().getEndTime();
+									Node timeNode2 = (Node) featureMember.getElementsByTagName(timeAttribute2).item(0);
+									Date time2 = Date.valueOf(timeNode2.getTextContent());
+									if(endTime == null) endTime = time2;
+									if(time2.after(endTime)) endTime = time2;
+								}
+							}
 
-							// coords
+							// geographic bbox
+							Node bbox = (Node) featureMember.getElementsByTagName("gml:Box").item(0);
 							Element coords = (Element) bbox.getFirstChild();
 							String[] gmlBounds = coords.getTextContent().split(" ");
 
@@ -133,8 +157,24 @@ public final class FeatureTypeUtils {
 						}
 
 					}
+					
+					// time extent
+					if(hasTime){
+						//temporal primitive
+						DefaultInstant startInstant = new DefaultInstant(new DefaultPosition(startTime));
+						DefaultInstant endInstant = null;
+						if(endTime != null) endInstant = new DefaultInstant(new DefaultPosition(endTime));
+						DefaultTemporalPrimitive temporalPrimitive = null;
+						if(endInstant != null){
+							temporalPrimitive = new DefaultPeriod(startInstant, endInstant);
+						}else{
+							temporalPrimitive = startInstant;
+						}
+						LOGGER.info("Time = "+temporalPrimitive.toString());
+						map.put(FeatureTypeProperty.TIME, temporalPrimitive);
+					}
 
-					// final adjustment
+					// final bbox adjustment
 					// ***************
 					// in case maxNegX & maxPosX unchanged
 					if (maxNegX == -180)
@@ -213,7 +253,7 @@ public final class FeatureTypeUtils {
 	 * @param url
 	 * @return
 	 * @throws DataStoreException 
-	 * @throws MalformedURLException 
+	 * @throws MalformedURLException
 	 */
 	public static Map<FeatureTypeProperty, Object> computeFeatureTypeProperties(String url, double buffer) throws DataStoreException, MalformedURLException {
 	

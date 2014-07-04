@@ -44,6 +44,10 @@ public class SettingsTest {
 		Assert.assertEquals("targetDS", server.getTargetDatastore());
 		Assert.assertEquals("someprefix", server.getTargetLayerPrefix());
 		
+		Assert.assertNotNull(server.getTimeDimension());
+		Assert.assertEquals("START_YEAR", server.getTimeDimension().getStartTime());
+		Assert.assertEquals("END_YEAR", server.getTimeDimension().getEndTime());
+		
 		List<BaseLayer> baseLayers = server.getBaseLayerList();
 		Assert.assertEquals("baselayerWS1", baseLayers.get(0).getWorkspace());
 		Assert.assertEquals("baselayerName1", baseLayers.get(0).getName());

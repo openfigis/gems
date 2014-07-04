@@ -10,6 +10,7 @@ import org.fao.fi.gems.model.settings.GeographicServerSettings;
 import org.fao.fi.gems.model.settings.MetadataCatalogueSettings;
 import org.fao.fi.gems.model.settings.PublicationSettings;
 import org.opengis.referencing.crs.CoordinateReferenceSystem;
+import org.opengis.temporal.TemporalPrimitive;
 
 import com.vividsolutions.jts.geom.Envelope;
 
@@ -44,11 +45,13 @@ public interface GeographicMetaObject {
 	
 	//GIS
 
+	int getFeaturesCount();
+	
 	CoordinateReferenceSystem getCRS();
 	
 	Envelope getBBOX();
-
-	int getFeaturesCount();
+	
+	TemporalPrimitive getTIME();
 
 	URI getLayerGraphicOverview();
 	

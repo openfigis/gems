@@ -10,6 +10,8 @@ import it.geosolutions.geoserver.rest.encoder.GSResourceEncoder.ProjectionPolicy
 import it.geosolutions.geoserver.rest.encoder.authorityurl.GSAuthorityURLInfoEncoder;
 import it.geosolutions.geoserver.rest.encoder.feature.GSFeatureTypeEncoder;
 import it.geosolutions.geoserver.rest.encoder.identifier.GSIdentifierInfoEncoder;
+import it.geosolutions.geoserver.rest.encoder.metadata.GSDimensionInfoEncoder.Presentation;
+import it.geosolutions.geoserver.rest.encoder.metadata.GSFeatureDimensionInfoEncoder;
 import it.geosolutions.geoserver.rest.encoder.metadata.virtualtable.GSVirtualTableEncoder;
 import it.geosolutions.geoserver.rest.encoder.metadata.virtualtable.VTGeometryEncoder;
 import it.geosolutions.geoserver.rest.encoder.metadatalink.GSMetadataLinkInfoEncoder;
@@ -29,6 +31,7 @@ import org.fao.fi.gems.association.GeographicMetaObjectProperty;
 import org.fao.fi.gems.entity.EntityAuthority;
 import org.fao.fi.gems.model.settings.GeographicServerSettings;
 import org.fao.fi.gems.model.settings.MetadataCatalogueSettings;
+import org.fao.fi.gems.model.settings.TimeDimension;
 import org.fao.fi.gems.util.Utils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -60,6 +63,7 @@ public class DataPublisher {
 	String trgWorkspace;
 	String trgDatastore;
 	String trgLayerPrefix;
+	TimeDimension timeDimension;
 	
 	String geonetworkBaseURL;
 
@@ -87,6 +91,7 @@ public class DataPublisher {
 		this.trgWorkspace = settings.getTargetWorkspace();
 		this.trgDatastore = settings.getTargetDatastore();
 		this.trgLayerPrefix = settings.getTargetLayerPrefix();
+		this.timeDimension = settings.getTimeDimension();
 
 		this.geonetworkBaseURL = catalogueSettings.getUrl();
 		
@@ -209,6 +214,21 @@ public class DataPublisher {
 						this.geonetworkBaseURL, object.getMetaIdentifier()));
 		fte.addMetadataLinkInfo(mde1);
 		fte.addMetadataLinkInfo(mde2);
+		
+		//time dimension
+		if(this.timeDimension != null){
+			GSFeatureDimensionInfoEncoder time = new GSFeatureDimensionInfoEncoder(this.timeDimension.getStartTime());
+			Presentation presentation = null;
+			if(this.timeDimension.getEndTime() != null){
+				presentation = Presentation.LIST;
+			}else{
+				presentation = Presentation.CONTINUOUS_INTERVAL;
+			}
+			time.setPresentation(presentation);
+			time.setUnit("ISO8601");
+			time.setEnabled(true);
+			fte.setMetadataDimension("time", time);
+		}
 
 		// layer
 		GSLayerEncoder layerEncoder = null;

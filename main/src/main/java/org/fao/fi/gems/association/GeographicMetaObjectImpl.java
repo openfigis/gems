@@ -18,6 +18,7 @@ import org.fao.fi.gems.model.settings.MetadataCatalogueSettings;
 import org.fao.fi.gems.model.settings.PublicationSettings;
 import org.fao.fi.gems.util.Utils;
 import org.opengis.referencing.crs.CoordinateReferenceSystem;
+import org.opengis.temporal.TemporalPrimitive;
 
 import com.vividsolutions.jts.geom.Envelope;
 
@@ -375,11 +376,21 @@ public class GeographicMetaObjectImpl implements GeographicMetaObject {
 	public CoordinateReferenceSystem getCRS() {
 		CoordinateReferenceSystem crs = null;
 		if(this.geoproperties != null){
-			if (!this.geoproperties.containsKey(FeatureTypeProperty.CRS)) {
+			if (this.geoproperties.containsKey(FeatureTypeProperty.CRS)) {
 				crs = (CoordinateReferenceSystem) this.geoproperties.get(FeatureTypeProperty.CRS);
 			}
 		}
 		return crs;
+	}
+	
+	public TemporalPrimitive getTIME(){
+		TemporalPrimitive time = null;
+		if(this.geoproperties != null){
+			if(this.geoproperties.containsKey(FeatureTypeProperty.TIME)){
+				time = (TemporalPrimitive) this.geoproperties.get(FeatureTypeProperty.TIME);
+			}
+		}
+		return time;
 	}
 	
 

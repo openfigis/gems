@@ -26,7 +26,10 @@ public class GeographicServerSettings{
 	private String targetWorkspace;
 	private String targetDatastore;
 	private String targetLayerPrefix;
+	private TimeDimension timeDimension;
+	
 	private List<BaseLayer> baseLayerList;
+	
 	private String method;
 	private String shapefileURL;
 
@@ -184,6 +187,20 @@ public class GeographicServerSettings{
 
 
 	/**
+	 * @return the timeDimension
+	 */
+	public TimeDimension getTimeDimension() {
+		return timeDimension;
+	}
+
+	/**
+	 * @param timeDimension the timeDimension to set
+	 */
+	public void setTimeDimension(TimeDimension timeDimension) {
+		this.timeDimension = timeDimension;
+	}
+
+	/**
 	 * @return the baseLayerList
 	 */
 	public List<BaseLayer> getBaseLayerList() {
@@ -236,6 +253,7 @@ public class GeographicServerSettings{
 
 		XStream xstream = new XStream(new StaxDriver());
 		xstream.aliasType("GeographicServer", GeographicServerSettings.class);
+		xstream.aliasType("timeDimension", TimeDimension.class);
 		xstream.aliasType("baseLayer", BaseLayer.class);
 		
 		GeographicServerSettings settings = (GeographicServerSettings) xstream

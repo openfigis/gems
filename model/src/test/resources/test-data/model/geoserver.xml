@@ -9,6 +9,10 @@
 	<targetWorkspace>targetWS</targetWorkspace>
 	<targetDatastore>targetDS</targetDatastore>
 	<targetLayerPrefix>someprefix</targetLayerPrefix>
+	<timeDimension>
+		<startTime>START_YEAR</startTime>
+		<endTime>END_YEAR</endTime>
+	</timeDimension>
 	<baseLayerList>
 		<baseLayer>
 			<workspace>baselayerWS1</workspace>

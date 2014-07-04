@@ -16,7 +16,11 @@
 			<targetWorkspace>targetWS</targetWorkspace>			<!-- target workspace where to publish the single GIS layers -->
 			<targetDatastore>targetDS</targetDatastore>			<!-- target datastore where to publish the single GIS layers -->
 			<targetLayerPrefix>someprefix</targetLayerPrefix>	<!-- some prefix to use for the target layer names -->
-			<baseLayerList>									<!-- Background layers (each background layer should have a valid workspace and layer names -->
+			<timeDimension>
+				<startTime>START_YEAR</startTime>
+				<endTime>END_YEAR</endTime>
+			</timeDimension>
+			<baseLayerList>										<!-- Background layers (each background layer should have a valid workspace and layer names -->
 				<baseLayer>
 					<workspace>baselayerWS1</workspace>
 					<name>baselayerName1</name>
