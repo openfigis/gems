@@ -366,7 +366,6 @@ public class GeographicEntityMetadata extends DefaultMetadata {
 												+ c.get(Calendar.YEAR)+ ". "
 												+ object.getTemplate().getCollection()+ ". "
 												+ object.getMetaTitle()
-												+ " ("+ object.getCode()+ "). "
 												+ "In: "+this.COPYRIGHT_CONTACT.getName()+" [online]. "
 												+ this.COPYRIGHT_CONTACT.getCity()+". "
 												+ "Updated "+sdf.format(this.lastRevisionDate)+" "
