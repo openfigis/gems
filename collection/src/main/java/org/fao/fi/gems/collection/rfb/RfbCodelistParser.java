@@ -99,7 +99,7 @@ public class RfbCodelistParser implements CodelistParser{
 					String style = eElement.getAttribute("style");
 					String fid = eElement.getAttribute("fid");
 					String label = ((Element) eElement.getElementsByTagName("descriptor").item(0)).getAttribute("title");
-					label += "("+rfb+")"; //add RFB acronym in parentesis
+					label += " ("+rfb+")"; //add RFB acronym in parentesis
 					
 					Map<GeographicMetaObjectProperty, List<String>> properties = new HashMap<GeographicMetaObjectProperty, List<String>>();
 					//FAO
