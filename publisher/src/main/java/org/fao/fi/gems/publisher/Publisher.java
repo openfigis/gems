@@ -57,45 +57,42 @@ public class Publisher {
 	 */
 	public void publish(GeographicMetaObject object, String style, boolean exist) throws Exception {
 
-		if (exist) {
-
-			// force data publication
-			if (this.settings.getPublicationSettings().isForceMetadata()) {
-				try {
+		try{
+			if (exist) {
+	
+				// force data publication
+				if (this.settings.getPublicationSettings().isForceMetadata()) {
 					this.getMetadataPublisher().deleteMetadata(object);
-				} catch (Exception e) {
-					LOGGER.warn("No metadata for id = "+object.getMetaIdentifier());
 				}
-
 				this.getMetadataPublisher().publishMetadata(object);
-
-			}
-
-			if (this.settings.getPublicationSettings().isForceData() == true) {
-				this.getDataPublisher().deleteLayer(object);
+	
+				if (this.settings.getPublicationSettings().isForceData() == true) {
+					this.getDataPublisher().deleteLayer(object);
+					this.getDataPublisher().publishLayer(
+							object,
+							style,
+							PublicationMethod.valueOf(this.settings.getGeographicServerSettings().getMethod()),
+							this.settings.getGeographicServerSettings().getShapefileURL()
+							);
+				}
+	
+			} else {
+				LOGGER.info("Publish new layer");
+				this.getMetadataPublisher().publishMetadata(object);
 				this.getDataPublisher().publishLayer(
 						object,
 						style,
 						PublicationMethod.valueOf(this.settings.getGeographicServerSettings().getMethod()),
-						this.settings.getGeographicServerSettings().getShapefileURL()
-						);
+						this.settings.getGeographicServerSettings().getShapefileURL());
+	
 			}
-
-		} else {
-			LOGGER.info("Publish new layer");
-			this.getMetadataPublisher().publishMetadata(object);
-			this.getDataPublisher().publishLayer(
-					object,
-					style,
-					PublicationMethod.valueOf(this.settings.getGeographicServerSettings().getMethod()),
-					this.settings.getGeographicServerSettings().getShapefileURL());
-
+		} catch (Exception e){
+			throw new Exception("Fail to publish data/metadata pair", e);
+		} finally {
+			int sleep = 3;
+			Thread.sleep(3*1000);
+			LOGGER.info("Sleeping "+sleep+" seconds");
 		}
-
-		int sleep = 3;
-		Thread.sleep(3*1000);
-		LOGGER.info("Sleeping "+sleep+" seconds");
-		
 	}
 
 	/**
@@ -107,27 +104,30 @@ public class Publisher {
 	 */
 	public void unpublish(GeographicMetaObject object, boolean exist) throws Exception {
 
-		if (this.settings.getPublicationSettings().isUnpublishData()) {
-			if (!exist) {
-				this.getDataPublisher().deleteOnlyFeatureType(object);
-
-			} else {
-				this.getDataPublisher().deleteLayer(object);
+		try {
+			if (this.settings.getPublicationSettings().isUnpublishData()) {
+				if (!exist) {
+					this.getDataPublisher().deleteOnlyFeatureType(object);
+				} else {
+					this.getDataPublisher().deleteLayer(object);
+				}
 			}
-		}
-
-		if (this.settings.getPublicationSettings().isUnpublishMetadata()) {
-			try {
-				this.getMetadataPublisher().deleteMetadata(object);
-			} catch (Exception e) {
-				LOGGER.warn("metadata was yet deleted");
+	
+			if (this.settings.getPublicationSettings().isUnpublishMetadata()) {
+				try {
+					this.getMetadataPublisher().deleteMetadata(object);
+				} catch (Exception e) {
+					throw new Exception("Failed to delete metadata" , e);
+				}
+	
 			}
-
+		} catch (Exception e){
+			throw new Exception("Fail to unpublish data/metadata pair", e);
+		} finally {
+			int sleep = 3;
+			Thread.sleep(3*1000);
+			LOGGER.info("Sleeping "+sleep+" seconds");
 		}
-
-		int sleep = 3;
-		Thread.sleep(3*1000);
-		LOGGER.info("Sleeping "+sleep+" seconds");
 	}
 
 }

@@ -2,6 +2,7 @@ package org.fao.fi.gems.publisher;
 
 import java.io.File;
 import java.util.EnumSet;
+import java.util.Iterator;
 
 import org.fao.fi.gems.GeographicEntityMetadata;
 import org.fao.fi.gems.association.GeographicMetaObject;
@@ -13,6 +14,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import it.geosolutions.geonetwork.GNClient;
+import it.geosolutions.geonetwork.exception.GNLibException;
+import it.geosolutions.geonetwork.exception.GNServerException;
 import it.geosolutions.geonetwork.util.GNInsertConfiguration;
 import it.geosolutions.geonetwork.util.GNPriv;
 import it.geosolutions.geonetwork.util.GNPrivConfiguration;
@@ -63,8 +66,9 @@ public class MetadataPublisher {
 	 * 
 	 * @param eobject
 	 * @return the metadata identifier
+	 * @throws Exception 
 	 */
-	public String publishMetadata(GeographicMetaObject object) {
+	public String publishMetadata(GeographicMetaObject object) throws Exception {
 
 		String metadataID = null;
 		try {
@@ -95,7 +99,7 @@ public class MetadataPublisher {
 			metadataID = metadata.getFileIdentifier();
 
 		} catch (Exception e) {
-			e.printStackTrace();
+			throw new Exception("Failed to publish metadata", e);
 		}
 
 		return metadataID;
@@ -108,16 +112,38 @@ public class MetadataPublisher {
 	 * @param object
 	 * @throws Exception
 	 */
-	public void deleteMetadata(GeographicMetaObject object) throws Exception {
+	public void deleteMetadata(GeographicMetaObject object) throws Exception{
 		
 		//configure metadata search 
 		GNSearchRequest request = new GNSearchRequest();
 		request.addParam("uuid", object.getMetaIdentifier());
-		GNSearchResponse response = client.search(request);
-		GNMetadata metadata = response.getMetadata(0);
+		GNSearchResponse response;
+		try {
+			response = client.search(request);
+		} catch (Exception e1) {
+			throw new Exception("Fail to search metadata in Geonetwork", e1);
+		}
 		
 		// delete
-		client.deleteMetadata(metadata.getId());
+		Iterator<GNMetadata> it = response.iterator();
+		GNMetadata metadata = null;
+		while(it.hasNext()){
+			GNMetadata md = it.next();
+			if(md.getUUID().matches(object.getMetaIdentifier())){
+				metadata = md;
+				break;
+			}
+			
+		}
+		if(metadata != null){
+			try {
+				client.deleteMetadata(metadata.getId());
+			} catch (Exception e) {
+				throw new Exception("Fail to delete metadata in Geonetwork", e);
+			}
+		}else{
+			LOGGER.warn("No metadata for id = "+object.getMetaIdentifier());
+		}
 	}
 
 }
