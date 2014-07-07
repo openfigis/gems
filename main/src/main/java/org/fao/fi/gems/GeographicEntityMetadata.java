@@ -105,6 +105,7 @@ public class GeographicEntityMetadata extends DefaultMetadata {
 	Collection<? extends Constraints> constraints;
 	List<ResponsibleParty> ORGANIZATIONS;
 	MetadataContact OWNER_CONTACT;
+	MetadataContact COPYRIGHT_CONTACT;
 
 	/**
 	 * Constructs a GeographicEntity metadata
@@ -214,6 +215,7 @@ public class GeographicEntityMetadata extends DefaultMetadata {
 			contacts.add(rp);
 			
 			if(contact.getRole().matches("OWNER")) this.OWNER_CONTACT = contact;
+			if(contact.isCopyrightOwner()) this.COPYRIGHT_CONTACT = contact;
 		}
 		
 		this.ORGANIZATIONS = contacts;
@@ -360,13 +362,13 @@ public class GeographicEntityMetadata extends DefaultMetadata {
 						// Usage for bibliography
 								new SimpleInternationalString(
 										"Usage subject to mandatory citation: "
-												+copyright+" "+this.OWNER_CONTACT.getAcronym()+", "
+												+copyright+" "+this.COPYRIGHT_CONTACT.getAcronym()+", "
 												+ c.get(Calendar.YEAR)+ ". "
 												+ object.getTemplate().getCollection()+ ". "
 												+ object.getMetaTitle()
 												+ " ("+ object.getCode()+ "). "
-												+ "In: "+this.OWNER_CONTACT.getName()+" [online]. "
-												+ this.OWNER_CONTACT.getCity()+". [Cited <DATE>] "
+												+ "In: "+this.COPYRIGHT_CONTACT.getName()+" [online]. "
+												+ this.COPYRIGHT_CONTACT.getCity()+". [Cited <DATE>] "
 												+ object.getTemplate().getCollectionURL()),
 
 								// Disclaimer

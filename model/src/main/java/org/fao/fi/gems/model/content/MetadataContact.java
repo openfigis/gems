@@ -24,6 +24,8 @@ public class MetadataContact {
 	private String organizationName;
 	private String role;
 	
+	private boolean copyrightOwner = false;
+	
 	/**
 	 * 
 	 * Default Constructor
@@ -227,6 +229,20 @@ public class MetadataContact {
 	 */
 	public void setRole(String role) {
 		this.role = role;
+	}
+
+	/**
+	 * @return the copyrightOwner
+	 */
+	public boolean isCopyrightOwner() {
+		return copyrightOwner;
+	}
+
+	/**
+	 * @param copyrightOwner the copyrightOwner to set
+	 */
+	public void setCopyrightOwner(boolean copyrightOwner) {
+		this.copyrightOwner = copyrightOwner;
 	}
 	
 }

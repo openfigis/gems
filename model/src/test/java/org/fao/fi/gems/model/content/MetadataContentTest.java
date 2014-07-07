@@ -82,6 +82,7 @@ public class MetadataContentTest {
 		Assert.assertEquals("TheCountry", orgs.get(0).getCountry());
 		Assert.assertEquals("78", orgs.get(0).getPostalCode());
 		Assert.assertEquals("OWNER", orgs.get(0).getRole());
+		Assert.assertFalse(orgs.get(0).isCopyrightOwner());
 		
 		Assert.assertEquals("ORG2", orgs.get(1).getAcronym());
 		Assert.assertEquals("ORGANIZATION2", orgs.get(1).getName());
@@ -92,6 +93,7 @@ public class MetadataContentTest {
 		Assert.assertEquals("TheCountry2", orgs.get(1).getCountry());
 		Assert.assertEquals("782", orgs.get(1).getPostalCode());
 		Assert.assertEquals("POINT_OF_CONTACT", orgs.get(1).getRole());
+		Assert.assertTrue(orgs.get(1).isCopyrightOwner());
 		
 	}
 	

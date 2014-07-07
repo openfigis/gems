@@ -136,6 +136,7 @@
 				<postalCode>782</postalCode>
 				<country>TheCountry2</country>
 				<role>POINT_OF_CONTACT</role>
+				<copyrightOwner>true</copyrightOwner>
 			</contact>
 		</organizationContacts>
 		<individualContacts>
