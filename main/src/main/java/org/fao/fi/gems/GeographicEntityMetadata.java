@@ -114,13 +114,13 @@ public class GeographicEntityMetadata extends DefaultMetadata {
 	 * @throws ParseException
 	 * 
 	 */
-	public GeographicEntityMetadata(GeographicMetaObject object, String revisionDate, String version) throws URISyntaxException, ParseException {
+	public GeographicEntityMetadata(GeographicMetaObject object, String version) throws URISyntaxException, ParseException {
 
 		super();
 		this.object = object;
-		this.lastRevisionDate = sdf.parse(revisionDate);
+		
+		this.lastRevisionDate = sdf.parse(sdf.format(new Date()));
 		this.lastVersion = version;
-
 
 		// build the metadata
 		this.setIdentifier(object.getMetaIdentifier()); // identifier
@@ -368,7 +368,9 @@ public class GeographicEntityMetadata extends DefaultMetadata {
 												+ object.getMetaTitle()
 												+ " ("+ object.getCode()+ "). "
 												+ "In: "+this.COPYRIGHT_CONTACT.getName()+" [online]. "
-												+ this.COPYRIGHT_CONTACT.getCity()+". [Cited <DATE>] "
+												+ this.COPYRIGHT_CONTACT.getCity()+". "
+												+ "Updated "+sdf.format(this.lastRevisionDate)+" "
+												+ "[Cited <DATE>] "
 												+ object.getTemplate().getCollectionURL()),
 
 								// Disclaimer

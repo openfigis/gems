@@ -35,7 +35,6 @@ public class MetadataPublisher {
 	
 	private static Logger LOGGER = LoggerFactory.getLogger(MetadataPublisher.class);
 
-	private String revisionDate;
 	private String version;
 
 	private String gnBaseURL;
@@ -49,7 +48,6 @@ public class MetadataPublisher {
 	 */
 	public MetadataPublisher(MetadataCatalogueSettings catalogueSettings,
 							 PublicationSettings publicationSettings) {
-		this.revisionDate = publicationSettings.getDate();
 		this.version = publicationSettings.getVersion();
 
 		// geonetwork connection
@@ -74,7 +72,7 @@ public class MetadataPublisher {
 		try {
 
 			final GeographicEntityMetadata metadata = new GeographicEntityMetadata(
-					object, this.revisionDate, this.version);
+					object, this.version);
 
 			// metadata insert configuration
 			GNInsertConfiguration icfg = new GNInsertConfiguration();

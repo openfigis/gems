@@ -57,7 +57,6 @@
 
 			<!-- publication parameters -->
 			<collectionType>mycollection</collectionType>		<!-- reference collection name -->
-			<date>2013-10-31</date>								<!-- publication date -->
 			<version>1.0</version>								<!-- version -->
 			<buffer>2</buffer>									<!-- numeric buffer value (in degrees) to set a geographic buffer for map bounding box -->
 			<style>somestyle</style>							<!-- style to apply to the published layer -->

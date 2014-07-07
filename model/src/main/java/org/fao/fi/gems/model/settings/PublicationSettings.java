@@ -24,7 +24,6 @@ public class PublicationSettings{
 	private String codelistParser;
 
 	private String collectionType;
-	private String date;
 	private String version;
 	private String style;
 	private double buffer;
@@ -169,22 +168,6 @@ public class PublicationSettings{
 	 */
 	public void setCollectionType(String collectionType) {
 		this.collectionType = collectionType;
-	}
-
-
-	/**
-	 * @return the date
-	 */
-	public String getDate() {
-		return date;
-	}
-
-
-	/**
-	 * @param date the date to set
-	 */
-	public void setDate(String date) {
-		this.date = date;
 	}
 
 

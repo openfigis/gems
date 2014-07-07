@@ -52,7 +52,6 @@
 
 		<!-- publication parameters -->
 		<collectionType>mycollection</collectionType>
-		<date>2013-10-31</date>
 		<version>1.0</version>
 		<buffer>2</buffer>
 		<style>somestyle</style>

@@ -32,7 +32,6 @@ public class PublicationSettingsTest {
 		Assert.assertEquals("org.fao.fi.gems.collection.anobject.parser", settings.getCodelistParser());
 		
 		Assert.assertEquals("mycollection", settings.getCollectionType());
-		Assert.assertEquals("2013-10-31", settings.getDate());
 		Assert.assertEquals("1.0", settings.getVersion());
 		Assert.assertEquals(2, settings.getBuffer(), 0);
 		Assert.assertEquals("somestyle", settings.getStyle());
