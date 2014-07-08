@@ -19,6 +19,7 @@ import java.util.UUID;
 import org.fao.fi.gems.association.GeographicMetaObject;
 import org.fao.fi.gems.association.GeographicMetaObjectProperty;
 import org.fao.fi.gems.entity.EntityAuthority;
+import org.fao.fi.gems.model.content.MetadataBiblioRef;
 import org.fao.fi.gems.model.content.MetadataContact;
 import org.fao.fi.gems.model.content.MetadataThesaurus;
 import org.fao.fi.gems.util.Utils;
@@ -105,7 +106,7 @@ public class GeographicEntityMetadata extends DefaultMetadata {
 	Collection<? extends Constraints> constraints;
 	List<ResponsibleParty> ORGANIZATIONS;
 	MetadataContact OWNER_CONTACT;
-	MetadataContact COPYRIGHT_CONTACT;
+	MetadataContact BIBLIO_CONTACT;
 
 	/**
 	 * Constructs a GeographicEntity metadata
@@ -215,7 +216,7 @@ public class GeographicEntityMetadata extends DefaultMetadata {
 			contacts.add(rp);
 			
 			if(contact.getRole().matches("OWNER")) this.OWNER_CONTACT = contact;
-			if(contact.isCopyrightOwner()) this.COPYRIGHT_CONTACT = contact;
+			if(contact.isBiblioAuthor()) this.BIBLIO_CONTACT = contact;
 		}
 		
 		this.ORGANIZATIONS = contacts;
@@ -349,8 +350,29 @@ public class GeographicEntityMetadata extends DefaultMetadata {
 		DefaultLegalConstraints legalConstraints = new DefaultLegalConstraints();
 		legalConstraints.setUseConstraints(Arrays.asList(Restriction.COPYRIGHT,
 				Restriction.LICENSE));
-		String copyright = "©";
 		
+		//prepare bibliography item
+		MetadataBiblioRef mdBiblioRef = object.getTemplate().getBiblioRef();
+		String biblioRef = "Usage subject to mandatory citation: ";
+		if(mdBiblioRef.isCopyright()) biblioRef += "© ";
+		biblioRef += this.BIBLIO_CONTACT.getAcronym()+", ";
+		biblioRef += c.get(Calendar.YEAR)+ ". ";
+		biblioRef += object.getTemplate().getCollection()+ ". ";
+		if(mdBiblioRef.getScope().matches("DATASET")){
+			biblioRef += object.getMetaTitle()+ ". ";
+		}
+		
+		biblioRef += "In: "+this.BIBLIO_CONTACT.getName()+" [online]. ";
+		biblioRef += this.BIBLIO_CONTACT.getCity()+". ";
+		biblioRef += "Updated "+sdf.format(this.lastRevisionDate)+" ";
+		biblioRef += "[Cited <DATE>] ";
+		
+		if(mdBiblioRef.getScope().matches("DATASET")){
+			biblioRef += Utils.getHTMLMetadataURL(object.getMetadataCatalogueSettings().getUrl(), object.getMetaIdentifier());
+		}else if(mdBiblioRef.getScope().matches("COLLECTION")){
+			biblioRef += object.getTemplate().getCollectionURL();
+		}
+	
 		legalConstraints
 				.setUseLimitations(Arrays
 						.asList(
@@ -360,20 +382,10 @@ public class GeographicEntityMetadata extends DefaultMetadata {
 								.getLicense()),
 
 						// Usage for bibliography
-								new SimpleInternationalString(
-										"Usage subject to mandatory citation: "
-												+copyright+" "+this.COPYRIGHT_CONTACT.getAcronym()+", "
-												+ c.get(Calendar.YEAR)+ ". "
-												+ object.getTemplate().getCollection()+ ". "
-												+ object.getMetaTitle()+ ". "
-												+ "In: "+this.COPYRIGHT_CONTACT.getName()+" [online]. "
-												+ this.COPYRIGHT_CONTACT.getCity()+". "
-												+ "Updated "+sdf.format(this.lastRevisionDate)+" "
-												+ "[Cited <DATE>] "
-												+ object.getTemplate().getCollectionURL()),
+						new SimpleInternationalString(biblioRef),
 
-								// Disclaimer
-								new SimpleInternationalString(object
+						// Disclaimer
+						new SimpleInternationalString(object
 										.getTemplate().getDisclaimer())));
 		legalConstraints.setAccessConstraints(Arrays.asList(
 				Restriction.COPYRIGHT, Restriction.LICENSE));

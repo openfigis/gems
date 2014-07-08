@@ -30,7 +30,7 @@ public class MetadataContent {
 	private List<String> topicCategories;
 	private List<MetadataContact> organizationContacts;
 	private List<MetadataContact> individualContacts;
-	
+	private MetadataBiblioRef biblioRef;
 	
 	public MetadataContent(){
 	}	
@@ -162,6 +162,20 @@ public class MetadataContent {
 	}
 	
 	/**
+	 * @return the biblioRef
+	 */
+	public MetadataBiblioRef getBiblioRef() {
+		return biblioRef;
+	}
+
+	/**
+	 * @param biblioRef the biblioRef to set
+	 */
+	public void setBiblioRef(MetadataBiblioRef biblioRef) {
+		this.biblioRef = biblioRef;
+	}
+
+	/**
 	 * Parsing from XML
 	 * 
 	 * @param file
@@ -174,6 +188,7 @@ public class MetadataContent {
 		xstream.alias("content", MetadataContent.class);
 		xstream.alias("thesaurus", MetadataThesaurus.class);
 		xstream.alias("contact", MetadataContact.class);
+		xstream.alias("biblioRef", MetadataBiblioRef.class);
 		
 		MetadataContent content = (MetadataContent) xstream.fromXML(file);
 			

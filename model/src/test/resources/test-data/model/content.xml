@@ -61,7 +61,7 @@
 			<postalCode>782</postalCode>
 			<country>TheCountry2</country>
 			<role>POINT_OF_CONTACT</role>
-			<copyrightOwner>true</copyrightOwner>
+			<biblioAuthor>true</biblioAuthor>
 		</contact>
 	</organizationContacts>
 	<individualContacts>
@@ -96,5 +96,11 @@
 			<role>POINT_OF_CONTACT</role>
 		</contact>
 	</individualContacts>
+	
+	<!-- Bibliographic reference -->
+	<biblioRef>
+		<scope>DATASET</scope>
+		<copyright>true</copyright>
+	</biblioRef>
 	
 </content>

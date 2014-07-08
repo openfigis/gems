@@ -24,7 +24,7 @@ public class MetadataContact {
 	private String organizationName;
 	private String role;
 	
-	private boolean copyrightOwner = false;
+	private boolean biblioAuthor = false;
 	
 	/**
 	 * 
@@ -232,17 +232,18 @@ public class MetadataContact {
 	}
 
 	/**
-	 * @return the copyrightOwner
+	 * @return the biblioAuthor
 	 */
-	public boolean isCopyrightOwner() {
-		return copyrightOwner;
+	public boolean isBiblioAuthor() {
+		return biblioAuthor;
 	}
 
 	/**
-	 * @param copyrightOwner the copyrightOwner to set
+	 * @param biblioAuthor the biblioAuthor to set
 	 */
-	public void setCopyrightOwner(boolean copyrightOwner) {
-		this.copyrightOwner = copyrightOwner;
+	public void setBiblioAuthor(boolean biblioAuthor) {
+		this.biblioAuthor = biblioAuthor;
 	}
+
 	
 }

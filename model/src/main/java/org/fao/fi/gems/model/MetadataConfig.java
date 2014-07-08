@@ -3,6 +3,7 @@ package org.fao.fi.gems.model;
 import java.io.File;
 import java.io.IOException;
 
+import org.fao.fi.gems.model.content.MetadataBiblioRef;
 import org.fao.fi.gems.model.content.MetadataContact;
 import org.fao.fi.gems.model.content.MetadataContent;
 import org.fao.fi.gems.model.content.MetadataThesaurus;
@@ -71,9 +72,14 @@ public class MetadataConfig {
 
 		XStream xstream = new XStream(new StaxDriver());
 		xstream.alias("configuration", MetadataConfig.class);
+		
+		//settings
+		xstream.alias("baseLayer", BaseLayer.class);
+		
+		//content
 		xstream.alias("contact", MetadataContact.class);
 		xstream.alias("thesaurus", MetadataThesaurus.class);
-		xstream.alias("baseLayer", BaseLayer.class);
+		xstream.alias("biblioRef", MetadataBiblioRef.class);
 
 		MetadataConfig config = (MetadataConfig) xstream
 				.fromXML(file);
