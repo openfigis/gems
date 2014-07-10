@@ -218,8 +218,9 @@ public class DataPublisher {
 		//time dimension
 		if(this.timeDimension != null){
 			GSFeatureDimensionInfoEncoder time = new GSFeatureDimensionInfoEncoder(this.timeDimension.getStartTime());
+			if(this.timeDimension.getEndTime() != null) time.setEndAttribute(this.timeDimension.getEndTime());
 			Presentation presentation = null;
-			if(this.timeDimension.getEndTime() != null){
+			if(this.timeDimension.getEndTime() == null){
 				presentation = Presentation.LIST;
 			}else{
 				presentation = Presentation.CONTINUOUS_INTERVAL;
