@@ -17,6 +17,7 @@ import org.fao.fi.gems.model.settings.GeographicServerSettings;
 import org.fao.fi.gems.model.settings.MetadataCatalogueSettings;
 import org.fao.fi.gems.model.settings.PublicationSettings;
 import org.fao.fi.gems.util.Utils;
+import org.geotoolkit.metadata.iso.extent.DefaultTemporalExtent;
 import org.opengis.referencing.crs.CoordinateReferenceSystem;
 import org.opengis.temporal.TemporalPrimitive;
 
@@ -50,8 +51,8 @@ public class GeographicMetaObjectImpl implements GeographicMetaObject {
 	private Map<FeatureTypeProperty, Object> geoproperties;
 	private URI graphicOverview;
 	
-
 	private boolean figis;
+	private String figisFactsheetUrl;
 	private URI viewerResource;
 	private String factsheet;
 	
@@ -94,6 +95,7 @@ public class GeographicMetaObjectImpl implements GeographicMetaObject {
 		
 		//Figis
 		this.figis = config.getSettings().getPublicationSettings().isFigis();
+		this.figisFactsheetUrl = config.getSettings().getPublicationSettings().getFigisFactsheetUrl();
 		this.setFigisViewerResource();
 		this.setFigisFactsheet();
 
@@ -500,20 +502,45 @@ public class GeographicMetaObjectImpl implements GeographicMetaObject {
 		this.viewerResource = null;		
 		
 		//only apply to figis collections
-		if(figis && this.entities.get(0).getFigisViewerId() != null){
+		if(figis){
 
 			Envelope bbox = this.getPreviewBBOX();
 			String figisDomain = this.entities.get(0).getFigisDomain();
 			
 			String resource = null;
-			if (bbox != null) {
-				resource = this.gsSettings.getUrl()+"/factsheets/" + figisDomain
-						+ ".html?" + this.collection + "=" + this.entities.get(0).getFigisViewerId()
-						+ "&extent=" + bbox.getMinX() + "," + bbox.getMinY() + ","
-						+ bbox.getMaxX() + "," + bbox.getMaxY() + "&prj=4326"; 
+			if (figisDomain != null && this.collection != null && bbox != null) {
+				
+				if (this.getCollection().matches("vme")){
+					
+					//get last year
+					DefaultTemporalExtent temporalExtent = new DefaultTemporalExtent();
+					temporalExtent.setExtent(this.getTIME());
+					String lastYear = temporalExtent.getEndTime().toString().substring(0, 4);
+					
+					//build xy center
+					double centerX = (bbox.getMaxX() + bbox.getMinX()) / 2;
+					double centerY = (bbox.getMaxY() + bbox.getMinY()) / 2;
+					
+					// build the link
+					resource = this.figisFactsheetUrl + "/vme-db/?"
+							+ "embed=true"
+							+ "&extent=" + bbox.getMinX() + "," + bbox.getMinY() + ","
+										 + bbox.getMaxX() + "," + bbox.getMaxY()
+							+ "&center=" + centerX + "," + centerY
+							+ "&prj=4326"
+							+ "&year=" + lastYear;
+							
+				} else {
+					if(this.entities.get(0).getFigisViewerId() != null){
+						resource = this.gsSettings.getUrl()+"/factsheets/" + figisDomain
+								+ ".html?" + this.collection + "=" + this.entities.get(0).getFigisViewerId()
+								+ "&extent=" + bbox.getMinX() + "," + bbox.getMinY() + ","
+								+ bbox.getMaxX() + "," + bbox.getMaxY() + "&prj=4326";		
+					}		
+				}
 			}
 			
-			if (figisDomain != null && this.collection != null && bbox != null) {
+			if (resource != null) {
 				this.viewerResource = new URI(resource);
 			}
 		}
@@ -534,7 +561,7 @@ public class GeographicMetaObjectImpl implements GeographicMetaObject {
 		//only apply to figis collections
 		if (figis) {
 			String figisViewerDomain = this.collection;
-			this.factsheet = this.pubSettings.getFigisFactsheetUrl() + "/"
+			this.factsheet = this.figisFactsheetUrl + "/"
 							+ figisViewerDomain + "/"
 							+ this.entities.get(0).getFigisId();
 		}
