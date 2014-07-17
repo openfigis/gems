@@ -429,7 +429,7 @@ public class GeographicEntityMetadata extends DefaultMetadata {
 
 			// viewer Resource (if it exists)
 			// -------------------------------
-			if(object.isFromFigis()){
+			if(object.isFromFigis() && object.getFigisViewerResource() != null){
 				DefaultOnlineResource viewerResource = new DefaultOnlineResource();
 				viewerResource.setLinkage(object.getFigisViewerResource());
 				viewerResource.setProtocol("WWW:LINK-1.0-http--link");
