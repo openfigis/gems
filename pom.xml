@@ -3,12 +3,12 @@
 	<modelVersion>4.0.0</modelVersion>
 	
 	<groupId>org.fao.fi</groupId>
-	<artifactId>gems</artifactId>
+	<artifactId>gems-parent</artifactId>
 	<packaging>pom</packaging>
-	<version>1.0-SNAPSHOT</version>
+	<version>${gems.version}</version>
 	
 	<name>GEMS - GIS Enforcing Metadata and Semantic</name>
-	<url>http://www.fao.org/fi</url>
+	<url>https://github.com/openfigis/gems</url>
 	
 	<!-- GEMS modules -->
 	<modules>
@@ -33,7 +33,11 @@
 	</developers>
 
 	<properties>
+		<!-- gems -->
+		<gems.version>1.0-SNAPSHOT</gems.version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		
+		<!-- dependency versions -->
 		<geotoolkit.version>3.21</geotoolkit.version>
 	</properties>
 
