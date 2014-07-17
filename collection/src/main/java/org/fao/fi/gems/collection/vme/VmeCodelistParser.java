@@ -11,13 +11,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import org.fao.fi.gems.association.GeographicMetaObjectProperty;
 import org.fao.fi.gems.codelist.CodelistParser;
 import org.fao.fi.gems.entity.EntityAddin;
 import org.fao.fi.gems.entity.EntityAuthority;
+import org.fao.fi.gems.entity.FigisGeographicEntityImpl;
 import org.fao.fi.gems.entity.GeographicEntity;
-import org.fao.fi.gems.entity.GeographicEntityImpl;
-import org.fao.fi.gems.util.Utils;
+import org.fao.fi.gems.metaobject.GeographicMetaObjectProperty;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -119,7 +118,7 @@ public class VmeCodelistParser implements CodelistParser{
 					wsReader.close();
 					
 					//configure geographic entity	
-					GeographicEntityImpl entity = null;
+					FigisGeographicEntityImpl entity = null;
 					try {
 						boolean addEntity = true;
 						for(GeographicEntity vmeEntity : vmeCodelist){
@@ -135,10 +134,9 @@ public class VmeCodelistParser implements CodelistParser{
 							properties.put(VmeProperty.VME, Arrays.asList(vmeId, localName, globalName));
 							properties.put(VmeProperty.FIGIS, Arrays.asList(figisId));
 								
-							entity = new GeographicEntityImpl(owner, collection, vmeId, title, properties);
+							entity = new FigisGeographicEntityImpl(owner, collection, vmeId, title, properties);
 							entity.setFigisId(figisId);
 							entity.setFigisDomain("vme");
-							//TODO entity.setFigisViewerId("");
 							
 							vmeCodelist.add(entity);
 						}

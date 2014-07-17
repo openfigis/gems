@@ -4,7 +4,7 @@ import java.net.URISyntaxException;
 import java.util.List;
 import java.util.Map;
 
-import org.fao.fi.gems.association.GeographicMetaObjectProperty;
+import org.fao.fi.gems.metaobject.GeographicMetaObjectProperty;
 import org.fao.fi.gems.util.Utils;
 
 /**
@@ -22,11 +22,6 @@ public class GeographicEntityImpl implements GeographicEntity {
 	private String refName;	
 	private Map<GeographicMetaObjectProperty, List<String>> specificProperties;
 	private String metaIdentifier;
-	
-	//FIGIS specific
-	private String figisDomain;
-	private String figisId;
-	private String figisViewerId;
  
 	public GeographicEntityImpl(String owner, String collection,
 								String code, String refName,
@@ -127,51 +122,6 @@ public class GeographicEntityImpl implements GeographicEntity {
 	 */
 	public void setMetaIdentifier(String metaIdentifier){
 		this.metaIdentifier = metaIdentifier;
-	}
-	
-	//FIGIS stuff
-	
-	
-	/**
-	 * @return the figisDomain
-	 */
-	public String getFigisDomain() {
-		return figisDomain;
-	}
-
-	/**
-	 * @param figisDomain the figisDomain to set
-	 */
-	public void setFigisDomain(String figisDomain) {
-		this.figisDomain = figisDomain;
-	}
-
-	/**
-	 * @return the figisId
-	 */
-	public String getFigisId() {
-		return figisId;
-	}
-
-	/**
-	 * @param figisId the figisId to set
-	 */
-	public void setFigisId(String figisId) {
-		this.figisId = figisId;
-	}
-
-	/**
-	 * @return the figisViewerId
-	 */
-	public String getFigisViewerId() {
-		return figisViewerId;
-	}
-
-	/**
-	 * @param figisViewerId the figisViewerId to set
-	 */
-	public void setFigisViewerId(String figisViewerId) {
-		this.figisViewerId = figisViewerId;
 	}
 
 }

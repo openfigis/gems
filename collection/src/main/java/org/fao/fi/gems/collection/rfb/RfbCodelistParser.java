@@ -13,12 +13,12 @@ import java.util.Set;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
-import org.fao.fi.gems.association.GeographicMetaObjectProperty;
 import org.fao.fi.gems.codelist.CodelistParser;
 import org.fao.fi.gems.entity.EntityAddin;
 import org.fao.fi.gems.entity.EntityAuthority;
+import org.fao.fi.gems.entity.FigisGeographicEntityImpl;
 import org.fao.fi.gems.entity.GeographicEntity;
-import org.fao.fi.gems.entity.GeographicEntityImpl;
+import org.fao.fi.gems.metaobject.GeographicMetaObjectProperty;
 import org.fao.fi.gems.util.Utils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -128,7 +128,7 @@ public class RfbCodelistParser implements CodelistParser{
 						properties.put(RfbProperty.ABSTRACT, Arrays.asList(abstractText));
 					}
 					
-					GeographicEntityImpl entity = new GeographicEntityImpl(owner, collection, rfb, label, properties);
+					FigisGeographicEntityImpl entity = new FigisGeographicEntityImpl(owner, collection, rfb, label, properties);
 					
 					//Figis stuff
 					entity.setFigisDomain("rfbs");

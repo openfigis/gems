@@ -62,7 +62,8 @@
 			<style>somestyle</style>
 			<test>true</test>
 			<testCode>thecode</testCode>
-			<figis>true</figis>
+			
+			<!-- FIGIS specific -->
 			<figisFactsheetUrl>http://www.fao.org/fishery</figisFactsheetUrl>
 			
 		</publicationSettings>

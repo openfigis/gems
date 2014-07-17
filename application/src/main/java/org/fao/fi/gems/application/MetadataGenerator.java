@@ -8,13 +8,15 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import org.fao.fi.gems.association.GeographicMetaObject;
-import org.fao.fi.gems.association.GeographicMetaObjectImpl;
-import org.fao.fi.gems.association.GeographicMetaObjectProperty;
 import org.fao.fi.gems.codelist.CodelistParser;
 import org.fao.fi.gems.feature.FeatureTypeProperty;
 import org.fao.fi.gems.entity.EntityAddin;
+import org.fao.fi.gems.entity.FigisGeographicEntityImpl;
 import org.fao.fi.gems.entity.GeographicEntity;
+import org.fao.fi.gems.metaobject.FigisGeographicMetaObjectImpl;
+import org.fao.fi.gems.metaobject.GeographicMetaObject;
+import org.fao.fi.gems.metaobject.GeographicMetaObjectImpl;
+import org.fao.fi.gems.metaobject.GeographicMetaObjectProperty;
 import org.fao.fi.gems.model.MetadataConfig;
 import org.fao.fi.gems.model.content.MetadataContact;
 import org.fao.fi.gems.publisher.Publisher;
@@ -139,7 +141,12 @@ public class MetadataGenerator {
 			}
 			
 			//configure entity
-			GeographicMetaObject metaObject = new GeographicMetaObjectImpl(Arrays.asList(entity), null, geoproperties, config);
+			GeographicMetaObject metaObject = null;
+			if(entity instanceof FigisGeographicEntityImpl){
+				metaObject = new FigisGeographicMetaObjectImpl(Arrays.asList(entity), null, geoproperties, config);
+			}else{
+				metaObject = new GeographicMetaObjectImpl(Arrays.asList(entity), null, geoproperties, config);
+			}
 			
 			// PUBLISH ACTION
 			if (action.matches("PUBLISH") && featureCount > 0) {

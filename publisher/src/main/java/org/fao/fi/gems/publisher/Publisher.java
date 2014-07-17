@@ -1,7 +1,8 @@
 package org.fao.fi.gems.publisher;
 
 import java.net.MalformedURLException;
-import org.fao.fi.gems.association.GeographicMetaObject;
+
+import org.fao.fi.gems.metaobject.GeographicMetaObject;
 import org.fao.fi.gems.model.MetadataConfig;
 import org.fao.fi.gems.model.settings.Settings;
 import org.slf4j.Logger;

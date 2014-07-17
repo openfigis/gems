@@ -31,7 +31,6 @@ public class PublicationSettings{
 	private boolean test;
 	private String testCode;
 	
-	private boolean figis;
 	private String figisFactsheetUrl;
 
 	/**
@@ -248,22 +247,6 @@ public class PublicationSettings{
 	 */
 	public void setTestCode(String testCode) {
 		this.testCode = testCode;
-	}
-
-
-	/**
-	 * @return the figis
-	 */
-	public boolean isFigis() {
-		return this.figis;
-	}
-
-
-	/**
-	 * @param figis the fromFigis to set
-	 */
-	public void setFigis(boolean fromFigis) {
-		this.figis = fromFigis;
 	}
 
 

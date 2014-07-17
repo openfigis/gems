@@ -1,4 +1,4 @@
-package org.fao.fi.gems.association;
+package org.fao.fi.gems.metaobject;
 
 import java.net.URI;
 import java.util.List;
@@ -16,7 +16,9 @@ import com.vividsolutions.jts.geom.Envelope;
 
 public interface GeographicMetaObject {
 
-	//Identification
+	/*
+	 * Identification methods
+	 */
 	
 	List<GeographicEntity> getEntities();
 	
@@ -32,7 +34,9 @@ public interface GeographicMetaObject {
 	
 	Map<GeographicMetaObjectProperty, List<String>> getSpecificProperties();
 	
-	//Settings
+	/*
+	 * Settings methods
+	 */
 
 	GeographicServerSettings getGeographicServerSettings();
 	
@@ -41,9 +45,10 @@ public interface GeographicMetaObject {
 	PublicationSettings getPublicationSettings();
 	
 	String getTargetLayerName();
-
 	
-	//GIS
+	/*
+	 * GIS methods
+	 */
 
 	int getFeaturesCount();
 	
@@ -56,17 +61,5 @@ public interface GeographicMetaObject {
 	TemporalPrimitive getTIME();
 
 	URI getLayerGraphicOverview();
-	
-	
-	//SPECIFIC to FIGIS
-	
-	boolean isFromFigis();
-	
-	URI getFigisViewerResource();
-	
-	String getFigisFactsheet();
-
-
-
 
 }

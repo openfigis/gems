@@ -87,7 +87,6 @@ public class SettingsTest {
 		Assert.assertEquals(2, publication.getBuffer(), 0);
 		Assert.assertTrue(publication.isTest());
 		Assert.assertEquals("thecode", publication.getTestCode());
-		Assert.assertTrue(publication.isFigis());
 		Assert.assertEquals("http://www.fao.org/fishery", publication.getFigisFactsheetUrl());
 
 	}

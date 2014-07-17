@@ -2,8 +2,8 @@ package org.fao.fi.gems.util;
 
 import java.util.List;
 
-import org.fao.fi.gems.association.GeographicMetaObject;
 import org.fao.fi.gems.entity.GeographicEntity;
+import org.fao.fi.gems.metaobject.GeographicMetaObject;
 import org.geotoolkit.xml.Namespaces;
 
 public final class Utils {

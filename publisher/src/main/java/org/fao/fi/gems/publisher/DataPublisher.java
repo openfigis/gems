@@ -26,9 +26,9 @@ import java.util.Map.Entry;
 
 import org.apache.commons.httpclient.NameValuePair;
 import org.apache.commons.io.FileUtils;
-import org.fao.fi.gems.association.GeographicMetaObject;
-import org.fao.fi.gems.association.GeographicMetaObjectProperty;
 import org.fao.fi.gems.entity.EntityAuthority;
+import org.fao.fi.gems.metaobject.GeographicMetaObject;
+import org.fao.fi.gems.metaobject.GeographicMetaObjectProperty;
 import org.fao.fi.gems.model.settings.GeographicServerSettings;
 import org.fao.fi.gems.model.settings.MetadataCatalogueSettings;
 import org.fao.fi.gems.model.settings.TimeDimension;

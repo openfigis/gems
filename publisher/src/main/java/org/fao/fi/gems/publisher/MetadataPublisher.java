@@ -5,7 +5,7 @@ import java.util.EnumSet;
 import java.util.Iterator;
 
 import org.fao.fi.gems.GeographicEntityMetadata;
-import org.fao.fi.gems.association.GeographicMetaObject;
+import org.fao.fi.gems.metaobject.GeographicMetaObject;
 import org.fao.fi.gems.model.settings.MetadataCatalogueSettings;
 import org.fao.fi.gems.model.settings.PublicationSettings;
 import org.geotoolkit.xml.XML;

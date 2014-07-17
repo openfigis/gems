@@ -1,4 +1,4 @@
-package org.fao.fi.gems.association;
+package org.fao.fi.gems.metaobject;
 
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -32,13 +32,13 @@ import com.vividsolutions.jts.geom.Envelope;
  */
 public class GeographicMetaObjectImpl implements GeographicMetaObject {
 
-	private GeographicServerSettings gsSettings;
+	protected GeographicServerSettings gsSettings;
 	private MetadataCatalogueSettings mdSettings;
 	private PublicationSettings pubSettings;
 
-	private String collection;
+	protected String collection;
+	protected List<GeographicEntity> entities;
 	private MetadataContent template;
-	private List<GeographicEntity> entities;
 	private String code;
 	private String refName;
 	private String metaId;
@@ -50,11 +50,6 @@ public class GeographicMetaObjectImpl implements GeographicMetaObject {
 	
 	private Map<FeatureTypeProperty, Object> geoproperties;
 	private URI graphicOverview;
-	
-	private boolean figis;
-	private String figisFactsheetUrl;
-	private URI viewerResource;
-	private String factsheet;
 	
  
 	/**
@@ -92,12 +87,6 @@ public class GeographicMetaObjectImpl implements GeographicMetaObject {
 		//gis
 		this.geoproperties = geoproperties;
 		this.setLayerGraphicOverview();
-		
-		//Figis
-		this.figis = config.getSettings().getPublicationSettings().isFigis();
-		this.figisFactsheetUrl = config.getSettings().getPublicationSettings().getFigisFactsheetUrl();
-		this.setFigisViewerResource();
-		this.setFigisFactsheet();
 
 	}
 	
@@ -476,103 +465,4 @@ public class GeographicMetaObjectImpl implements GeographicMetaObject {
 		this.graphicOverview = new URI(graphicLink);
 	}
 
-	
-	/** ==============================================
-	 *  		    FIGIS SPECIFIC METHODS
-	 *  ==============================================
-	 */
-	
-	/**
-	 * Returns true if the collection is from FIGIS
-	 * 
-	 */
-	public boolean isFromFigis(){
-		return this.figis;
-	}
-	
-	
-	/**
-	 * Get FIGIS Viewer Resource (specific to FAO)
-	 * 
-	 * @return the URI for the FIGIS map viewer
-	 * @throws URISyntaxException
-	 */
-	private void setFigisViewerResource() throws URISyntaxException {
-		
-		this.viewerResource = null;		
-		
-		//only apply to figis collections
-		if(figis){
-
-			Envelope bbox = this.getPreviewBBOX();
-			String figisDomain = this.entities.get(0).getFigisDomain();
-			
-			String resource = null;
-			if (figisDomain != null && this.collection != null && bbox != null) {
-				
-				if (this.getCollection().matches("vme")){
-					
-					//get last year
-					DefaultTemporalExtent temporalExtent = new DefaultTemporalExtent();
-					temporalExtent.setExtent(this.getTIME());
-					String lastYear = temporalExtent.getEndTime().toString().substring(0, 4);
-					
-					//build xy center
-					double centerX = (bbox.getMaxX() + bbox.getMinX()) / 2;
-					double centerY = (bbox.getMaxY() + bbox.getMinY()) / 2;
-					
-					// build the link
-					resource = this.figisFactsheetUrl + "/vme-db/?"
-							+ "embed=true"
-							+ "&extent=" + bbox.getMinX() + "," + bbox.getMinY() + ","
-										 + bbox.getMaxX() + "," + bbox.getMaxY()
-							+ "&center=" + centerX + "," + centerY
-							+ "&prj=4326"
-							+ "&year=" + lastYear;
-							
-				} else {
-					if(this.entities.get(0).getFigisViewerId() != null){
-						resource = this.gsSettings.getUrl()+"/factsheets/" + figisDomain
-								+ ".html?" + this.collection + "=" + this.entities.get(0).getFigisViewerId()
-								+ "&extent=" + bbox.getMinX() + "," + bbox.getMinY() + ","
-								+ bbox.getMaxX() + "," + bbox.getMaxY() + "&prj=4326";		
-					}		
-				}
-			}
-			
-			if (resource != null) {
-				this.viewerResource = new URI(resource);
-			}
-		}
-	}
-
-	public URI getFigisViewerResource() {
-		return this.viewerResource;
-	}
-
-	/**
-	 * Set Figis Factsheet URL
-	 * 
-	 */
-	public void setFigisFactsheet() {	
-		
-		this.factsheet = null;
-		
-		//only apply to figis collections
-		if (figis) {
-			String figisViewerDomain = this.collection;
-			this.factsheet = this.figisFactsheetUrl + "/"
-							+ figisViewerDomain + "/"
-							+ this.entities.get(0).getFigisId();
-		}
-	}
-	
-	/**
-	 * Get Figis Factsheet URL
-	 * 
-	 */
-	public String getFigisFactsheet(){
-		return this.factsheet;
-	}
-	
 }

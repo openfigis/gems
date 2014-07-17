@@ -1,4 +1,4 @@
-package org.fao.fi.gems.association;
+package org.fao.fi.gems.metaobject;
 
 public interface GeographicMetaObjectProperty {
 

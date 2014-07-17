@@ -16,9 +16,10 @@ import java.util.Map.Entry;
 import java.util.Set;
 import java.util.UUID;
 
-import org.fao.fi.gems.association.GeographicMetaObject;
-import org.fao.fi.gems.association.GeographicMetaObjectProperty;
 import org.fao.fi.gems.entity.EntityAuthority;
+import org.fao.fi.gems.metaobject.FigisGeographicMetaObjectImpl;
+import org.fao.fi.gems.metaobject.GeographicMetaObject;
+import org.fao.fi.gems.metaobject.GeographicMetaObjectProperty;
 import org.fao.fi.gems.model.content.MetadataBiblioRef;
 import org.fao.fi.gems.model.content.MetadataContact;
 import org.fao.fi.gems.model.content.MetadataThesaurus;
@@ -48,7 +49,6 @@ import org.geotoolkit.metadata.iso.quality.DefaultDataQuality;
 import org.geotoolkit.metadata.iso.quality.DefaultScope;
 import org.geotoolkit.metadata.iso.spatial.DefaultGeometricObjects;
 import org.geotoolkit.metadata.iso.spatial.DefaultVectorSpatialRepresentation;
-import org.geotoolkit.temporal.object.DefaultTemporalPrimitive;
 import org.geotoolkit.util.SimpleInternationalString;
 import org.opengis.metadata.citation.DateType;
 import org.opengis.metadata.citation.OnLineFunction;
@@ -417,9 +417,10 @@ public class GeographicEntityMetadata extends DefaultMetadata {
 
 			// factsheet (if it exists)
 			// ---------------------------
-			if(object.isFromFigis()){
+			if (object instanceof FigisGeographicMetaObjectImpl
+					&& ((FigisGeographicMetaObjectImpl) object).getFigisFactsheet() != null) {
 				DefaultOnlineResource factsheet = new DefaultOnlineResource();
-				factsheet.setLinkage(new URI(object.getFigisFactsheet()));
+				factsheet.setLinkage(new URI( ((FigisGeographicMetaObjectImpl) object).getFigisFactsheet()));
 				factsheet.setProtocol("WWW:LINK-1.0-http--link");
 				factsheet.setDescription(new SimpleInternationalString(
 						"Factsheet - Summary description"));
@@ -429,9 +430,10 @@ public class GeographicEntityMetadata extends DefaultMetadata {
 
 			// viewer Resource (if it exists)
 			// -------------------------------
-			if(object.isFromFigis() && object.getFigisViewerResource() != null){
+			if(object instanceof FigisGeographicMetaObjectImpl
+					&& ((FigisGeographicMetaObjectImpl) object).getFigisViewerResource() != null){
 				DefaultOnlineResource viewerResource = new DefaultOnlineResource();
-				viewerResource.setLinkage(object.getFigisViewerResource());
+				viewerResource.setLinkage(((FigisGeographicMetaObjectImpl) object).getFigisViewerResource());
 				viewerResource.setProtocol("WWW:LINK-1.0-http--link");
 				viewerResource.setDescription(new SimpleInternationalString(object
 						.getTemplate().getCollection() + " (GIS Viewer)"));
