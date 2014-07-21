@@ -37,6 +37,7 @@ public class GeographicMetaObjectImpl implements GeographicMetaObject {
 	private PublicationSettings pubSettings;
 
 	protected String collection;
+	protected String owner;
 	protected List<GeographicEntity> entities;
 	private MetadataContent template;
 	private String code;
@@ -46,7 +47,7 @@ public class GeographicMetaObjectImpl implements GeographicMetaObject {
 	private String targetLayername;
 	
 	private Map<EntityAddin,String> addins;
-	private Map<GeographicMetaObjectProperty,List<String>> specificProperties;
+	protected Map<GeographicMetaObjectProperty,List<String>> specificProperties;
 	
 	private Map<FeatureTypeProperty, Object> geoproperties;
 	private URI graphicOverview;
@@ -74,6 +75,12 @@ public class GeographicMetaObjectImpl implements GeographicMetaObject {
 		//identification
 		this.template = config.getContent();
 		this.collection = this.pubSettings.getCollectionType();
+		for(MetadataContact org : config.getContent().getOrganizationContacts()){
+			if(org.getRole().matches("OWNER")){
+				this.owner = org.getAcronym();
+				break;
+			}
+		}
 		
 		this.setEntities(entities);
 		this.setCode(entities);

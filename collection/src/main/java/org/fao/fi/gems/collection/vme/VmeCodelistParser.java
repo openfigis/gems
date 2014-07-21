@@ -43,6 +43,7 @@ public class VmeCodelistParser implements CodelistParser{
 		FIGIS (EntityAuthority.FIGIS, true, true, false),
 		
 		VME ("VME", false, true, false),
+		GLOBALTYPE("GLOBALTYPE", false, false, false),
 		STYLE(EntityAddin.STYLE, false, false, false);
 	
 		private final Object object;
@@ -98,6 +99,7 @@ public class VmeCodelistParser implements CodelistParser{
 					String dataOwner = obj.get("OWNER").getAsString();
 					String localName = obj.get("LOCAL_NAME").getAsString();
 					String globalName = obj.get("GLOB_NAME").getAsString();
+					String globalType = obj.get("GLOB_TYPE").getAsString();
 					
 					String title = localName + " ("+globalName+" - "+dataOwner+")";
 					
@@ -133,6 +135,13 @@ public class VmeCodelistParser implements CodelistParser{
 							//properties.put(VmeProperty.FAO, Arrays.asList(Utils.buildMetadataIdentifier(owner, collection, vmeId)));
 							properties.put(VmeProperty.VME, Arrays.asList(vmeId, localName, globalName));
 							properties.put(VmeProperty.FIGIS, Arrays.asList(figisId));
+							
+							//add global type (used for the mapviewer link)
+							properties.put(VmeProperty.GLOBALTYPE, Arrays.asList(globalType));
+							
+							//add style
+							String style = "MEASURES_" + globalType + "_for_" + owner;
+							properties.put(VmeProperty.STYLE, Arrays.asList(style));
 								
 							entity = new FigisGeographicEntityImpl(owner, collection, vmeId, title, properties);
 							entity.setFigisId(figisId);

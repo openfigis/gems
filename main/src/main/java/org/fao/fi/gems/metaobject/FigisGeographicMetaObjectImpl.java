@@ -10,6 +10,8 @@ import org.fao.fi.gems.entity.FigisGeographicEntityImpl;
 import org.fao.fi.gems.feature.FeatureTypeProperty;
 import org.fao.fi.gems.model.MetadataConfig;
 import org.geotoolkit.metadata.iso.extent.DefaultTemporalExtent;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.vividsolutions.jts.geom.Envelope;
 
@@ -21,6 +23,8 @@ import com.vividsolutions.jts.geom.Envelope;
  */
 public class FigisGeographicMetaObjectImpl extends GeographicMetaObjectImpl implements FigisGeographicMetaObject{
 
+	private static Logger LOGGER = LoggerFactory.getLogger(FigisGeographicMetaObjectImpl.class);
+	
 	private String figisFactsheetUrl;
 	private URI viewerResource;
 	private String factsheet;
@@ -75,14 +79,28 @@ public class FigisGeographicMetaObjectImpl extends GeographicMetaObjectImpl impl
 				double centerY = (bbox.getMaxY() + bbox.getMinY()) / 2;
 				
 				// build the link
+				String globalType = null;
+				for(GeographicMetaObjectProperty prop : this.specificProperties.keySet()){
+					if(prop.toString().matches("GLOBALTYPE")){
+						globalType = this.specificProperties.get(prop).get(0);
+						break;
+					}
+				}
+				String layerOfInterest = null;
+				if(globalType.matches("VME")) layerOfInterest = "VME Closure";
+				if(globalType.matches("BTM_FISH")) layerOfInterest = "Bottom fishing areas";
+				if(globalType.matches("OTHER")) layerOfInterest = "Other access regulated areas";
+				
 				resource = this.figisFactsheetUrl + "/vme-db/?"
 						+ "embed=true"
 						+ "&extent=" + bbox.getMinX() + "," + bbox.getMinY() + ","
 									 + bbox.getMaxX() + "," + bbox.getMaxY()
 						+ "&center=" + centerX + "," + centerY
 						+ "&prj=4326"
-						+ "&year=" + lastYear;
-						
+						+ "&year=" + lastYear
+						+ "&rfb=" + this.owner
+						+ "&layers=Oceans imagery;"+layerOfInterest+";Gebco Undersea Features;";
+				resource = resource.replaceAll(" ", "%20");
 			} else {
 				if(((FigisGeographicEntityImpl) this.entities.get(0)).getFigisViewerId() != null){
 					resource = this.gsSettings.getUrl()+"/factsheets/" + figisDomain
