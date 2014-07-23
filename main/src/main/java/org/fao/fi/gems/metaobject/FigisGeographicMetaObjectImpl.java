@@ -128,7 +128,7 @@ public class FigisGeographicMetaObjectImpl extends GeographicMetaObjectImpl impl
 
 		this.factsheet = null;
 		if (this.collection != null && this.figisFactsheetUrl != null
-				&& this.entities != null) {
+				&& ((FigisGeographicEntityImpl) this.entities.get(0)).getFigisId() != null) {
 			String figisViewerDomain = this.collection;
 			this.factsheet = this.figisFactsheetUrl + "/" + figisViewerDomain
 					+ "/" + ((FigisGeographicEntityImpl) this.entities.get(0)).getFigisId();

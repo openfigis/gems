@@ -130,11 +130,11 @@ public class VmeCodelistParser implements CodelistParser{
 							}
 						}
 						
-						if(addEntity && figisId != null){
+						if(addEntity){
 							Map<GeographicMetaObjectProperty, List<String>> properties = new HashMap<GeographicMetaObjectProperty, List<String>>();
 							//properties.put(VmeProperty.FAO, Arrays.asList(Utils.buildMetadataIdentifier(owner, collection, vmeId)));
 							properties.put(VmeProperty.VME, Arrays.asList(vmeId, localName, globalName));
-							properties.put(VmeProperty.FIGIS, Arrays.asList(figisId));
+							if(figisId != null) properties.put(VmeProperty.FIGIS, Arrays.asList(figisId));
 							
 							//add global type (used for the mapviewer link)
 							properties.put(VmeProperty.GLOBALTYPE, Arrays.asList(globalType));
@@ -144,7 +144,7 @@ public class VmeCodelistParser implements CodelistParser{
 							properties.put(VmeProperty.STYLE, Arrays.asList(style));
 								
 							entity = new FigisGeographicEntityImpl(owner, collection, vmeId, title, properties);
-							entity.setFigisId(figisId);
+							if(figisId != null) entity.setFigisId(figisId);
 							entity.setFigisDomain("vme");
 							
 							vmeCodelist.add(entity);
