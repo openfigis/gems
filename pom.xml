@@ -34,7 +34,7 @@
 
 	<properties>
 		<!-- gems -->
-		<gems.version>1.0-SNAPSHOT</gems.version>
+		<gems.version>1.0.0</gems.version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		
 		<!-- dependency versions -->
