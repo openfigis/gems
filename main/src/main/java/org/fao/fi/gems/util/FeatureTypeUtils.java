@@ -46,10 +46,11 @@ public final class FeatureTypeUtils {
 	 * @param code
 	 * @param buffer
 	 * @return
+	 * @throws Exception 
 	 */
 	public static Map<FeatureTypeProperty, Object> computeFeatureTypeProperties(
 			GeographicServerSettings settings,
-			String code, double buffer) {
+			String code, double buffer) throws Exception {
 		
 		Map<FeatureTypeProperty, Object> map = null;
 
@@ -252,7 +253,7 @@ public final class FeatureTypeUtils {
 				}
 			}
 		} catch (Exception e) {
-			LOGGER.warn("Error trying to perform WFS GetFeature request");
+			throw new Exception("Error trying to perform WFS GetFeature request", e);
 		}
 
 		return map;
