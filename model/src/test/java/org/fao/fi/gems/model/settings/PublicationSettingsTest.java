@@ -37,6 +37,9 @@ public class PublicationSettingsTest {
 		Assert.assertEquals("somestyle", settings.getStyle());
 		Assert.assertTrue(settings.isTest());
 		Assert.assertEquals("thecode", settings.getTestCode());
+		
+		//FIGIS specific
+		Assert.assertEquals("http://www.fao.org/figis/geoserver/factsheets", settings.getFigisViewerUrl());
 		Assert.assertEquals("http://www.fao.org/fishery", settings.getFigisFactsheetUrl());
 
 	}

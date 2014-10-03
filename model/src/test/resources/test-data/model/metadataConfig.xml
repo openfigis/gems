@@ -64,6 +64,7 @@
 			<testCode>thecode</testCode>
 			
 			<!-- FIGIS specific -->
+			<figisViewerUrl>http://www.fao.org/figis/geoserver/factsheets</figisViewerUrl>
 			<figisFactsheetUrl>http://www.fao.org/fishery</figisFactsheetUrl>
 			
 		</publicationSettings>

@@ -31,6 +31,7 @@ public class PublicationSettings{
 	private boolean test;
 	private String testCode;
 	
+	private String figisViewerUrl;
 	private String figisFactsheetUrl;
 
 	/**
@@ -247,6 +248,22 @@ public class PublicationSettings{
 	 */
 	public void setTestCode(String testCode) {
 		this.testCode = testCode;
+	}
+
+
+	/**
+	 * @return the figisViewerUrl
+	 */
+	public String getFigisViewerUrl() {
+		return figisViewerUrl;
+	}
+
+
+	/**
+	 * @param figisViewerUrl the figisViewerUrl to set
+	 */
+	public void setFigisViewerUrl(String figisViewerUrl) {
+		this.figisViewerUrl = figisViewerUrl;
 	}
 
 

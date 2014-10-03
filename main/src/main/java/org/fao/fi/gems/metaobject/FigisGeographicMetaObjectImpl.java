@@ -25,6 +25,7 @@ public class FigisGeographicMetaObjectImpl extends GeographicMetaObjectImpl impl
 
 	private static Logger LOGGER = LoggerFactory.getLogger(FigisGeographicMetaObjectImpl.class);
 	
+	private String figisViewerUrl;
 	private String figisFactsheetUrl;
 	private URI viewerResource;
 	private String factsheet;
@@ -44,6 +45,7 @@ public class FigisGeographicMetaObjectImpl extends GeographicMetaObjectImpl impl
 			MetadataConfig config) throws URISyntaxException {
 		super(entities, objectProperties, geoproperties, config);
 		
+		this.figisViewerUrl = config.getSettings().getPublicationSettings().getFigisViewerUrl();
 		this.figisFactsheetUrl = config.getSettings().getPublicationSettings().getFigisFactsheetUrl();
 		this.setFigisViewerResource();
 		this.setFigisFactsheet();
@@ -91,7 +93,7 @@ public class FigisGeographicMetaObjectImpl extends GeographicMetaObjectImpl impl
 				if(globalType.matches("BTM_FISH")) layerOfInterest = "Bottom fishing areas";
 				if(globalType.matches("OTHER")) layerOfInterest = "Other access regulated areas";
 				
-				resource = this.figisFactsheetUrl + "/vme-db/?"
+				resource = this.figisViewerUrl + "/vme-db/?"
 						+ "embed=true"
 						+ "&extent=" + bbox.getMinX() + "," + bbox.getMinY() + ","
 									 + bbox.getMaxX() + "," + bbox.getMaxY()
@@ -103,7 +105,7 @@ public class FigisGeographicMetaObjectImpl extends GeographicMetaObjectImpl impl
 				resource = resource.replaceAll(" ", "%20");
 			} else {
 				if(((FigisGeographicEntityImpl) this.entities.get(0)).getFigisViewerId() != null){
-					resource = this.gsSettings.getUrl()+"/factsheets/" + figisDomain
+					resource = this.figisViewerUrl+ "/" + figisDomain
 							+ ".html?" + this.collection + "=" + ((FigisGeographicEntityImpl) this.entities.get(0)).getFigisViewerId()
 							+ "&extent=" + bbox.getMinX() + "," + bbox.getMinY() + ","
 							+ bbox.getMaxX() + "," + bbox.getMaxY() + "&prj=4326";		
