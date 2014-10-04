@@ -54,10 +54,12 @@ public class Publisher {
 	 * @param object
 	 * @param style
 	 * @param exist
+	 * @return 
 	 * @throws Exception
 	 */
-	public void publish(GeographicMetaObject object, String style, boolean exist) throws Exception {
+	public boolean publish(GeographicMetaObject object, String style, boolean exist) throws Exception {
 
+		boolean published = false;
 		try{
 			if (exist) {
 	
@@ -89,11 +91,15 @@ public class Publisher {
 			}
 		} catch (Exception e){
 			throw new Exception("Fail to publish data/metadata pair", e);
+			
 		} finally {
+			published = true;
 			int sleep = 3;
 			Thread.sleep(3*1000);
 			LOGGER.info("Sleeping "+sleep+" seconds");
 		}
+		
+		return published;
 	}
 
 	/**

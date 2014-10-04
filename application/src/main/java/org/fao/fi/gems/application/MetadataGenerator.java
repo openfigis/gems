@@ -1,6 +1,7 @@
 package org.fao.fi.gems.application;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -91,6 +92,7 @@ public class MetadataGenerator {
 
 		int size = 0;
 
+		List<String> failures = new ArrayList<String>();
 		List<String> existingLayers = publisher.getDataPublisher().GSReader
 				.getLayers().getNames(); // read once, improve performance
 
@@ -171,14 +173,29 @@ public class MetadataGenerator {
 					style = "polygon";
 				}
 				
-				publisher.publish(metaObject, style, exist);
-				size = size + 1;	
-				LOGGER.info(size + " published metalayers");
-			
+				boolean published = false;
+				try {
+					published = publisher.publish(metaObject, style, exist);
+					if(published){
+						size = size + 1;	
+						LOGGER.info(size + " published metalayers");
+					}
+				}catch(Exception e){
+					LOGGER.info("Failed to publish layer/metadata pair for " + entity.getCode());
+					failures.add(entity.getCode());
+				}
+
 			// UNPUBLISH ACTION
 			}else if (action.matches("UNPUBLISH")) {
 				publisher.unpublish(metaObject, exist);
 			}
 		}
+		
+		LOGGER.info("== PUBLICATION FAILURES ==");
+		Iterator<String> failuresIt = failures.iterator();
+		while(failuresIt.hasNext()){
+			LOGGER.info(failuresIt.next());
+		}
+		
 	}
 }
