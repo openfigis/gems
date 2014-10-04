@@ -77,7 +77,7 @@ public class SpeciesCodelistParser implements CodelistParser{
 		
 	}	
 	
-	public Set<GeographicEntity> getCodelist(String owner, String collection, String specieslist) {
+	public Set<GeographicEntity> getCodelist(String owner, String collection, String specieslist, List<String> subset) {
 		
 		//available styles
 		Random styleRandomizer = new Random();
@@ -112,68 +112,76 @@ public class SpeciesCodelistParser implements CodelistParser{
 					String alphacode = eElement.getAttribute("a3c");
 					String FigisId = eElement.getAttribute("FigisID");
 					
-					//other properties
-					String englishName = eElement.getAttribute("en");
-					String scName = eElement.getAttribute("lt");
-					String family = eElement.getAttribute("family");
-					String order = eElement.getAttribute("order");
-					
-					//habitat
-					String mar = eElement.getAttribute("mar");
-					String inl = eElement.getAttribute("inl");
-					String hab = null;
-					if (mar.equals("1")) {
-						if (inl.equals("1")) {
-							hab = "mi";
-						} else {
-							hab = "m";
-						}
-					} else if (mar.equals("0")) {
-						if (inl.equals("1")) {
-							hab = "i";
-						}
-
+					//wrapEntity by default is true
+					//if there is a list of subset then wrap entity only for those ones
+					boolean wrapEntity = true;
+					if(subset.size() > 0){
+						if(!subset.contains(alphacode)) wrapEntity = false;
 					}
 					
-					//style
-					String randomStyle = "species_style_"+ styleColorList.get(styleRandomizer.nextInt(styleColorList.size()));
-					
-					//properties
-					//----------
-					//FAO
-					properties.put(SpeciesProperty.FAO, Arrays.asList(Utils.buildMetadataIdentifier(owner, collection, alphacode)));
-					
-					//ASFIS
-					properties.put(SpeciesProperty.ASFIS, Arrays.asList(alphacode, englishName, scName, family, order));
-					
-					//FIGIS
-					properties.put(SpeciesProperty.FIGIS, Arrays.asList(FigisId));
-					
-					//FLOD & WoRMS (inherited from FLOD)
-					FLODSpeciesEntity flodEntity = new FLODSpeciesEntity(alphacode);
-					if(flodEntity.getFlodContent() != null){
-						properties.put(SpeciesProperty.FLOD, Arrays.asList(flodEntity.getASFISCodedEntity()));
+					if(wrapEntity){
+						//other properties
+						String englishName = eElement.getAttribute("en");
+						String scName = eElement.getAttribute("lt");
+						String family = eElement.getAttribute("family");
+						String order = eElement.getAttribute("order");
 						
-						if(flodEntity.getAphiaID() != null){//control because not all species in FLOD have worms info
-							properties.put(SpeciesProperty.WORMS, Arrays.asList(flodEntity.getAphiaID(), flodEntity.getWormsScientificName()));
-						}	
+						//habitat
+						String mar = eElement.getAttribute("mar");
+						String inl = eElement.getAttribute("inl");
+						String hab = null;
+						if (mar.equals("1")) {
+							if (inl.equals("1")) {
+								hab = "mi";
+							} else {
+								hab = "m";
+							}
+						} else if (mar.equals("0")) {
+							if (inl.equals("1")) {
+								hab = "i";
+							}
+	
+						}
+						
+						//style
+						String randomStyle = "species_style_"+ styleColorList.get(styleRandomizer.nextInt(styleColorList.size()));
+						
+						//properties
+						//----------
+						//FAO
+						properties.put(SpeciesProperty.FAO, Arrays.asList(Utils.buildMetadataIdentifier(owner, collection, alphacode)));
+						
+						//ASFIS
+						properties.put(SpeciesProperty.ASFIS, Arrays.asList(alphacode, englishName, scName, family, order));
+						
+						//FIGIS
+						properties.put(SpeciesProperty.FIGIS, Arrays.asList(FigisId));
+						
+						//FLOD & WoRMS (inherited from FLOD)
+						FLODSpeciesEntity flodEntity = new FLODSpeciesEntity(alphacode);
+						if(flodEntity.getFlodContent() != null){
+							properties.put(SpeciesProperty.FLOD, Arrays.asList(flodEntity.getASFISCodedEntity()));
+							
+							if(flodEntity.getAphiaID() != null){//control because not all species in FLOD have worms info
+								properties.put(SpeciesProperty.WORMS, Arrays.asList(flodEntity.getAphiaID(), flodEntity.getWormsScientificName()));
+							}	
+						}
+						
+						//Others (habitat, style)
+						properties.put(SpeciesProperty.HABITAT, Arrays.asList(hab));
+						properties.put(SpeciesProperty.STYLE, Arrays.asList(randomStyle));
+						
+						//create Geographic entity
+						FigisGeographicEntityImpl entity = new FigisGeographicEntityImpl(owner, collection, alphacode, scName, properties);
+						
+						//specific Figis stuff required
+						entity.setFigisDomain("species");
+						entity.setFigisId(FigisId);
+						entity.setFigisViewerId(alphacode+"-"+hab);
+						
+						//add entity to codelist
+						codelist.add(entity);
 					}
-					
-					//Others (habitat, style)
-					properties.put(SpeciesProperty.HABITAT, Arrays.asList(hab));
-					properties.put(SpeciesProperty.STYLE, Arrays.asList(randomStyle));
-					
-					//create Geographic entity
-					FigisGeographicEntityImpl entity = new FigisGeographicEntityImpl(owner, collection, alphacode, scName, properties);
-					
-					//specific Figis stuff required
-					entity.setFigisDomain("species");
-					entity.setFigisId(FigisId);
-					entity.setFigisViewerId(alphacode+"-"+hab);
-					
-					//add entity to codelist
-					codelist.add(entity);
-
 				}
 			}
 		} catch (Exception e) {

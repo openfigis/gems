@@ -72,7 +72,7 @@ public class RfbCodelistParser implements CodelistParser{
 	
 	
 	public Set<GeographicEntity> getCodelist(String owner, String collection,
-			String url) {
+			String url, List<String> subset) {
 		
 		Set<GeographicEntity> rfbCodelist = new HashSet<GeographicEntity>();
 		
@@ -100,44 +100,51 @@ public class RfbCodelistParser implements CodelistParser{
 					String fid = eElement.getAttribute("fid");
 					String label = ((Element) eElement.getElementsByTagName("descriptor").item(0)).getAttribute("title");
 					
-					Map<GeographicMetaObjectProperty, List<String>> properties = new HashMap<GeographicMetaObjectProperty, List<String>>();
-					//FAO
-					properties.put(RfbProperty.FAO, Arrays.asList(Utils.buildMetadataIdentifier(owner, collection, rfb)));
-					
-					//FIGIS
-					properties.put(RfbProperty.FIGIS, Arrays.asList(fid));
-					
-					//FLOD
-					FLODRfbEntity flodEntity = new FLODRfbEntity(rfb);
-					if(flodEntity.getFlodContent() != null){
-						properties.put(RfbProperty.FLOD, Arrays.asList(flodEntity.getRfbCodedEntity()));
+					//wrapEntity by default is true
+					//if there is a list of subset then wrap entity only for those ones
+					boolean wrapEntity = true;
+					if(subset.size() > 0){
+						if(!subset.contains(rfb)) wrapEntity = false;
 					}
-					
-					//Style
-					properties.put(RfbProperty.STYLE, Arrays.asList(style));
-					
-					//Rfb abstract
-		
-					URL fsURL = new URL("http://www.fao.org/fishery/xml/organization/"+fid);
-					Document doc2 = dBuilder.parse(fsURL.openStream());	
-
-					Element geoCoverage = (Element) doc2.getDocumentElement().getElementsByTagName("fi:GeoCoverage").item(0);
-					NodeList nodeList = geoCoverage.getElementsByTagName("fi:Text");
-					if(nodeList.getLength() > 0){
-						String abstractText = nodeList.item(0).getTextContent().replaceAll("<p>", "").replaceAll("</p>", "");
-						properties.put(RfbProperty.ABSTRACT, Arrays.asList(abstractText));
+					if(wrapEntity){
+						Map<GeographicMetaObjectProperty, List<String>> properties = new HashMap<GeographicMetaObjectProperty, List<String>>();
+						//FAO
+						properties.put(RfbProperty.FAO, Arrays.asList(Utils.buildMetadataIdentifier(owner, collection, rfb)));
+						
+						//FIGIS
+						properties.put(RfbProperty.FIGIS, Arrays.asList(fid));
+						
+						//FLOD
+						FLODRfbEntity flodEntity = new FLODRfbEntity(rfb);
+						if(flodEntity.getFlodContent() != null){
+							properties.put(RfbProperty.FLOD, Arrays.asList(flodEntity.getRfbCodedEntity()));
+						}
+						
+						//Style
+						properties.put(RfbProperty.STYLE, Arrays.asList(style));
+						
+						//Rfb abstract
+			
+						URL fsURL = new URL("http://www.fao.org/fishery/xml/organization/"+fid);
+						Document doc2 = dBuilder.parse(fsURL.openStream());	
+	
+						Element geoCoverage = (Element) doc2.getDocumentElement().getElementsByTagName("fi:GeoCoverage").item(0);
+						NodeList nodeList = geoCoverage.getElementsByTagName("fi:Text");
+						if(nodeList.getLength() > 0){
+							String abstractText = nodeList.item(0).getTextContent().replaceAll("<p>", "").replaceAll("</p>", "");
+							properties.put(RfbProperty.ABSTRACT, Arrays.asList(abstractText));
+						}
+						
+						FigisGeographicEntityImpl entity = new FigisGeographicEntityImpl(owner, collection, rfb, label, properties);
+						
+						//Figis stuff
+						entity.setFigisDomain("rfbs");
+						entity.setFigisId(rfb.toLowerCase());
+						entity.setFigisViewerId(rfb);
+						
+						//add geographic entity
+						rfbCodelist.add(entity);
 					}
-					
-					FigisGeographicEntityImpl entity = new FigisGeographicEntityImpl(owner, collection, rfb, label, properties);
-					
-					//Figis stuff
-					entity.setFigisDomain("rfbs");
-					entity.setFigisId(rfb.toLowerCase());
-					entity.setFigisViewerId(rfb);
-					
-					//add geographic entity
-					rfbCodelist.add(entity);
-
 				}
 			}
 		} catch (Exception e) {

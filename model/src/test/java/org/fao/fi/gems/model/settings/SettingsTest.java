@@ -85,8 +85,12 @@ public class SettingsTest {
 		Assert.assertEquals("mycollection", publication.getCollectionType());
 		Assert.assertEquals("1.0", publication.getVersion());
 		Assert.assertEquals(2, publication.getBuffer(), 0);
-		Assert.assertTrue(publication.isTest());
-		Assert.assertEquals("thecode", publication.getTestCode());
+		
+		List<String> entities = publication.getEntities();
+		Assert.assertNotNull(entities);
+		Assert.assertEquals(2,entities.size());
+		Assert.assertEquals("thecode1", entities.get(0));
+		Assert.assertEquals("thecode2", entities.get(1));
 		
 		//FIGIS specific
 		Assert.assertEquals("http://www.fao.org/figis/geoserver/factsheets", publication.getFigisViewerUrl());

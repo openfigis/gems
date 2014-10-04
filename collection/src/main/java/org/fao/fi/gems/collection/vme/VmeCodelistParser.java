@@ -77,7 +77,7 @@ public class VmeCodelistParser implements CodelistParser{
 	}	
 	
 	public Set<GeographicEntity> getCodelist(String owner, String collection,
-			String url) {
+			String url, List<String> subset) {
 		
 		Set<GeographicEntity> vmeCodelist = new HashSet<GeographicEntity>();
 		
@@ -96,63 +96,71 @@ public class VmeCodelistParser implements CodelistParser{
 				for(int i = 0;i<bindings.size();i++){
 					JsonObject obj = bindings.get(i).getAsJsonObject().get("properties").getAsJsonObject();
 					String vmeId = obj.get("VME_ID").getAsString();
-					String dataOwner = obj.get("OWNER").getAsString();
-					String localName = obj.get("LOCAL_NAME").getAsString();
-					String globalName = obj.get("GLOB_NAME").getAsString();
-					String globalType = obj.get("GLOB_TYPE").getAsString();
 					
-					String title = localName + " ("+globalName+" - "+dataOwner+")";
-					
-					//retrieving FIGIS stuff
-					String figisId = null;
-					String wsRequestUrl = VME_WS_SERVICE + vmeId;
-					URL wsUrl = new URL(wsRequestUrl);
-					JsonReader wsReader = new JsonReader(new InputStreamReader(wsUrl.openStream()));
-					JsonParser wsParser = new JsonParser();
-					JsonObject wsObject = wsParser.parse(wsReader).getAsJsonObject();
-					
-					JsonArray wsRequest = wsObject.get("resultList").getAsJsonArray();
-					if(wsRequest != null){
-						if(wsRequest.size() > 0){	
-							figisId = wsRequest.get(0).getAsJsonObject().get("vmeId").getAsString();
-						}
+					//wrapEntity by default is true
+					//if there is a list of subset then wrap entity only for those ones
+					boolean wrapEntity = true;
+					if(subset.size() > 0){
+						if(!subset.contains(vmeId)) wrapEntity = false;
 					}
-					wsReader.close();
-					
-					//configure geographic entity	
-					FigisGeographicEntityImpl entity = null;
-					try {
-						boolean addEntity = true;
-						for(GeographicEntity vmeEntity : vmeCodelist){
-							if(vmeEntity.getCode().matches(vmeId)){
-								addEntity = false;
-								break;
+					if(wrapEntity){
+						String dataOwner = obj.get("OWNER").getAsString();
+						String localName = obj.get("LOCAL_NAME").getAsString();
+						String globalName = obj.get("GLOB_NAME").getAsString();
+						String globalType = obj.get("GLOB_TYPE").getAsString();
+						
+						String title = localName + " ("+globalName+" - "+dataOwner+")";
+						
+						//retrieving FIGIS stuff
+						String figisId = null;
+						String wsRequestUrl = VME_WS_SERVICE + vmeId;
+						URL wsUrl = new URL(wsRequestUrl);
+						JsonReader wsReader = new JsonReader(new InputStreamReader(wsUrl.openStream()));
+						JsonParser wsParser = new JsonParser();
+						JsonObject wsObject = wsParser.parse(wsReader).getAsJsonObject();
+						
+						JsonArray wsRequest = wsObject.get("resultList").getAsJsonArray();
+						if(wsRequest != null){
+							if(wsRequest.size() > 0){	
+								figisId = wsRequest.get(0).getAsJsonObject().get("vmeId").getAsString();
 							}
 						}
+						wsReader.close();
 						
-						if(addEntity){
-							Map<GeographicMetaObjectProperty, List<String>> properties = new HashMap<GeographicMetaObjectProperty, List<String>>();
-							//properties.put(VmeProperty.FAO, Arrays.asList(Utils.buildMetadataIdentifier(owner, collection, vmeId)));
-							properties.put(VmeProperty.VME, Arrays.asList(vmeId, localName, globalName));
-							if(figisId != null) properties.put(VmeProperty.FIGIS, Arrays.asList(figisId));
+						//configure geographic entity	
+						FigisGeographicEntityImpl entity = null;
+						try {
+							boolean addEntity = true;
+							for(GeographicEntity vmeEntity : vmeCodelist){
+								if(vmeEntity.getCode().matches(vmeId)){
+									addEntity = false;
+									break;
+								}
+							}
 							
-							//add global type (used for the mapviewer link)
-							properties.put(VmeProperty.GLOBALTYPE, Arrays.asList(globalType));
-							
-							//add style
-							String style = "MEASURES_" + globalType + "_for_" + owner;
-							properties.put(VmeProperty.STYLE, Arrays.asList(style));
+							if(addEntity){
+								Map<GeographicMetaObjectProperty, List<String>> properties = new HashMap<GeographicMetaObjectProperty, List<String>>();
+								//properties.put(VmeProperty.FAO, Arrays.asList(Utils.buildMetadataIdentifier(owner, collection, vmeId)));
+								properties.put(VmeProperty.VME, Arrays.asList(vmeId, localName, globalName));
+								if(figisId != null) properties.put(VmeProperty.FIGIS, Arrays.asList(figisId));
 								
-							entity = new FigisGeographicEntityImpl(owner, collection, vmeId, title, properties);
-							if(figisId != null) entity.setFigisId(figisId);
-							entity.setFigisDomain("vme");
-							
-							vmeCodelist.add(entity);
+								//add global type (used for the mapviewer link)
+								properties.put(VmeProperty.GLOBALTYPE, Arrays.asList(globalType));
+								
+								//add style
+								String style = "MEASURES_" + globalType + "_for_" + owner;
+								properties.put(VmeProperty.STYLE, Arrays.asList(style));
+									
+								entity = new FigisGeographicEntityImpl(owner, collection, vmeId, title, properties);
+								if(figisId != null) entity.setFigisId(figisId);
+								entity.setFigisDomain("vme");
+								
+								vmeCodelist.add(entity);
+							}
+						} catch (URISyntaxException e) {
+							e.printStackTrace();
 						}
-					} catch (URISyntaxException e) {
-						e.printStackTrace();
 					}
-					
 				}
 			}
 

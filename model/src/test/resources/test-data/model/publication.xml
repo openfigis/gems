@@ -16,8 +16,12 @@
 	<version>1.0</version>
 	<buffer>2</buffer>
 	<style>somestyle</style>
-	<test>true</test>
-	<testCode>thecode</testCode>
+	
+	<!-- Subset (in case publishing should be applied to a subset only) -->
+	<entities>
+		<string>thecode1</string>
+		<string>thecode2</string>
+	</entities>
 	
 	<!-- FIGIS specific -->	
 	<figisViewerUrl>http://www.fao.org/figis/geoserver/factsheets</figisViewerUrl>

@@ -73,7 +73,7 @@ public class EezCodelistParser implements CodelistParser{
 	}
 	
 	public Set<GeographicEntity> getCodelist(String owner, String collection,
-			String url) {
+			String url, List<String> subset) {
 		
 		Set<GeographicEntity> eezCodelist = new HashSet<GeographicEntity>();
 		
@@ -96,23 +96,33 @@ public class EezCodelistParser implements CodelistParser{
 					String country = obj.get("country").getAsString();
 					String iso_3digit = obj.get("iso_3digit").getAsString();
 
-					GeographicEntity entity =null;
-					try {
-						Map<GeographicMetaObjectProperty, List<String>> properties = new HashMap<GeographicMetaObjectProperty, List<String>>();
-						properties.put(EezProperty.VLIZ, Arrays.asList(Utils.buildMetadataIdentifier(owner, collection, mrgid)));
-						properties.put(EezProperty.MARINEREGIONS, Arrays.asList(mrgid, country, label));
-						properties.put(EezProperty.ISO, Arrays.asList(iso_3digit));
-						
-						
-						FLODEezEntity flodEntity = new FLODEezEntity(mrgid);
-						if(flodEntity.getFlodContent() != null){
-							properties.put(EezProperty.FLOD, Arrays.asList(flodEntity.getCodedEntity()));
+					GeographicEntity entity = null;
+					
+					//wrapEntity by default is true
+					//if there is a list of subset then wrap entity only for those ones
+					boolean wrapEntity = true;
+					if(subset.size() > 0){
+						if(!subset.contains(mrgid)) wrapEntity = false;
+					}
+					
+					if(wrapEntity){
+						try {
+							Map<GeographicMetaObjectProperty, List<String>> properties = new HashMap<GeographicMetaObjectProperty, List<String>>();
+							properties.put(EezProperty.VLIZ, Arrays.asList(Utils.buildMetadataIdentifier(owner, collection, mrgid)));
+							properties.put(EezProperty.MARINEREGIONS, Arrays.asList(mrgid, country, label));
+							properties.put(EezProperty.ISO, Arrays.asList(iso_3digit));
+							
+							
+							FLODEezEntity flodEntity = new FLODEezEntity(mrgid);
+							if(flodEntity.getFlodContent() != null){
+								properties.put(EezProperty.FLOD, Arrays.asList(flodEntity.getCodedEntity()));
+							}
+							
+							entity = new GeographicEntityImpl(owner, collection, mrgid, label, properties);
+							eezCodelist.add(entity);
+						} catch (URISyntaxException e) {
+							e.printStackTrace();
 						}
-						
-						entity = new GeographicEntityImpl(owner, collection, mrgid, label, properties);
-						eezCodelist.add(entity);
-					} catch (URISyntaxException e) {
-						e.printStackTrace();
 					}
 					
 				}

@@ -2,6 +2,9 @@ package org.fao.fi.gems.model.settings;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.io.xml.StaxDriver;
 
@@ -28,8 +31,7 @@ public class PublicationSettings{
 	private String style;
 	private double buffer;
 	
-	private boolean test;
-	private String testCode;
+	private List<String> entities = new ArrayList<String>();
 	
 	private String figisViewerUrl;
 	private String figisFactsheetUrl;
@@ -220,36 +222,27 @@ public class PublicationSettings{
 
 
 	/**
-	 * @return the test
+	 * @return the entities
 	 */
-	public boolean isTest() {
-		return test;
+	public List<String> getEntities() {
+		return entities;
 	}
 
 
 	/**
-	 * @param test the test to set
+	 * @param entities the entities to set
 	 */
-	public void setTest(boolean test) {
-		this.test = test;
+	public void setEntities(List<String> entities) {
+		this.entities = entities;
 	}
-
-
+	
+	
 	/**
-	 * @return the testCode
+	 * @param entity
 	 */
-	public String getTestCode() {
-		return testCode;
+	public void addEntity(String entity){
+		this.entities.add(entity);
 	}
-
-
-	/**
-	 * @param testCode the testCode to set
-	 */
-	public void setTestCode(String testCode) {
-		this.testCode = testCode;
-	}
-
 
 	/**
 	 * @return the figisViewerUrl

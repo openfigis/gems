@@ -2,6 +2,7 @@ package org.fao.fi.gems.model.settings;
 
 import java.io.File;
 import java.net.URISyntaxException;
+import java.util.List;
 
 
 import org.fao.fi.gems.model.settings.PublicationSettings;
@@ -35,8 +36,12 @@ public class PublicationSettingsTest {
 		Assert.assertEquals("1.0", settings.getVersion());
 		Assert.assertEquals(2, settings.getBuffer(), 0);
 		Assert.assertEquals("somestyle", settings.getStyle());
-		Assert.assertTrue(settings.isTest());
-		Assert.assertEquals("thecode", settings.getTestCode());
+		
+		List<String> entities = settings.getEntities();
+		Assert.assertNotNull(entities);
+		Assert.assertEquals(2,entities.size());
+		Assert.assertEquals("thecode1", entities.get(0));
+		Assert.assertEquals("thecode2", entities.get(1));
 		
 		//FIGIS specific
 		Assert.assertEquals("http://www.fao.org/figis/geoserver/factsheets", settings.getFigisViewerUrl());

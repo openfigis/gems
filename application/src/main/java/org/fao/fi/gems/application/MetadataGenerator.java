@@ -46,7 +46,7 @@ public class MetadataGenerator {
 
 		//Read the configuration
 		LOGGER.info("(1) Loading the configuration file");
-		MetadataConfig config = MetadataConfig.fromXML(new File(args[0]));
+		MetadataConfig config = MetadataConfig.fromXML(new File("c:/gis/metadata/config/species_new.xml"));
 		
 		//read the codelists
 		LOGGER.info("(2) Loading the reference list");
@@ -57,35 +57,29 @@ public class MetadataGenerator {
 				break;
 			}
 		}
+		
 		LOGGER.info("Owner = "+owner);
 		String collectionType = config.getSettings().getPublicationSettings().getCollectionType();
 		LOGGER.info("Collection type = "+collectionType);
 		String codelistUrl = config.getSettings().getPublicationSettings().getCodelistURL().replaceAll("&amp;","&");
 		LOGGER.info("Codelist URL = "+codelistUrl);
 		
+		List<String> subset = null;
+		List<String> entities = config.getSettings().getPublicationSettings().getEntities();
+		if(entities.size() > 0){
+			subset = entities;
+			LOGGER.info("Scope = SUBSET");
+			LOGGER.info("List of entities = "+entities.toString());
+		}else{
+			LOGGER.info("Scope = COMPLETE");
+		}
+		
 		//load the codelist parser
 		ClassLoader loader = ClassLoader.getSystemClassLoader();
 		Class<?> parserClass = loader.loadClass(config.getSettings().getPublicationSettings().getCodelistParser());
 		CodelistParser codelistParser = (CodelistParser) parserClass.newInstance();
-		set = codelistParser.getCodelist(owner, collectionType, codelistUrl);
+		set = codelistParser.getCodelist(owner, collectionType, codelistUrl, subset);
 		LOGGER.info("Codelist parser = "+config.getSettings().getPublicationSettings().getCodelistParser());
-		
-		//only for test (apply to the first element)
-		if(config.getSettings().getPublicationSettings().isTest()){
-			GeographicEntity testEntity = null;
-			Iterator<GeographicEntity> it = set.iterator();
-			while(it.hasNext()){
-				GeographicEntity ent = it.next();
-				String code = ent.getCode();
-				if(code.matches(config.getSettings().getPublicationSettings().getTestCode())){
-					testEntity = ent;
-					break;
-				}
-			}
-			set = new HashSet<GeographicEntity>();
-			set.add(testEntity);
-			LOGGER.info("Testing with "+testEntity.getCode());
-		}
 			
 		// configure the publisher
 		Publisher publisher = new Publisher(config);
@@ -98,6 +92,7 @@ public class MetadataGenerator {
 
 		// iteration on the entities
 		LOGGER.info("(3) Start metadata creation & publication");
+		LOGGER.info("Nb of expected publications = " + set.size());
 		Iterator<GeographicEntity> entityIterator = set.iterator();
 		while (entityIterator.hasNext()) {
 
@@ -191,7 +186,7 @@ public class MetadataGenerator {
 			}
 		}
 		
-		LOGGER.info("== PUBLICATION FAILURES ==");
+		if(failures.size() > 0) LOGGER.info("== PUBLICATION FAILURES ==");
 		Iterator<String> failuresIt = failures.iterator();
 		while(failuresIt.hasNext()){
 			LOGGER.info(failuresIt.next());
