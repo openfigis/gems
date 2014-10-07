@@ -62,10 +62,10 @@
 			<style>somestyle</style>							<!-- style to apply to the published layer -->
 			
 			<!-- Subset (in case publishing should be applied to a subset only) -->
-			<subset>
+			<entities>
 				<string>thecode1</string>
 				<string>thecode2</string>
-			</subset>
+			</entities>
 			
 			<!--  FIGIS specific -->
 			<figisViewerUrl>http://www.fao.org/figis/geoserver/factsheets</figisViewerUrl> <!-- FIGIS Viewer base URL -->
