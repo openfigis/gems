@@ -115,8 +115,10 @@ public class SpeciesCodelistParser implements CodelistParser{
 					//wrapEntity by default is true
 					//if there is a list of subset then wrap entity only for those ones
 					boolean wrapEntity = true;
-					if(subset.size() > 0){
-						if(!subset.contains(alphacode)) wrapEntity = false;
+					if(subset != null){
+						if(subset.size() > 0){
+							if(!subset.contains(alphacode)) wrapEntity = false;
+						}
 					}
 					
 					if(wrapEntity){
