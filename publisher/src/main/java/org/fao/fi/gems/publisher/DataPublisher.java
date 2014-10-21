@@ -16,7 +16,6 @@ import it.geosolutions.geoserver.rest.encoder.metadata.virtualtable.GSVirtualTab
 import it.geosolutions.geoserver.rest.encoder.metadata.virtualtable.VTGeometryEncoder;
 import it.geosolutions.geoserver.rest.encoder.metadatalink.GSMetadataLinkInfoEncoder;
 
-import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -24,8 +23,6 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map.Entry;
 
-import org.apache.commons.httpclient.NameValuePair;
-import org.apache.commons.io.FileUtils;
 import org.fao.fi.gems.entity.EntityAuthority;
 import org.fao.fi.gems.metaobject.GeographicMetaObject;
 import org.fao.fi.gems.metaobject.GeographicMetaObjectProperty;
@@ -65,6 +62,8 @@ public class DataPublisher {
 	String trgLayerPrefix;
 	TimeDimension timeDimension;
 	
+	List<String> existingLayers;
+	
 	String geonetworkBaseURL;
 
 
@@ -92,42 +91,79 @@ public class DataPublisher {
 		this.trgDatastore = settings.getTargetDatastore();
 		this.trgLayerPrefix = settings.getTargetLayerPrefix();
 		this.timeDimension = settings.getTimeDimension();
+		
+		this.existingLayers = GSReader.getLayers().getNames();
 
 		this.geonetworkBaseURL = catalogueSettings.getUrl();
 		
 	}
 
+	
+	/**
+	 * Get list of existing layers
+	 * 
+	 * @return a list of layer names
+	 */
+	public List<String> getExistingLayers(){
+		return this.existingLayers;
+	}
+	
 
 	/**
 	 * Check layer existence
 	 * 
 	 * 
-	 * @param code
+	 * @param object
 	 * @return
 	 * @throws Exception
 	 */
-	public boolean checkLayerExistence(String code) {
-		String layername = this.trgLayerPrefix + "_" + code;
-
-		// using geoserver-manager
-		List<String> layers = GSReader.getLayers().getNames();
-		return layers.contains(layername);
+	public String checkLayerExistence(GeographicMetaObject object) {
+		
+		String layername = this.trgLayerPrefix + "_" + object.getCode();
+		List<String> layers = this.getExistingLayers();
+		
+		String existingLayer = null;
+		if(layers.contains(layername)) existingLayer = layername;
+		return existingLayer;
 	}
 
+	
 	/**
 	 * Delete the layer
 	 * 
 	 * @param object
 	 * @throws Exception
 	 */
-	public boolean deleteLayer(GeographicMetaObject object) {
+	public boolean deleteLayer(GeographicMetaObject object) throws Exception {
 		String layername = object.getTargetLayerName();
-
-		// using geoserver-manager
-		return GSPublisher.unpublishFeatureType(trgWorkspace, trgDatastore,
-				layername);
+		String existingLayer = this.checkLayerExistence(object);
+		
+		boolean deleted = false;
+		if(existingLayer != null){
+			try{
+				deleted = GSPublisher.unpublishFeatureType(trgWorkspace, trgDatastore, layername);
+			}catch(Exception e){
+				throw new Exception("Fail to delete unpublish Feature Type / Layer resources", e);
+			}
+		}else{
+			try{
+				deleted = this.deleteOnlyFeatureType(object);
+			} catch (Exception e){
+				throw new Exception("Fail to delete only feature type",e);
+			}
+		}
+		
+		return deleted;
 	}
 
+	
+	/**
+	 * Delete only the feature Type
+	 * 
+	 * @param object
+	 * @return
+	 * @throws MalformedURLException
+	 */
 	public boolean deleteOnlyFeatureType(GeographicMetaObject object)
 			throws MalformedURLException {
 		URL deleteFtUrl = new URL(this.geoserverBaseURL + "/rest/workspaces/"

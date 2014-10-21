@@ -74,10 +74,10 @@ public class SettingsTest {
 		PublicationSettings publication = 	settings.getPublicationSettings();
 		Assert.assertNotNull(publication);
 		Assert.assertEquals("PUBLISH", publication.getAction());
+		Assert.assertTrue(publication.isActionData());
+		Assert.assertTrue(publication.isActionMetadata());
 		Assert.assertTrue(publication.isForceData());
 		Assert.assertTrue(publication.isForceMetadata());
-		Assert.assertTrue(publication.isUnpublishData());
-		Assert.assertTrue(publication.isUnpublishMetadata());
 		
 		Assert.assertEquals("http://www.organization.org/codelist", publication.getCodelistURL());
 		Assert.assertEquals("org.fao.fi.gems.collection.anobject.parser", publication.getCodelistParser());

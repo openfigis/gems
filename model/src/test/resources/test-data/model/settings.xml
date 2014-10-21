@@ -41,10 +41,10 @@
 
 		<!-- actions -->
 		<action>PUBLISH</action>
-		<forceData>true</forceData>
-		<forceMetadata>true</forceMetadata>
-		<unpublishData>true</unpublishData>
-		<unpublishMetadata>true</unpublishMetadata>
+		<actionData>true</actionData>					
+		<actionMetadata>true</actionMetadata>			
+		<forceData>true</forceData>						
+		<forceMetadata>true</forceMetadata>	
 
 		<!-- reference list for batch process -->
 		<codelistURL>http://www.organization.org/codelist</codelistURL>

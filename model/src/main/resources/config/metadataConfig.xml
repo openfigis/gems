@@ -46,10 +46,10 @@
 
 			<!-- actions -->
 			<action>PUBLISH</action>
-			<forceData>true</forceData>							<!-- force the data publication -->
-			<forceMetadata>true</forceMetadata>					<!-- force the metadata publication -->
-			<unpublishData>true</unpublishData>					<!-- unpublish data (if action == PUBLISH) -->
-			<unpublishMetadata>true</unpublishMetadata>			<!-- unpublish metadata (if action == PUBLISH) -->
+			<actionData>true</actionData>					<!-- action to perform on data -->
+			<actionMetadata>true</actionMetadata>			<!-- action to perform on metadata -->
+			<forceData>true</forceData>						<!-- force the data publication -->
+			<forceMetadata>true</forceMetadata>				<!-- force the metadata publication -->
 
 			<!-- reference list for batch process -->
 			<codelistURL>http://www.organization.org/codelist</codelistURL>

@@ -18,10 +18,11 @@ import com.thoughtworks.xstream.io.xml.StaxDriver;
 public class PublicationSettings{
 
 	private String action;
+	private boolean actionData;
+	private boolean actionMetadata;
 	private boolean forceData;
 	private boolean forceMetadata;
-	private boolean unpublishData;
-	private boolean unpublishMetadata;
+
 	
 	private String codelistURL;
 	private String codelistParser;
@@ -94,34 +95,34 @@ public class PublicationSettings{
 
 
 	/**
-	 * @return the unpublishData
+	 * @return the actionData
 	 */
-	public boolean isUnpublishData() {
-		return unpublishData;
+	public boolean isActionData() {
+		return actionData;
 	}
 
 
 	/**
-	 * @param unpublishData the unpublishData to set
+	 * @param actionData the actionData to set
 	 */
-	public void setUnpublishData(boolean unpublishData) {
-		this.unpublishData = unpublishData;
+	public void setActionData(boolean actionData) {
+		this.actionData = actionData;
 	}
 
 
 	/**
-	 * @return the unpublishMetadata
+	 * @return the actionMetadata
 	 */
-	public boolean isUnpublishMetadata() {
-		return unpublishMetadata;
+	public boolean isActionMetadata() {
+		return actionMetadata;
 	}
 
 
 	/**
-	 * @param unpublishMetadata the unpublishMetadata to set
+	 * @param actionMetadata the actionMetadata to set
 	 */
-	public void setUnpublishMetadata(boolean unpublishMetadata) {
-		this.unpublishMetadata = unpublishMetadata;
+	public void setActionMetadata(boolean actionMetadata) {
+		this.actionMetadata = actionMetadata;
 	}
 
 

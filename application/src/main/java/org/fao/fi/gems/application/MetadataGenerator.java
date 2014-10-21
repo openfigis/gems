@@ -3,7 +3,6 @@ package org.fao.fi.gems.application;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -87,8 +86,6 @@ public class MetadataGenerator {
 		int size = 0;
 
 		List<String> failures = new ArrayList<String>();
-		List<String> existingLayers = publisher.getDataPublisher().GSReader
-				.getLayers().getNames(); // read once, improve performance
 
 		// iteration on the entities
 		LOGGER.info("(3) Start metadata creation & publication");
@@ -101,9 +98,6 @@ public class MetadataGenerator {
 			LOGGER.info("Publishing single layer & metadata for: "+entity.getCode()+ " ("+entity.getRefName()+")");
 
 			Map<FeatureTypeProperty, Object> geoproperties = null;
-			
-			String targetLayer = config.getSettings().getGeographicServerSettings().getTargetLayerPrefix() + "_" + entity.getCode();
-			boolean exist = existingLayers.contains(targetLayer);
 			
 			String action = config.getSettings().getPublicationSettings().getAction();
 			LOGGER.info("== ACTION: "+action+" == ");
@@ -145,32 +139,35 @@ public class MetadataGenerator {
 				metaObject = new GeographicMetaObjectImpl(Arrays.asList(entity), null, geoproperties, config);
 			}
 			
-			// PUBLISH ACTION
-			if (action.matches("PUBLISH") && featureCount > 0) {
-				String style = config.getSettings().getPublicationSettings().getStyle();
-				
-				if(style == null){
-					Iterator<GeographicMetaObjectProperty> it2 = entity.getSpecificProperties().keySet().iterator();
-					while(it2.hasNext()){
-						GeographicMetaObjectProperty property = it2.next();
-						Object obj = property.getObject();
-						if(obj == EntityAddin.STYLE){
-							style = entity.getSpecificProperties().get(property).get(0);
-							break;
-						}
+			//style
+			String style = config.getSettings().getPublicationSettings().getStyle();
+			
+			if(style == null){
+				Iterator<GeographicMetaObjectProperty> it2 = entity.getSpecificProperties().keySet().iterator();
+				while(it2.hasNext()){
+					GeographicMetaObjectProperty property = it2.next();
+					Object obj = property.getObject();
+					if(obj == EntityAddin.STYLE){
+						style = entity.getSpecificProperties().get(property).get(0);
+						break;
 					}
 				}
-				
-				if(style != null){
-					LOGGER.debug(style);
-				}else{
-					LOGGER.warn("Applying default style");
-					style = "polygon";
-				}
+			}
+			
+			if(style != null){
+				LOGGER.debug(style);
+			}else{
+				LOGGER.warn("Applying default style");
+				style = "polygon";
+			}
+			
+			// PUBLISH ACTION
+			//===============
+			if (action.matches("PUBLISH") && featureCount > 0) {
 				
 				boolean published = false;
 				try {
-					published = publisher.publish(metaObject, style, exist);
+					published = publisher.publish(metaObject, style);
 					if(published){
 						size = size + 1;	
 						LOGGER.info(size + " published metalayers");
@@ -181,12 +178,24 @@ public class MetadataGenerator {
 				}
 
 			// UNPUBLISH ACTION
+			//=================
 			}else if (action.matches("UNPUBLISH")) {
-				publisher.unpublish(metaObject, exist);
+				
+				boolean unpublished = false;
+				try {
+					unpublished = publisher.unpublish(metaObject, style);
+					if(unpublished){
+						size = size + 1;	
+						LOGGER.info(size + " unpublished metalayers");
+					}
+				}catch(Exception e){
+					LOGGER.info("Failed to unpublish layer/metadata pair for " + entity.getCode());
+					failures.add(entity.getCode());
+				}
 			}
 		}
 		
-		if(failures.size() > 0) LOGGER.info("== PUBLICATION FAILURES ==");
+		if(failures.size() > 0) LOGGER.info("== GEMS FAILURES ==");
 		Iterator<String> failuresIt = failures.iterator();
 		while(failuresIt.hasNext()){
 			LOGGER.info(failuresIt.next());

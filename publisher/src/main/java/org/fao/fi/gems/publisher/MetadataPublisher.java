@@ -9,19 +9,15 @@ import org.fao.fi.gems.metaobject.GeographicMetaObject;
 import org.fao.fi.gems.model.settings.MetadataCatalogueSettings;
 import org.fao.fi.gems.model.settings.PublicationSettings;
 import org.geotoolkit.xml.XML;
-import org.jdom.Element;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import it.geosolutions.geonetwork.GNClient;
-import it.geosolutions.geonetwork.exception.GNLibException;
-import it.geosolutions.geonetwork.exception.GNServerException;
 import it.geosolutions.geonetwork.util.GNInsertConfiguration;
 import it.geosolutions.geonetwork.util.GNPriv;
 import it.geosolutions.geonetwork.util.GNPrivConfiguration;
 import it.geosolutions.geonetwork.util.GNSearchRequest;
 import it.geosolutions.geonetwork.util.GNSearchResponse;
-import it.geosolutions.geonetwork.util.GNSearchRequest.Config;
 import it.geosolutions.geonetwork.util.GNSearchResponse.GNMetadata;
 
 /**
@@ -58,6 +54,40 @@ public class MetadataPublisher {
 			throw new RuntimeException("Could not log in");
 		}
 	}
+	
+	
+	/**
+	 * check metadata existence
+	 * 
+	 * @param object
+	 * @return a GNMetadata object, null otherwise
+	 * @throws Exception 
+	 */
+	public GNMetadata checkMetadataExistence(GeographicMetaObject object) throws Exception{
+		
+		GNSearchRequest request = new GNSearchRequest();
+		request.addParam("uuid", object.getMetaIdentifier());
+		GNSearchResponse response;
+		try {
+			response = client.search(request);
+		} catch (Exception e1) {
+			throw new Exception("Fail to search metadata in Geonetwork", e1);
+		}
+		
+		// delete
+		Iterator<GNMetadata> it = response.iterator();
+		GNMetadata metadata = null;
+		while(it.hasNext()){
+			GNMetadata md = it.next();
+			if(md.getUUID().matches(object.getMetaIdentifier())){
+				metadata = md;
+				break;
+			}
+			
+		}
+		return metadata;
+	}
+	
 
 	/**
 	 * Method to publish a metadata
@@ -103,7 +133,8 @@ public class MetadataPublisher {
 		return metadataID;
 
 	}
-
+	
+	
 	/**
 	 * Delete a metadata from Geonetwork
 	 * 
@@ -112,27 +143,7 @@ public class MetadataPublisher {
 	 */
 	public void deleteMetadata(GeographicMetaObject object) throws Exception{
 		
-		//configure metadata search 
-		GNSearchRequest request = new GNSearchRequest();
-		request.addParam("uuid", object.getMetaIdentifier());
-		GNSearchResponse response;
-		try {
-			response = client.search(request);
-		} catch (Exception e1) {
-			throw new Exception("Fail to search metadata in Geonetwork", e1);
-		}
-		
-		// delete
-		Iterator<GNMetadata> it = response.iterator();
-		GNMetadata metadata = null;
-		while(it.hasNext()){
-			GNMetadata md = it.next();
-			if(md.getUUID().matches(object.getMetaIdentifier())){
-				metadata = md;
-				break;
-			}
-			
-		}
+		GNMetadata metadata = this.checkMetadataExistence(object);
 		if(metadata != null){
 			try {
 				client.deleteMetadata(metadata.getId());
