@@ -205,7 +205,7 @@ public class MetadataGenerator {
 					LOGGER.info("List of geoserver workers (cluster members) detected");
 					LOGGER.info("Reloading geoserver worker's in-memory catalog");
 					boolean reload = publisher.getDataPublisher().reloadWorkerCatalogs();
-					if(!reload){
+					if(reload){
 						LOGGER.info("Successfull reload of geoserver worker in-memory catalogs");
 					} else{
 						LOGGER.info("Some catalog reload failed! check above log for details");
