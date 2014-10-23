@@ -20,12 +20,15 @@ import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Arrays;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map.Entry;
 
 import org.fao.fi.gems.entity.EntityAuthority;
 import org.fao.fi.gems.metaobject.GeographicMetaObject;
 import org.fao.fi.gems.metaobject.GeographicMetaObjectProperty;
+import org.fao.fi.gems.model.settings.GeoMasterInstance;
+import org.fao.fi.gems.model.settings.GeoWorkerInstance;
 import org.fao.fi.gems.model.settings.GeographicServerSettings;
 import org.fao.fi.gems.model.settings.MetadataCatalogueSettings;
 import org.fao.fi.gems.model.settings.TimeDimension;
@@ -47,10 +50,8 @@ public class DataPublisher {
 	
 	private static final String crs = "GEOGCS[\"WGS 84\", \n  DATUM[\"World Geodetic System 1984\", \n    SPHEROID[\"WGS 84\", 6378137.0, 298.257223563, AUTHORITY[\"EPSG\",\"7030\"]], \n    AUTHORITY[\"EPSG\",\"6326\"]], \n  PRIMEM[\"Greenwich\", 0.0, AUTHORITY[\"EPSG\",\"8901\"]], \n  UNIT[\"degree\", 0.017453292519943295], \n  AXIS[\"Geodetic longitude\", EAST], \n  AXIS[\"Geodetic latitude\", NORTH], \n  AUTHORITY[\"EPSG\",\"4326\"]]";
 
-	String geoserverBaseURL;
-	String gsUser;
-	String gsPwd;
-	String gsVersion;
+	GeoMasterInstance master;
+	List<GeoWorkerInstance> workers;
 
 	public GeoServerRESTReader GSReader;
 	public GeoServerRESTPublisher GSPublisher;
@@ -77,13 +78,11 @@ public class DataPublisher {
 	public DataPublisher(GeographicServerSettings settings, MetadataCatalogueSettings catalogueSettings)
 			throws MalformedURLException {
 
-		this.geoserverBaseURL = settings.getUrl();
-		this.gsUser = settings.getUser();
-		this.gsPwd = settings.getPassword();
-		this.gsVersion = settings.getVersion();
+		this.master = settings.getInstances().getMaster();
+		this.workers = settings.getInstances().getWorkers();
 
-		this.GSReader = new GeoServerRESTReader(geoserverBaseURL, gsUser, gsPwd);
-		this.GSPublisher = new GeoServerRESTPublisher(geoserverBaseURL, gsUser, gsPwd);
+		this.GSReader = new GeoServerRESTReader(master.getUrl(), master.getUser(), master.getPassword());
+		this.GSPublisher = new GeoServerRESTPublisher(master.getUrl(), master.getUser(), master.getPassword());
 
 		this.srcLayer = settings.getSourceLayer();
 		this.srcAttribute = settings.getSourceAttribute();
@@ -166,12 +165,12 @@ public class DataPublisher {
 	 */
 	public boolean deleteOnlyFeatureType(GeographicMetaObject object)
 			throws MalformedURLException {
-		URL deleteFtUrl = new URL(this.geoserverBaseURL + "/rest/workspaces/"
+		URL deleteFtUrl = new URL(this.master.getUrl() + "/rest/workspaces/"
 				+ this.trgWorkspace + "/datastores/" + this.trgDatastore
 				+ "/featuretypes/" + object.getTargetLayerName());
 
 		boolean ftDeleted = HTTPUtils.delete(deleteFtUrl.toExternalForm(),
-				this.gsUser, this.gsPwd);
+				this.master.getUser(), this.master.getPassword());
 		return ftDeleted;
 	}
 
@@ -269,7 +268,7 @@ public class DataPublisher {
 
 		// layer
 		GSLayerEncoder layerEncoder = null;
-		if(this.gsVersion.startsWith("2.1") || this.gsVersion.matches("2.1")){
+		if(this.master.getVersion().startsWith("2.1") || this.master.getVersion().matches("2.1")){
 			layerEncoder = new GSLayerEncoder21();
 		}else{
 			layerEncoder = new GSLayerEncoder();
@@ -318,4 +317,5 @@ public class DataPublisher {
 		return publish;
 
 	}
+
 }
