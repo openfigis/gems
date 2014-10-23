@@ -8,6 +8,7 @@ import org.fao.fi.gems.model.content.MetadataContact;
 import org.fao.fi.gems.model.content.MetadataContent;
 import org.fao.fi.gems.model.content.MetadataThesaurus;
 import org.fao.fi.gems.model.settings.BaseLayer;
+import org.fao.fi.gems.model.settings.GeoWorkerInstance;
 import org.fao.fi.gems.model.settings.Settings;
 
 import com.thoughtworks.xstream.XStream;
@@ -74,6 +75,7 @@ public class MetadataConfig {
 		xstream.alias("configuration", MetadataConfig.class);
 		
 		//settings
+		xstream.alias("worker", GeoWorkerInstance.class);
 		xstream.alias("baseLayer", BaseLayer.class);
 		
 		//content

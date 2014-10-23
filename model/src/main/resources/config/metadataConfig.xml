@@ -6,10 +6,43 @@
 	<settings>
 		<!-- Geographic Server settings -->
 		<geographicServerSettings>
-			<url>http://www.organization.org/geoserver</url> 	<!-- Geographic server base url -->
-			<user>user</user>									<!-- Geographic server User -->
-			<password>pwd</password>							<!-- Geographic server password -->
-			<version>2.1</version>								<!-- Geoserver version (used to distinguish behaviors of REST Geoserver Java client) -->
+		
+			<!-- geographic server base url used for OWS online resources 
+			In case of a cluster of geographic servers, this URL is the one
+			in charge of load balancing requests to the different instances -->
+			<publicUrl>http://www.organization.org/geoserver</publicUrl>
+			
+			<!-- instances of geographic servers with whom REST communication will be done -->
+			<instances>
+				<!-- instance considered as the master one, used for REST resource publication/unpublication -->
+				<master>
+					<url>http://www.organization.org/geoserver.dv.1</url> 	<!-- Geographic server base url -->
+					<user>user</user>										<!-- Geographic server User -->
+					<password>pwd</password>								<!-- Geographic server password -->
+					<version>version</version> 								<!-- Geographic server version -->
+				</master>
+				
+				<!-- additional instances targeted by a load balancing for which the in-memory catalog will be reloaded -->
+				<!-- leave empty list if no additional workers -->
+				<workers>
+					<worker>
+						<url>http://www.organization.org/geoserver.dv.2</url> 	<!-- Geographic server base url -->
+						<user>user</user>										<!-- Geographic server User -->
+						<password>pwd</password>								<!-- Geographic server password -->
+					</worker>
+					<worker>
+						<url>http://www.organization.org/geoserver.dv.3</url> 	<!-- Geographic server base url -->
+						<user>user</user>										<!-- Geographic server User -->
+						<password>pwd</password>								<!-- Geographic server password -->
+					</worker>
+					<worker>
+						<url>http://www.organization.org/geoserver.dv.4</url> 	<!-- Geographic server base url -->
+						<user>user</user>										<!-- Geographic server User -->
+						<password>pwd</password>								<!-- Geographic server password -->
+					</worker>
+				</workers>								
+			</instances>
+			
 			<sourceWorkspace>sourceWS</sourceWorkspace>			<!-- workspace where to find the GIS source data collection layer -->
 			<sourceLayer>layer</sourceLayer>					<!-- GIS data collection layer name -->
 			<sourceAttribute>att</sourceAttribute>				<!-- attribute name on which to build the filter -->

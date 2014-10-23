@@ -16,10 +16,10 @@ import com.thoughtworks.xstream.io.xml.StaxDriver;
  */
 public class GeographicServerSettings{
 	
-	private String url;
-	private String user;
-	private String password;
-	private String version;
+	private String publicUrl;
+
+	private GeoInstanceList instances;
+	
 	private String sourceWorkspace;
 	private String sourceLayer;
 	private String sourceAttribute;
@@ -37,62 +37,34 @@ public class GeographicServerSettings{
 	}
 
 	/**
-	 * @return the url
+	 * @return the public url
 	 */
-	public String getUrl() {
-		return url;
+	public String getPublicUrl() {
+		return publicUrl;
 	}
 
 	/**
-	 * @param url
-	 *            the url to set
+	 * @param publicUrl
+	 *            the publicUrl to set
 	 */
-	public void setUrl(String url) {
-		this.url = url;
+	public void setPublicUrl(String publicUrl) {
+		this.publicUrl = publicUrl;
 	}
 
 	/**
-	 * @return the user
+	 * 
+	 * @return the GeoInstanceList
 	 */
-	public String getUser() {
-		return user;
+	public GeoInstanceList getInstances() {
+		return instances;
 	}
 
 	/**
-	 * @param user
-	 *            the user to set
+	 * 
+	 * @param instances
 	 */
-	public void setUser(String user) {
-		this.user = user;
-	}
-
-	/**
-	 * @return the password
-	 */
-	public String getPassword() {
-		return password;
-	}
-
-	/**
-	 * @param password
-	 *            the password to set
-	 */
-	public void setPassword(String password) {
-		this.password = password;
-	}
-
-	/**
-	 * @return the version
-	 */
-	public String getVersion() {
-		return version;
-	}
-
-	/**
-	 * @param version the version to set
-	 */
-	public void setVersion(String version) {
-		this.version = version;
+	public void setInstanceList(GeoInstanceList instances) {
+		this.instances = instances;
 	}
 
 	/**
@@ -253,8 +225,13 @@ public class GeographicServerSettings{
 
 		XStream xstream = new XStream(new StaxDriver());
 		xstream.aliasType("GeographicServer", GeographicServerSettings.class);
-		xstream.aliasType("timeDimension", TimeDimension.class);
+		
+		xstream.aliasType("instances", GeoInstanceList.class);
+		xstream.aliasType("master", GeoMasterInstance.class);
+		xstream.aliasType("worker", GeoWorkerInstance.class);
+		
 		xstream.aliasType("baseLayer", BaseLayer.class);
+		xstream.aliasType("timeDimension", TimeDimension.class);
 		
 		GeographicServerSettings settings = (GeographicServerSettings) xstream
 				.fromXML(file);

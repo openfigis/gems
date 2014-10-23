@@ -1,8 +1,32 @@
 <GeographicServer>
-	<url>http://www.organization.org/geoserver</url>
-	<user>user</user>
-	<password>pwd</password>
-	<version>2.1</version>
+	
+	<publicUrl>http://www.organization.org/geoserver</publicUrl>
+	<instances>
+		<master>
+			<url>http://www.organization.org/geoserver.dv.1</url>
+			<user>user</user>
+			<password>pwd</password>
+			<version>2.5</version>
+		</master>
+		<workers>
+			<worker>
+				<url>http://www.organization.org/geoserver.dv.2</url>
+				<user>user</user>
+				<password>pwd</password>
+			</worker>
+			<worker>
+				<url>http://www.organization.org/geoserver.dv.3</url>
+				<user>user</user>
+				<password>pwd</password>
+			</worker>
+			<worker>
+				<url>http://www.organization.org/geoserver.dv.4</url>
+				<user>user</user>
+				<password>pwd</password>
+			</worker>
+		</workers>								
+	</instances>
+	
 	<sourceWorkspace>sourceWS</sourceWorkspace>
 	<sourceLayer>layer</sourceLayer>
 	<sourceAttribute>att</sourceAttribute>

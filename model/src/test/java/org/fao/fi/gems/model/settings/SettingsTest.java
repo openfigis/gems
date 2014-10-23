@@ -33,10 +33,24 @@ public class SettingsTest {
 	public void testGeographicServerSettings(){
 		GeographicServerSettings server = settings.getGeographicServerSettings();
 		Assert.assertNotNull(server);
-		Assert.assertEquals("http://www.organization.org/geoserver", server.getUrl());
-		Assert.assertEquals("user", server.getUser());
-		Assert.assertEquals("pwd", server.getPassword());
-		Assert.assertEquals("2.1", server.getVersion());
+		Assert.assertEquals("http://www.organization.org/geoserver", server.getPublicUrl());
+		
+		GeoInstanceList instances = server.getInstances();
+		Assert.assertNotNull(instances);
+		GeoMasterInstance master = instances.getMaster();
+		Assert.assertNotNull(master);
+		Assert.assertEquals(master.getUrl(), "http://www.organization.org/geoserver.dv.1");
+		Assert.assertEquals(master.getUser(), "user");
+		Assert.assertEquals(master.getPassword(), "pwd");
+		Assert.assertEquals(master.getVersion(), "2.5");
+		List<GeoWorkerInstance> workers = instances.getWorkers();
+		Assert.assertNotNull(workers);
+		Assert.assertEquals(workers.size(), 3);
+		for(int i=0;i<workers.size();i++){
+			int workerIdx = i+2;
+			Assert.assertEquals(workers.get(i).getUrl(), "http://www.organization.org/geoserver.dv."+workerIdx);
+		}
+		
 		Assert.assertEquals("sourceWS", server.getSourceWorkspace());
 		Assert.assertEquals("layer", server.getSourceLayer());
 		Assert.assertEquals("att", server.getSourceAttribute());
