@@ -19,6 +19,7 @@ import org.fao.fi.gems.metaobject.GeographicMetaObjectImpl;
 import org.fao.fi.gems.metaobject.GeographicMetaObjectProperty;
 import org.fao.fi.gems.model.MetadataConfig;
 import org.fao.fi.gems.model.content.MetadataContact;
+import org.fao.fi.gems.model.settings.GeoWorkerInstance;
 import org.fao.fi.gems.publisher.Publisher;
 import org.fao.fi.gems.util.FeatureTypeUtils;
 import org.slf4j.Logger;
@@ -87,112 +88,132 @@ public class MetadataGenerator {
 
 		List<String> failures = new ArrayList<String>();
 
+		//action
+		String action = config.getSettings().getPublicationSettings().getAction();
+		LOGGER.info("== ACTION: "+action+" == ");
+		
 		// iteration on the entities
 		LOGGER.info("(3) Start metadata creation & publication");
 		LOGGER.info("Nb of expected publications = " + set.size());
 		Iterator<GeographicEntity> entityIterator = set.iterator();
-		while (entityIterator.hasNext()) {
-
-			GeographicEntity entity = entityIterator.next();
-			LOGGER.info("==============");
-			LOGGER.info("Publishing single layer & metadata for: "+entity.getCode()+ " ("+entity.getRefName()+")");
-
-			Map<FeatureTypeProperty, Object> geoproperties = null;
-			
-			String action = config.getSettings().getPublicationSettings().getAction();
-			LOGGER.info("== ACTION: "+action+" == ");
-				
-			// calculate geoproperties
-			if (action.matches("PUBLISH")){
-				while (geoproperties == null) {
-					geoproperties = FeatureTypeUtils
-							.computeFeatureTypeProperties(
-									config.getSettings().getGeographicServerSettings(),
-									entity.getCode(),
-									config.getSettings().getPublicationSettings().getBuffer());
+		try{
+			while (entityIterator.hasNext()) {
+	
+				GeographicEntity entity = entityIterator.next();
+				LOGGER.info("==============");
+				LOGGER.info("Publishing single layer & metadata for: "+entity.getCode()+ " ("+entity.getRefName()+")");
+	
+				Map<FeatureTypeProperty, Object> geoproperties = null;
+					
+				// calculate geoproperties
+				if (action.matches("PUBLISH")){
+					while (geoproperties == null) {
+						geoproperties = FeatureTypeUtils
+								.computeFeatureTypeProperties(
+										config.getSettings().getGeographicServerSettings(),
+										entity.getCode(),
+										config.getSettings().getPublicationSettings().getBuffer());
+					}
 				}
-			}
-				
-			Integer featureCount = 0;
-			if(action.matches("PUBLISH")) {
-				featureCount = (Integer) geoproperties.get(FeatureTypeProperty.COUNT);
-			}
-			if(featureCount == 0) geoproperties = null;
-			
-			//abstract
-			Iterator<GeographicMetaObjectProperty> it = entity.getSpecificProperties().keySet().iterator();
-			while(it.hasNext()){
-				GeographicMetaObjectProperty property = it.next();
-				Object obj = property.getObject();
-				if(obj == EntityAddin.ABSTRACT){
-					String abstractText = entity.getSpecificProperties().get(property).get(0);
-					config.getContent().setAbstract(abstractText);
-					break;
+					
+				Integer featureCount = 0;
+				if(action.matches("PUBLISH")) {
+					featureCount = (Integer) geoproperties.get(FeatureTypeProperty.COUNT);
 				}
-			}
-			
-			//configure entity
-			GeographicMetaObject metaObject = null;
-			if(entity instanceof FigisGeographicEntityImpl){
-				metaObject = new FigisGeographicMetaObjectImpl(Arrays.asList(entity), null, geoproperties, config);
-			}else{
-				metaObject = new GeographicMetaObjectImpl(Arrays.asList(entity), null, geoproperties, config);
-			}
-			
-			//style
-			String style = config.getSettings().getPublicationSettings().getStyle();
-			
-			if(style == null){
-				Iterator<GeographicMetaObjectProperty> it2 = entity.getSpecificProperties().keySet().iterator();
-				while(it2.hasNext()){
-					GeographicMetaObjectProperty property = it2.next();
+				if(featureCount == 0) geoproperties = null;
+				
+				//abstract
+				Iterator<GeographicMetaObjectProperty> it = entity.getSpecificProperties().keySet().iterator();
+				while(it.hasNext()){
+					GeographicMetaObjectProperty property = it.next();
 					Object obj = property.getObject();
-					if(obj == EntityAddin.STYLE){
-						style = entity.getSpecificProperties().get(property).get(0);
+					if(obj == EntityAddin.ABSTRACT){
+						String abstractText = entity.getSpecificProperties().get(property).get(0);
+						config.getContent().setAbstract(abstractText);
 						break;
 					}
 				}
+				
+				//configure entity
+				GeographicMetaObject metaObject = null;
+				if(entity instanceof FigisGeographicEntityImpl){
+					metaObject = new FigisGeographicMetaObjectImpl(Arrays.asList(entity), null, geoproperties, config);
+				}else{
+					metaObject = new GeographicMetaObjectImpl(Arrays.asList(entity), null, geoproperties, config);
+				}
+				
+				//style
+				String style = config.getSettings().getPublicationSettings().getStyle();
+				
+				if(style == null){
+					Iterator<GeographicMetaObjectProperty> it2 = entity.getSpecificProperties().keySet().iterator();
+					while(it2.hasNext()){
+						GeographicMetaObjectProperty property = it2.next();
+						Object obj = property.getObject();
+						if(obj == EntityAddin.STYLE){
+							style = entity.getSpecificProperties().get(property).get(0);
+							break;
+						}
+					}
+				}
+				
+				if(style != null){
+					LOGGER.debug(style);
+				}else{
+					LOGGER.warn("Applying default style");
+					style = "polygon";
+				}
+				
+				// PUBLISH ACTION
+				//===============
+				if (action.matches("PUBLISH") && featureCount > 0) {
+					
+					boolean published = false;
+					try {
+						published = publisher.publish(metaObject, style);
+						if(published){
+							size = size + 1;	
+							LOGGER.info(size + " published metalayers");
+						}
+					}catch(Exception e){
+						LOGGER.info("Failed to publish layer/metadata pair for " + entity.getCode());
+						failures.add(entity.getCode());
+					}
+	
+				// UNPUBLISH ACTION
+				//=================
+				}else if (action.matches("UNPUBLISH")) {
+					
+					boolean unpublished = false;
+					try {
+						unpublished = publisher.unpublish(metaObject, style);
+						if(unpublished){
+							size = size + 1;	
+							LOGGER.info(size + " unpublished metalayers");
+						}
+					}catch(Exception e){
+						LOGGER.info("Failed to unpublish layer/metadata pair for " + entity.getCode());
+						failures.add(entity.getCode());
+					}
+				}
+			}
+		} finally {
+			LOGGER.info("GEMS finished to "+action.toLowerCase()+ " layer/metadata pairs");
+			List<GeoWorkerInstance> workers = config.getSettings().getGeographicServerSettings().getInstances().getWorkers();
+			if(workers != null){
+				if(workers.size() > 0){
+					LOGGER.info("List of geoserver workers (cluster members) detected");
+					LOGGER.info("Reloading geoserver worker's in-memory catalog");
+					boolean reload = publisher.getDataPublisher().reloadWorkerCatalogs();
+					if(!reload){
+						LOGGER.info("Successfull reload of geoserver worker in-memory catalogs");
+					} else{
+						LOGGER.info("Some catalog reload failed! check above log for details");
+					}
+				}
 			}
 			
-			if(style != null){
-				LOGGER.debug(style);
-			}else{
-				LOGGER.warn("Applying default style");
-				style = "polygon";
-			}
-			
-			// PUBLISH ACTION
-			//===============
-			if (action.matches("PUBLISH") && featureCount > 0) {
-				
-				boolean published = false;
-				try {
-					published = publisher.publish(metaObject, style);
-					if(published){
-						size = size + 1;	
-						LOGGER.info(size + " published metalayers");
-					}
-				}catch(Exception e){
-					LOGGER.info("Failed to publish layer/metadata pair for " + entity.getCode());
-					failures.add(entity.getCode());
-				}
-
-			// UNPUBLISH ACTION
-			//=================
-			}else if (action.matches("UNPUBLISH")) {
-				
-				boolean unpublished = false;
-				try {
-					unpublished = publisher.unpublish(metaObject, style);
-					if(unpublished){
-						size = size + 1;	
-						LOGGER.info(size + " unpublished metalayers");
-					}
-				}catch(Exception e){
-					LOGGER.info("Failed to unpublish layer/metadata pair for " + entity.getCode());
-					failures.add(entity.getCode());
-				}
-			}
+			LOGGER.info("GEMS publication complete!");
 		}
 		
 		if(failures.size() > 0) LOGGER.info("== GEMS FAILURES ==");
