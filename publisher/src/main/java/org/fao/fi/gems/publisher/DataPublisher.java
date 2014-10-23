@@ -317,5 +317,57 @@ public class DataPublisher {
 		return publish;
 
 	}
+	
+	
+	/**
+	 * A method to reload in-memory catalogs of geoserver workers
+	 * that are part of a cluster, in order to align these catalogs
+	 * on the master one.
+	 * 
+	 * @return true if catalogs were reloaded, false otherwise
+	 * 
+	 */
+	public boolean reloadWorkerCatalogs() {
+		boolean response = false;
+		boolean reloadFailed = false;
+		
+		Iterator<GeoWorkerInstance> it = this.workers.iterator();
+		while (it.hasNext()) {
+			GeoWorkerInstance worker = it.next();
+			GeoServerRESTPublisher workerPublisher = new GeoServerRESTPublisher(
+					worker.getUrl(), worker.getUser(), worker.getPassword());
+			
+			int i = 0;
+			boolean success = false;
+			try{
+				while(i <= 2){
+					int attempt = i+1;
+					LOGGER.info("Attempt "+attempt+" to reload in-memory catalog "
+								+ "for worker: "+worker.getUrl());
+					success = workerPublisher.reload();
+					if(success){
+						LOGGER.info("Successfull in-memory catalog reload "
+									+ "for worker: "+ worker.getUrl());
+						break;
+					}else{
+						i++;
+					}
+				}
+			} finally {
+				if(!success){
+					LOGGER.info("Failed to reload in-memory catalog "
+								+ "for worker: "+worker.getUrl());
+					reloadFailed = true;
+					response = false;
+				} else {
+					if(!reloadFailed) {
+						response = true;
+					}
+				}
+			}
+		}
+
+		return response;
+	}
 
 }
