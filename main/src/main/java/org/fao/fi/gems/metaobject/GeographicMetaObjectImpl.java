@@ -17,7 +17,6 @@ import org.fao.fi.gems.model.settings.GeographicServerSettings;
 import org.fao.fi.gems.model.settings.MetadataCatalogueSettings;
 import org.fao.fi.gems.model.settings.PublicationSettings;
 import org.fao.fi.gems.util.Utils;
-import org.geotoolkit.metadata.iso.extent.DefaultTemporalExtent;
 import org.opengis.referencing.crs.CoordinateReferenceSystem;
 import org.opengis.temporal.TemporalPrimitive;
 
@@ -460,7 +459,7 @@ public class GeographicMetaObjectImpl implements GeographicMetaObject {
 		}
 
 		String completeLayerName = this.gsSettings.getTargetWorkspace() + ":" + this.targetLayername;
-		String graphicLink = this.gsSettings.getUrl()
+		String graphicLink = this.gsSettings.getPublicUrl()
 				+ "/wms?service=WMS&version=1.1.0&request=GetMap" + "&layers="
 				+ baselayers+"," + completeLayerName + "&bbox=" + minX
 				+ "," + minY + "," + maxX + "," + maxY + "&width=" + width

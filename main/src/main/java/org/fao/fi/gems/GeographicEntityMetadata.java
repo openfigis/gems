@@ -446,7 +446,7 @@ public class GeographicEntityMetadata extends DefaultMetadata {
 			// WMS resource
 			// ----------------
 			DefaultOnlineResource wmsResource = new DefaultOnlineResource();
-			wmsResource.setLinkage(new URI(object.getGeographicServerSettings().getUrl() + "/"
+			wmsResource.setLinkage(new URI(object.getGeographicServerSettings().getPublicUrl() + "/"
 					+ object.getGeographicServerSettings().getTargetWorkspace() + "/ows?SERVICE=WMS"));
 			// "&srs="+object.getGisProperties().get(GisProperty.PROJECTION)+
 			// "&styles="+object.getGisProperties().get(GisProperty.STYLE)));
@@ -459,7 +459,7 @@ public class GeographicEntityMetadata extends DefaultMetadata {
 			// -------------------------------
 			// GML
 			DefaultOnlineResource wfsResource1 = new DefaultOnlineResource();
-			wfsResource1.setLinkage(new URI(object.getGeographicServerSettings().getUrl() + "/"
+			wfsResource1.setLinkage(new URI(object.getGeographicServerSettings().getPublicUrl() + "/"
 					+ object.getGeographicServerSettings().getTargetWorkspace()
 					+ "/ows?service=WFS&request=GetFeature&version=1.0.0"
 					+ "&typeName=" + object.getTargetLayerName()));
@@ -476,7 +476,7 @@ public class GeographicEntityMetadata extends DefaultMetadata {
 			// developements
 			String shpFileName = this.getOwnerOrganization().getAcronym()+"_" + object.getTargetLayerName();
 			DefaultOnlineResource wfsResource2 = new DefaultOnlineResource();
-			wfsResource2.setLinkage(new URI(object.getGeographicServerSettings().getUrl() + "/"
+			wfsResource2.setLinkage(new URI(object.getGeographicServerSettings().getPublicUrl() + "/"
 					+ object.getGeographicServerSettings().getTargetWorkspace()
 					+ "/ows?service=WFS&request=GetFeature&version=1.0.0"
 					+ "&typeName=" + object.getTargetLayerName()

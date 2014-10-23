@@ -71,7 +71,7 @@ public final class FeatureTypeUtils {
 		
 		try{
 
-			String wfsRequest= settings.getUrl() + "/" + settings.getSourceWorkspace()
+			String wfsRequest= settings.getPublicUrl() + "/" + settings.getSourceWorkspace()
 					+ "/ows?service=wfs&version=1.0.0&request=GetFeature"
 					+ "&typeName=" + settings.getSourceLayer() + "&cql_filter=" + settings.getSourceAttribute()
 					+ "='" + code + "'";
