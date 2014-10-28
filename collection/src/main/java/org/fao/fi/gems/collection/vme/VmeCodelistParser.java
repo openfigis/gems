@@ -44,8 +44,9 @@ public class VmeCodelistParser implements CodelistParser{
 		
 		VME ("VME", false, true, false),
 		GLOBALTYPE("GLOBALTYPE", false, false, false),
+		BASETITLE(EntityAddin.BASETITLE, false, false, false),
 		STYLE(EntityAddin.STYLE, false, false, false);
-	
+		
 		private final Object object;
 		private final boolean isAuthority;
 		private final boolean isThesaurus;
@@ -111,7 +112,24 @@ public class VmeCodelistParser implements CodelistParser{
 						String globalName = obj.get("GLOB_NAME").getAsString();
 						String globalType = obj.get("GLOB_TYPE").getAsString();
 						
-						String title = localName + " ("+globalName+" - "+dataOwner+")";
+						//basetitle
+						String basetitle = null;
+						if(globalType.matches("VME")){
+								basetitle = "VME closed areas";
+								
+						}else if(globalType.matches("BTM_FISH")){
+								basetitle = "Bottom fishing areas";
+								
+						}else if(globalType.matches("OTHER")){
+								basetitle = "Other areas";
+						}
+						basetitle += " related to UNGA Res. 61-105 – ";
+						
+						//title
+						String title = localName + " ("+dataOwner+")";
+						
+						//style
+						String style = "MEASURES_" + globalType + "_for_" + owner;
 						
 						//retrieving FIGIS stuff
 						String figisId = null;
@@ -146,11 +164,13 @@ public class VmeCodelistParser implements CodelistParser{
 								properties.put(VmeProperty.VME, Arrays.asList(vmeId, localName, globalName));
 								if(figisId != null) properties.put(VmeProperty.FIGIS, Arrays.asList(figisId));
 								
+								//add basetitle
+								properties.put(VmeProperty.BASETITLE, Arrays.asList(basetitle));
+								
 								//add global type (used for the mapviewer link)
 								properties.put(VmeProperty.GLOBALTYPE, Arrays.asList(globalType));
 								
 								//add style
-								String style = "MEASURES_" + globalType + "_for_" + owner;
 								properties.put(VmeProperty.STYLE, Arrays.asList(style));
 									
 								entity = new FigisGeographicEntityImpl(owner, collection, vmeId, title, properties);

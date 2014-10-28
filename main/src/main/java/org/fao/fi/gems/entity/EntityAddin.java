@@ -5,4 +5,5 @@ public enum EntityAddin {
 	STYLE,
 	HABITAT,
 	ABSTRACT,
+	BASETITLE
 }

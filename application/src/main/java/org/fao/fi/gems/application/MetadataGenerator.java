@@ -122,16 +122,22 @@ public class MetadataGenerator {
 				}
 				if(featureCount == 0) geoproperties = null;
 				
-				//abstract
+				//pass specific properties to config
 				Iterator<GeographicMetaObjectProperty> it = entity.getSpecificProperties().keySet().iterator();
 				while(it.hasNext()){
+					
 					GeographicMetaObjectProperty property = it.next();
+					
 					Object obj = property.getObject();
 					if(obj == EntityAddin.ABSTRACT){
 						String abstractText = entity.getSpecificProperties().get(property).get(0);
 						config.getContent().setAbstract(abstractText);
-						break;
+					
+					} else if(obj == EntityAddin.BASETITLE) {
+						String basetitleText = entity.getSpecificProperties().get(property).get(0);
+						config.getContent().setBaseTitle(basetitleText);
 					}
+					
 				}
 				
 				//configure entity
