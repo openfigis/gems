@@ -162,6 +162,7 @@ public class MetadataGenerator {
 				
 				//style
 				String style = config.getSettings().getPublicationSettings().getStyle();
+				if(style == "") style = null;
 				
 				if(style == null){
 					Iterator<GeographicMetaObjectProperty> it2 = entity.getSpecificProperties().keySet().iterator();
