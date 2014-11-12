@@ -107,20 +107,32 @@ public class MetadataGenerator {
 					
 				// calculate geoproperties
 				if (action.matches("PUBLISH")){
-					while (geoproperties == null) {
-						geoproperties = FeatureTypeUtils
-								.computeFeatureTypeProperties(
-										config.getSettings().getGeographicServerSettings(),
-										entity.getCode(),
-										config.getSettings().getPublicationSettings().getBuffer());
+					int i = 1;
+					while (geoproperties == null && i <= 3) {
+						try{
+							LOGGER.info("Calculating geoproperties - Attempt "+i);
+							geoproperties = FeatureTypeUtils
+									.computeFeatureTypeProperties(
+											config.getSettings().getGeographicServerSettings(),
+											entity.getCode(),
+											config.getSettings().getPublicationSettings().getBuffer());
+						}catch(Exception e){
+							LOGGER.info("Failed to calculate geoproperties at attempt "+i);
+						}finally{
+							if(geoproperties != null){
+								break;
+							}
+						}
+						i++;
 					}
 				}
+				if(geoproperties == null) continue;
 					
 				Integer featureCount = 0;
 				if(action.matches("PUBLISH")) {
 					featureCount = (Integer) geoproperties.get(FeatureTypeProperty.COUNT);
 				}
-				if(featureCount == 0) geoproperties = null;
+				if(featureCount == 0) continue;
 				
 				//pass specific properties to config
 				Iterator<GeographicMetaObjectProperty> it = entity.getSpecificProperties().keySet().iterator();
