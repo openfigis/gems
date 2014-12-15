@@ -89,7 +89,7 @@ public class FigisGeographicMetaObjectImpl extends GeographicMetaObjectImpl impl
 					}
 				}
 				String layerOfInterest = null;
-				if(globalType.matches("VME")) layerOfInterest = "VME Closure";
+				if(globalType.matches("VME")) layerOfInterest = "VME closed areas";
 				if(globalType.matches("BTM_FISH")) layerOfInterest = "Bottom fishing areas";
 				if(globalType.matches("OTHER")) layerOfInterest = "Other access regulated areas";
 				
