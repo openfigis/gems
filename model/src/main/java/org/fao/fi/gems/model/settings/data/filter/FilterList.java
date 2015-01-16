@@ -4,8 +4,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * A class giving a list of filters including an instance of PropertyFilter
- * and a list of DataFilter.
+ * A class giving a list of filters including:
+ * - a list of DataObject filters
+ * - a list of extra data filters (with values specified at configuration level)
+ * - a list of properties to restrain the featureType of the final GEMS product
  * 
  * @author eblondel
  *

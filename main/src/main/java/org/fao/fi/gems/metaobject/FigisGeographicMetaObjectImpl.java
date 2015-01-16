@@ -10,9 +10,6 @@ import org.fao.fi.gems.entity.FigisGeographicEntityImpl;
 import org.fao.fi.gems.feature.FeatureTypeProperty;
 import org.fao.fi.gems.model.GemsConfig;
 import org.geotoolkit.metadata.iso.extent.DefaultTemporalExtent;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.vividsolutions.jts.geom.Envelope;
 
 /**
@@ -22,8 +19,6 @@ import com.vividsolutions.jts.geom.Envelope;
  *
  */
 public class FigisGeographicMetaObjectImpl extends GeographicMetaObjectImpl implements FigisGeographicMetaObject{
-
-	private static Logger LOGGER = LoggerFactory.getLogger(FigisGeographicMetaObjectImpl.class);
 	
 	private String figisViewerUrl;
 	private String figisFactsheetUrl;

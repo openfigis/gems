@@ -47,7 +47,7 @@ public class Gems {
 
 		//Read the configuration
 		LOGGER.info("(1) Loading the configuration file");
-		GemsConfig config = GemsConfig.fromXML(new File("D:/Mes documents/Documents/CLIENTS/FAO/Infrastructure/GEMS/vme_neafc_dev_global.xml"));
+		GemsConfig config = GemsConfig.fromXML(new File(args[0]));
 		
 		//read the codelists
 		LOGGER.info("(2) Loading the reference list");

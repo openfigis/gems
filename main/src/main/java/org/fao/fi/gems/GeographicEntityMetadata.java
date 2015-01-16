@@ -68,9 +68,6 @@ import org.opengis.metadata.maintenance.ScopeCode;
 import org.opengis.metadata.spatial.GeometricObjectType;
 import org.opengis.metadata.spatial.TopologyLevel;
 import org.opengis.temporal.TemporalPrimitive;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.vividsolutions.jts.geom.Envelope;
 
 /**
@@ -85,8 +82,6 @@ import com.vividsolutions.jts.geom.Envelope;
  * 
  */
 public class GeographicEntityMetadata extends DefaultMetadata {
-
-	private static Logger LOGGER = LoggerFactory.getLogger(GeographicEntityMetadata.class);
 	
 	private static final String INSPIRE_THESAURUS_CITATION = "GEMET - INSPIRE themes, version 1.0";
 

@@ -1,7 +1,8 @@
 package org.fao.fi.gems.model.settings.data.filter;
 
 /**
- * an Extra data filter
+ * an Extra data filter that can be specified at
+ * configuration level
  * 
  * @author eblondel
  *
