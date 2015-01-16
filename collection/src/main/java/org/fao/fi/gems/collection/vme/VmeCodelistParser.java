@@ -33,7 +33,7 @@ import com.google.gson.stream.JsonReader;
  */
 public class VmeCodelistParser implements CodelistParser{
 
-	private static final String VME_WS_SERVICE = "http://figisapps.fao.org/figis/ws/vme/webservice/get?inventoryIdentifier=";
+	private static final String VME_WS_SERVICE = "http://www.fao.org/figis/ws/vme/webservice/get?inventoryIdentifier=";
 	
 	private static Logger LOGGER = LoggerFactory.getLogger(VmeCodelistParser.class);
 	

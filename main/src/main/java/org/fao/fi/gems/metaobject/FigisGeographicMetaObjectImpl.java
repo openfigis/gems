@@ -8,7 +8,7 @@ import java.util.Map;
 import org.fao.fi.gems.entity.GeographicEntity;
 import org.fao.fi.gems.entity.FigisGeographicEntityImpl;
 import org.fao.fi.gems.feature.FeatureTypeProperty;
-import org.fao.fi.gems.model.MetadataConfig;
+import org.fao.fi.gems.model.GemsConfig;
 import org.geotoolkit.metadata.iso.extent.DefaultTemporalExtent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -42,7 +42,7 @@ public class FigisGeographicMetaObjectImpl extends GeographicMetaObjectImpl impl
 	public FigisGeographicMetaObjectImpl(List<GeographicEntity> entities,
 			Map<GeographicMetaObjectProperty, List<String>> objectProperties,
 			Map<FeatureTypeProperty, Object> geoproperties,
-			MetadataConfig config) throws URISyntaxException {
+			GemsConfig config) throws URISyntaxException {
 		super(entities, objectProperties, geoproperties, config);
 		
 		this.figisViewerUrl = config.getSettings().getPublicationSettings().getFigisViewerUrl();
@@ -63,17 +63,17 @@ public class FigisGeographicMetaObjectImpl extends GeographicMetaObjectImpl impl
 		
 		this.viewerResource = null;		
 		
-		Envelope bbox = this.getPreviewBBOX();
+		Envelope bbox = this.geographicExtentPreview();
 		String figisDomain = ((FigisGeographicEntityImpl) this.entities.get(0)).getFigisDomain();
 		
 		String resource = null;
 		if (figisDomain != null && this.collection != null && bbox != null) {
 			
-			if (this.getCollection().matches("vme")){
+			if (this.collection().matches("vme")){
 				
 				//get last year
 				DefaultTemporalExtent temporalExtent = new DefaultTemporalExtent();
-				temporalExtent.setExtent(this.getTIME());
+				temporalExtent.setExtent(this.temporalExtent());
 				String lastYear = temporalExtent.getEndTime().toString().substring(0, 4);
 				
 				//build xy center

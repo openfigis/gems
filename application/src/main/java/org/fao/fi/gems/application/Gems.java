@@ -17,7 +17,7 @@ import org.fao.fi.gems.metaobject.FigisGeographicMetaObjectImpl;
 import org.fao.fi.gems.metaobject.GeographicMetaObject;
 import org.fao.fi.gems.metaobject.GeographicMetaObjectImpl;
 import org.fao.fi.gems.metaobject.GeographicMetaObjectProperty;
-import org.fao.fi.gems.model.MetadataConfig;
+import org.fao.fi.gems.model.GemsConfig;
 import org.fao.fi.gems.model.content.MetadataContact;
 import org.fao.fi.gems.model.settings.GeoWorkerInstance;
 import org.fao.fi.gems.publisher.Publisher;
@@ -29,9 +29,9 @@ import org.slf4j.LoggerFactory;
  * Main App to launch the batch data/metadata publication
  * 
  */
-public class MetadataGenerator {
+public class Gems {
 
-	private static Logger LOGGER = LoggerFactory.getLogger(MetadataGenerator.class);
+	private static Logger LOGGER = LoggerFactory.getLogger(Gems.class);
 
 	static Set<GeographicEntity> set = null;
 	
@@ -46,7 +46,7 @@ public class MetadataGenerator {
 
 		//Read the configuration
 		LOGGER.info("(1) Loading the configuration file");
-		MetadataConfig config = MetadataConfig.fromXML(new File(args[0]));
+		GemsConfig config = GemsConfig.fromXML(new File("D:/Mes documents/Documents/CLIENTS/FAO/Infrastructure/GEMS/vme_neafc_dev.xml"));
 		
 		//read the codelists
 		LOGGER.info("(2) Loading the reference list");
@@ -68,10 +68,10 @@ public class MetadataGenerator {
 		List<String> entities = config.getSettings().getPublicationSettings().getEntities();
 		if(entities.size() > 0){
 			subset = entities;
-			LOGGER.info("Scope = SUBSET");
+			LOGGER.info("Publication Scope = SUBSET");
 			LOGGER.info("List of entities = "+entities.toString());
 		}else{
-			LOGGER.info("Scope = COMPLETE");
+			LOGGER.info("Publication Scope = COMPLETE");
 		}
 		
 		//load the codelist parser
@@ -104,8 +104,10 @@ public class MetadataGenerator {
 				LOGGER.info(action+" single layer & metadata for: "+entity.getCode()+ " ("+entity.getRefName()+")");
 	
 				Map<FeatureTypeProperty, Object> geoproperties = null;
-					
-				// calculate geoproperties
+				
+				Integer featureCount = 0;
+				
+				// calculate geoproperties & feature count
 				if (action.matches("PUBLISH")){
 					int i = 1;
 					while (geoproperties == null && i <= 3) {
@@ -125,14 +127,14 @@ public class MetadataGenerator {
 						}
 						i++;
 					}
-					if(geoproperties == null) continue;
+					if(geoproperties == null){
+						continue;
+					}else{	
+						featureCount = (Integer) geoproperties.get(FeatureTypeProperty.COUNT);
+						if(featureCount == 0) continue;
+					}
 				}
 					
-				Integer featureCount = 0;
-				if(action.matches("PUBLISH")) {
-					featureCount = (Integer) geoproperties.get(FeatureTypeProperty.COUNT);
-					if(featureCount == 0) continue;
-				}
 				
 				//pass specific properties to config
 				Iterator<GeographicMetaObjectProperty> it = entity.getSpecificProperties().keySet().iterator();

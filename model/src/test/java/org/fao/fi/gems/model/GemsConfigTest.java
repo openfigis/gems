@@ -7,19 +7,20 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-public class MetadataConfigTest {
+public class GemsConfigTest {
 
-	MetadataConfig config;
+	GemsConfig config;
 	
 	@Before
 	public void setUp() throws URISyntaxException{
 		File fileName = this.getResourceFile("metadataConfig.xml");
-		config = (MetadataConfig) MetadataConfig.fromXML(fileName);
+		config = (GemsConfig) GemsConfig.fromXML(fileName);
 	}
 	
 	@Test
 	public void testMetadataConfig(){
 		Assert.assertNotNull(config);
+		Assert.assertEquals("DATASET",config.getScope());
 		Assert.assertNotNull(config.getSettings());
 		Assert.assertNotNull(config.getContent());
 	}

@@ -5,10 +5,8 @@ import java.util.List;
 import java.util.Map;
 
 import org.fao.fi.gems.entity.GeographicEntity;
+import org.fao.fi.gems.model.GemsConfig;
 import org.fao.fi.gems.model.content.MetadataContent;
-import org.fao.fi.gems.model.settings.GeographicServerSettings;
-import org.fao.fi.gems.model.settings.MetadataCatalogueSettings;
-import org.fao.fi.gems.model.settings.PublicationSettings;
 import org.opengis.referencing.crs.CoordinateReferenceSystem;
 import org.opengis.temporal.TemporalPrimitive;
 
@@ -20,46 +18,43 @@ public interface GeographicMetaObject {
 	 * Identification methods
 	 */
 	
-	List<GeographicEntity> getEntities();
+	List<GeographicEntity> entities();
 	
-	String getCode();
+	String code();
 	
-	String getRefName();
+	String refName();
 	
-	String getMetaIdentifier();
+	String targetLayerName();
 	
-	String getMetaTitle();
+	String metaIdentifier();
 	
-	MetadataContent getTemplate();
+	String metaTitle();
 	
-	Map<GeographicMetaObjectProperty, List<String>> getSpecificProperties();
+	MetadataContent template();
+	
+	Map<GeographicMetaObjectProperty, List<String>> properties();
 	
 	/*
 	 * Settings methods
 	 */
 
-	GeographicServerSettings getGeographicServerSettings();
-	
-	MetadataCatalogueSettings getMetadataCatalogueSettings();
-	
-	PublicationSettings getPublicationSettings();
-	
-	String getTargetLayerName();
+	GemsConfig config();
+
 	
 	/*
 	 * GIS methods
 	 */
 
-	int getFeaturesCount();
+	int featuresCount();
 	
-	CoordinateReferenceSystem getCRS();
+	CoordinateReferenceSystem crs();
 	
-	Envelope getActualBBOX();
+	Envelope geographicExtentActual();
 	
-	Envelope getPreviewBBOX();
+	Envelope geographicExtentPreview();
 	
-	TemporalPrimitive getTIME();
+	TemporalPrimitive temporalExtent();
 
-	URI getLayerGraphicOverview();
+	URI graphicOverview();
 
 }

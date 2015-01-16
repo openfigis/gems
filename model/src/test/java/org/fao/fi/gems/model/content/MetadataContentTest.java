@@ -139,7 +139,7 @@ public class MetadataContentTest {
 	@Test
 	public void testBiblioRef(){
 		Assert.assertNotNull(content.getBiblioRef());
-		Assert.assertEquals("DATASET", content.getBiblioRef().getScope());
+		Assert.assertEquals("DATASET",content.getBiblioRef().getScope());
 		Assert.assertTrue(content.getBiblioRef().isCopyright());
 	}
 	

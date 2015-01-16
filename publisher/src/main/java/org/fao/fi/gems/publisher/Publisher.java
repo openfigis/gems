@@ -3,7 +3,7 @@ package org.fao.fi.gems.publisher;
 import java.net.MalformedURLException;
 
 import org.fao.fi.gems.metaobject.GeographicMetaObject;
-import org.fao.fi.gems.model.MetadataConfig;
+import org.fao.fi.gems.model.GemsConfig;
 import org.fao.fi.gems.model.settings.Settings;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -31,7 +31,7 @@ public class Publisher {
 	 * @param config
 	 * @throws MalformedURLException
 	 */
-	public Publisher(MetadataConfig config) throws MalformedURLException{
+	public Publisher(GemsConfig config) throws MalformedURLException{
 	
 		settings = config.getSettings();
 		dataPublisher = new DataPublisher(config.getSettings().getGeographicServerSettings(),

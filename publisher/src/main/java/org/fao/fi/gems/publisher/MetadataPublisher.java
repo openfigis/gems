@@ -66,7 +66,7 @@ public class MetadataPublisher {
 	public GNMetadata checkMetadataExistence(GeographicMetaObject object) throws Exception{
 		
 		GNSearchRequest request = new GNSearchRequest();
-		request.addParam("uuid", object.getMetaIdentifier());
+		request.addParam("uuid", object.metaIdentifier());
 		GNSearchResponse response;
 		try {
 			response = client.search(request);
@@ -79,7 +79,7 @@ public class MetadataPublisher {
 		GNMetadata metadata = null;
 		while(it.hasNext()){
 			GNMetadata md = it.next();
-			if(md.getUUID().matches(object.getMetaIdentifier())){
+			if(md.getUUID().matches(object.metaIdentifier())){
 				metadata = md;
 				break;
 			}
@@ -151,7 +151,7 @@ public class MetadataPublisher {
 				throw new Exception("Fail to delete metadata in Geonetwork", e);
 			}
 		}else{
-			LOGGER.warn("No metadata for id = "+object.getMetaIdentifier());
+			LOGGER.warn("No metadata for id = "+object.metaIdentifier());
 		}
 	}
 

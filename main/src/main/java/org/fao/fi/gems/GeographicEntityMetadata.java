@@ -124,7 +124,7 @@ public class GeographicEntityMetadata extends DefaultMetadata {
 		this.lastVersion = version;
 
 		// build the metadata
-		this.setIdentifier(object.getMetaIdentifier()); // identifier
+		this.setIdentifier(object.metaIdentifier()); // identifier
 		this.setDateStamp(this.lastRevisionDate);
 
 		this.setLocales(Arrays.asList(Locale.ENGLISH)); // Locales
@@ -139,7 +139,7 @@ public class GeographicEntityMetadata extends DefaultMetadata {
 		this.setIndividualContacts(); // individual contacts
 		this.setDataQuality(); // methodology if existing
 		this.setSpatialRepresentation(); // spatial representation
-		this.setReferenceSystemInfo(Arrays.asList(object.getCRS())); // ReferenceSystem
+		this.setReferenceSystemInfo(Arrays.asList(object.crs())); // ReferenceSystem
 		this.setMetadataConstraints(); // constraints
 		this.setDistributionInfo();
 		this.setIdentificationInfo();
@@ -191,7 +191,7 @@ public class GeographicEntityMetadata extends DefaultMetadata {
 		
 		final List<ResponsibleParty> contacts = new ArrayList<ResponsibleParty>();
 		
-		for(MetadataContact contact : object.getTemplate().getOrganizationContacts()){
+		for(MetadataContact contact : object.template().getOrganizationContacts()){
 			
 			final DefaultResponsibleParty rp = new DefaultResponsibleParty();
 			
@@ -233,7 +233,7 @@ public class GeographicEntityMetadata extends DefaultMetadata {
 		
 		final List<ResponsibleParty> contacts = new ArrayList<ResponsibleParty>();
 		
-		for(MetadataContact iContact : object.getTemplate().getIndividualContacts()){
+		for(MetadataContact iContact : object.template().getIndividualContacts()){
 		
 			DefaultResponsibleParty rp = new DefaultResponsibleParty();
 			
@@ -307,7 +307,7 @@ public class GeographicEntityMetadata extends DefaultMetadata {
 		quality.setScope(scope);
 
 		DefaultLineage lineage = new DefaultLineage();
-		lineage.setStatement(new SimpleInternationalString(object.getTemplate()
+		lineage.setStatement(new SimpleInternationalString(object.template()
 				.getMethodology()));
 		quality.setLineage(lineage);
 		this.setDataQualityInfo(Arrays.asList(quality));
@@ -325,7 +325,7 @@ public class GeographicEntityMetadata extends DefaultMetadata {
 		geomObjects.setGeometricObjectType(GeometricObjectType.SURFACE);
 
 		// count
-		int count = this.object.getFeaturesCount();
+		int count = this.object.featuresCount();
 
 		geomObjects.setGeometricObjectCount(count);
 		spatialRepresentation.setGeometricObjects(Arrays.asList(geomObjects));
@@ -352,14 +352,14 @@ public class GeographicEntityMetadata extends DefaultMetadata {
 				Restriction.LICENSE));
 		
 		//prepare bibliography item
-		MetadataBiblioRef mdBiblioRef = object.getTemplate().getBiblioRef();
+		MetadataBiblioRef mdBiblioRef = object.template().getBiblioRef();
 		String biblioRef = "Usage subject to mandatory citation: ";
 		if(mdBiblioRef.isCopyright()) biblioRef += "© ";
 		biblioRef += this.BIBLIO_CONTACT.getAcronym()+", ";
 		biblioRef += c.get(Calendar.YEAR)+ ". ";
-		biblioRef += object.getTemplate().getCollection()+ ". ";
+		biblioRef += object.template().getCollection()+ ". ";
 		if(mdBiblioRef.getScope().matches("DATASET")){
-			biblioRef += object.getMetaTitle()+ ". ";
+			biblioRef += object.metaTitle()+ ". ";
 		}
 		
 		biblioRef += "In: "+this.BIBLIO_CONTACT.getName()+" [online]. ";
@@ -368,9 +368,9 @@ public class GeographicEntityMetadata extends DefaultMetadata {
 		biblioRef += "[Cited <DATE>] ";
 		
 		if(mdBiblioRef.getScope().matches("DATASET")){
-			biblioRef += Utils.getHTMLMetadataURL(object.getMetadataCatalogueSettings().getUrl(), object.getMetaIdentifier());
+			biblioRef += Utils.getHTMLMetadataURL(object.config().getSettings().getMetadataCatalogueSettings().getUrl(), object.metaIdentifier());
 		}else if(mdBiblioRef.getScope().matches("COLLECTION")){
-			biblioRef += object.getTemplate().getCollectionURL();
+			biblioRef += object.template().getCollectionURL();
 		}
 	
 		legalConstraints
@@ -378,7 +378,7 @@ public class GeographicEntityMetadata extends DefaultMetadata {
 						.asList(
 
 						// license to use
-						new SimpleInternationalString(object.getTemplate()
+						new SimpleInternationalString(object.template()
 								.getLicense()),
 
 						// Usage for bibliography
@@ -386,7 +386,7 @@ public class GeographicEntityMetadata extends DefaultMetadata {
 
 						// Disclaimer
 						new SimpleInternationalString(object
-										.getTemplate().getDisclaimer())));
+										.template().getDisclaimer())));
 		legalConstraints.setAccessConstraints(Arrays.asList(
 				Restriction.COPYRIGHT, Restriction.LICENSE));
 
@@ -408,10 +408,10 @@ public class GeographicEntityMetadata extends DefaultMetadata {
 			// website main resource
 			// ---------------------------
 			DefaultOnlineResource fiweb = new DefaultOnlineResource();
-			fiweb.setLinkage(new URI(object.getTemplate().getCollectionURL()));
+			fiweb.setLinkage(new URI(object.template().getCollectionURL()));
 			fiweb.setProtocol("WWW:LINK-1.0-http--link");
 			fiweb.setDescription(new SimpleInternationalString(object
-					.getTemplate().getCollection()));
+					.template().getCollection()));
 			fiweb.setFunction(OnLineFunction.INFORMATION);
 			resources.add(fiweb);
 
@@ -436,7 +436,7 @@ public class GeographicEntityMetadata extends DefaultMetadata {
 				viewerResource.setLinkage(((FigisGeographicMetaObjectImpl) object).getFigisViewerResource());
 				viewerResource.setProtocol("WWW:LINK-1.0-http--link");
 				viewerResource.setDescription(new SimpleInternationalString(object
-						.getTemplate().getCollection() + " (GIS Viewer)"));
+						.template().getCollection() + " (GIS Viewer)"));
 				viewerResource.setFunction(OnLineFunction.INFORMATION);
 				resources.add(viewerResource);
 			}
@@ -446,25 +446,25 @@ public class GeographicEntityMetadata extends DefaultMetadata {
 			// WMS resource
 			// ----------------
 			DefaultOnlineResource wmsResource = new DefaultOnlineResource();
-			wmsResource.setLinkage(new URI(object.getGeographicServerSettings().getPublicUrl() + "/"
-					+ object.getGeographicServerSettings().getTargetWorkspace() + "/ows?SERVICE=WMS"));
+			wmsResource.setLinkage(new URI(object.config().getSettings().getGeographicServerSettings().getPublicUrl() + "/"
+					+ object.config().getSettings().getGeographicServerSettings().getTargetWorkspace() + "/ows?SERVICE=WMS"));
 			// "&srs="+object.getGisProperties().get(GisProperty.PROJECTION)+
 			// "&styles="+object.getGisProperties().get(GisProperty.STYLE)));
 			wmsResource.setProtocol("OGC:WMS-1.3.0-http-get-map");
-			wmsResource.setName(object.getTargetLayerName());
-			wmsResource.setDescription(new SimpleInternationalString(object.getMetaTitle()));
+			wmsResource.setName(object.targetLayerName());
+			wmsResource.setDescription(new SimpleInternationalString(object.metaTitle()));
 			resources.add(wmsResource);
 
 			// WFS resource (both GML and SHP)
 			// -------------------------------
 			// GML
 			DefaultOnlineResource wfsResource1 = new DefaultOnlineResource();
-			wfsResource1.setLinkage(new URI(object.getGeographicServerSettings().getPublicUrl() + "/"
-					+ object.getGeographicServerSettings().getTargetWorkspace()
+			wfsResource1.setLinkage(new URI(object.config().getSettings().getGeographicServerSettings().getPublicUrl() + "/"
+					+ object.config().getSettings().getGeographicServerSettings().getTargetWorkspace()
 					+ "/ows?service=WFS&request=GetFeature&version=1.0.0"
-					+ "&typeName=" + object.getTargetLayerName()));
+					+ "&typeName=" + object.targetLayerName()));
 			wfsResource1.setProtocol("OGC:WFS-1.0.0-http-get-feature");
-			wfsResource1.setName(object.getTargetLayerName());
+			wfsResource1.setName(object.targetLayerName());
 			wfsResource1.setDescription(new SimpleInternationalString(
 					"GIS data (WFS - GML)"));
 			wfsResource1.setFunction(OnLineFunction.DOWNLOAD);
@@ -474,17 +474,17 @@ public class GeographicEntityMetadata extends DefaultMetadata {
 			// note: in the future we should see to customize the SHAPE-ZIP so
 			// it handles the metadata. This will require Geoserver
 			// developements
-			String shpFileName = this.getOwnerOrganization().getAcronym()+"_" + object.getTargetLayerName();
+			String shpFileName = this.getOwnerOrganization().getAcronym()+"_" + object.targetLayerName();
 			DefaultOnlineResource wfsResource2 = new DefaultOnlineResource();
-			wfsResource2.setLinkage(new URI(object.getGeographicServerSettings().getPublicUrl() + "/"
-					+ object.getGeographicServerSettings().getTargetWorkspace()
+			wfsResource2.setLinkage(new URI(object.config().getSettings().getGeographicServerSettings().getPublicUrl() + "/"
+					+ object.config().getSettings().getGeographicServerSettings().getTargetWorkspace()
 					+ "/ows?service=WFS&request=GetFeature&version=1.0.0"
-					+ "&typeName=" + object.getTargetLayerName()
+					+ "&typeName=" + object.targetLayerName()
 					+ "&outputFormat=SHAPE-ZIP" + "&format_options=filename:"
 					+ shpFileName + ".zip"));
 
 			wfsResource2.setProtocol("OGC:WFS-1.0.0-http-get-feature");
-			wfsResource2.setName(object.getTargetLayerName());
+			wfsResource2.setName(object.targetLayerName());
 			wfsResource2.setDescription(new SimpleInternationalString(
 					"GIS data (WFS - Shapefile)"));
 			wfsResource2.setFunction(OnLineFunction.DOWNLOAD);
@@ -497,7 +497,7 @@ public class GeographicEntityMetadata extends DefaultMetadata {
 			// ----------------
 			DefaultOnlineResource xmlResource = new DefaultOnlineResource();
 			xmlResource.setLinkage(new URI(Utils.getXMLMetadataURL(
-					object.getMetadataCatalogueSettings().getUrl(), this.getFileIdentifier())));
+					object.config().getSettings().getMetadataCatalogueSettings().getUrl(), this.getFileIdentifier())));
 			xmlResource.setProtocol("WWW:LINK-1.0-http--link");
 			xmlResource.setName("XML");
 			xmlResource.setDescription(new SimpleInternationalString(
@@ -535,7 +535,7 @@ public class GeographicEntityMetadata extends DefaultMetadata {
 		citation.setIdentifiers(Arrays.asList(identifier));
 
 		// title
-		citation.setTitle(new SimpleInternationalString(object.getMetaTitle()));
+		citation.setTitle(new SimpleInternationalString(object.metaTitle()));
 		DefaultCitationDate citationDate = new DefaultCitationDate();
 		citationDate.setDate(this.getRevisionDate());
 		citationDate.setDateType(DateType.REVISION);
@@ -562,7 +562,7 @@ public class GeographicEntityMetadata extends DefaultMetadata {
 		
 		//Geographic bounding box
 		DefaultGeographicBoundingBox boundingBox = new DefaultGeographicBoundingBox();
-		Envelope bbox = object.getActualBBOX();
+		Envelope bbox = object.geographicExtentActual();
 		if (bbox != null) {
 			boundingBox.setWestBoundLongitude(bbox.getMinX());
 			boundingBox.setEastBoundLongitude(bbox.getMaxX());
@@ -577,7 +577,7 @@ public class GeographicEntityMetadata extends DefaultMetadata {
 		extent.getGeographicElements().add(boundingBox);
 
 		//Temporal extent
-		TemporalPrimitive time = object.getTIME();
+		TemporalPrimitive time = object.temporalExtent();
 		if(time != null){
 			DefaultTemporalExtent temporalExtent = new DefaultTemporalExtent();
 			temporalExtent.setExtent(time);
@@ -589,12 +589,12 @@ public class GeographicEntityMetadata extends DefaultMetadata {
 		
 		// abstract
 		// -------
-		identification.setAbstract(new SimpleInternationalString(object.getMetaTitle()+ ". "+ object.getTemplate().getAbstract()));
+		identification.setAbstract(new SimpleInternationalString(object.metaTitle()+ ". "+ object.template().getAbstract()));
 
 		// purpose
 		// -------
 		identification.setPurpose(new SimpleInternationalString(object
-				.getTemplate().getPurpose()));
+				.template().getPurpose()));
 		// maintenance information
 		// -----------------------
 		DefaultMaintenanceInformation info = new DefaultMaintenanceInformation();
@@ -605,7 +605,7 @@ public class GeographicEntityMetadata extends DefaultMetadata {
 		// ----------------
 		DefaultBrowseGraphic graphic = new DefaultBrowseGraphic();
 		graphic.setFileDescription(new SimpleInternationalString("Map overview"));
-		graphic.setFileName(object.getLayerGraphicOverview());
+		graphic.setFileName(object.graphicOverview());
 		graphic.setFileType("image/png");
 		identification.setGraphicOverviews(Arrays.asList(graphic));
 
@@ -615,7 +615,7 @@ public class GeographicEntityMetadata extends DefaultMetadata {
 		List<DefaultKeywords> keywordsList = new ArrayList<DefaultKeywords>();
 
 		// add general thesaurus
-		for (MetadataThesaurus thesaurus : object.getTemplate()
+		for (MetadataThesaurus thesaurus : object.template()
 				.getThesaurusList()) {
 
 			DefaultKeywords keywords = new DefaultKeywords();
@@ -643,7 +643,7 @@ public class GeographicEntityMetadata extends DefaultMetadata {
 
 		// add object-based thesaurus
 		for (Entry<GeographicMetaObjectProperty, List<String>> objectType : object
-				.getSpecificProperties().entrySet()) {
+				.properties().entrySet()) {
 			if (objectType.getKey().isThesaurus()) {
 
 				DefaultKeywords keywords = new DefaultKeywords();
@@ -687,7 +687,7 @@ public class GeographicEntityMetadata extends DefaultMetadata {
 		// topic category
 		// --------------
 		List<TopicCategory> categories = new ArrayList<TopicCategory>();
-		for(String cat : object.getTemplate().getTopicCategories()){
+		for(String cat : object.template().getTopicCategories()){
 			categories.add(TopicCategory.valueOf(cat));
 		}
 		identification.setTopicCategories(categories);
@@ -695,7 +695,7 @@ public class GeographicEntityMetadata extends DefaultMetadata {
 		// additional information
 		// ----------------------
 		identification
-				.setSupplementalInformation(new SimpleInternationalString(object.getTemplate().getSupplementaryInformation()));
+				.setSupplementalInformation(new SimpleInternationalString(object.template().getSupplementaryInformation()));
 
 		// add identification info
 		this.getIdentificationInfo().add(identification);

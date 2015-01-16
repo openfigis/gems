@@ -118,7 +118,7 @@ public class DataPublisher {
 	 */
 	public String checkLayerExistence(GeographicMetaObject object) {
 		
-		String layername = this.trgLayerPrefix + "_" + object.getCode();
+		String layername = this.trgLayerPrefix + "_" + object.code();
 		List<String> layers = this.getExistingLayers();
 		
 		String existingLayer = null;
@@ -134,7 +134,7 @@ public class DataPublisher {
 	 * @throws Exception
 	 */
 	public boolean deleteLayer(GeographicMetaObject object) throws Exception {
-		String layername = object.getTargetLayerName();
+		String layername = object.targetLayerName();
 		String existingLayer = this.checkLayerExistence(object);
 		
 		boolean deleted = false;
@@ -167,7 +167,7 @@ public class DataPublisher {
 			throws MalformedURLException {
 		URL deleteFtUrl = new URL(this.master.getUrl() + "/rest/workspaces/"
 				+ this.trgWorkspace + "/datastores/" + this.trgDatastore
-				+ "/featuretypes/" + object.getTargetLayerName());
+				+ "/featuretypes/" + object.targetLayerName());
 
 		boolean ftDeleted = HTTPUtils.delete(deleteFtUrl.toExternalForm(),
 				this.master.getUser(), this.master.getPassword());
@@ -187,15 +187,15 @@ public class DataPublisher {
 		// -----------------------
 		final GSFeatureTypeEncoder fte = new GSFeatureTypeEncoder();
 		fte.setProjectionPolicy(ProjectionPolicy.REPROJECT_TO_DECLARED);
-		fte.setNativeName(object.getTargetLayerName());
-		fte.setName(object.getTargetLayerName());
-		fte.setTitle(object.getMetaTitle());
+		fte.setNativeName(object.targetLayerName());
+		fte.setName(object.targetLayerName());
+		fte.setTitle(object.metaTitle());
 		fte.setSRS("EPSG:4326");
 		fte.setNativeCRS("EPSG:4326");
 		fte.setEnabled(true);
 
 		for (Entry<GeographicMetaObjectProperty, List<String>> entry : object
-				.getSpecificProperties().entrySet()) {
+				.properties().entrySet()) {
 			if (entry.getKey().isAuthority() && entry.getKey().isThesaurus()) {
 				if (!entry.getKey().containsURIs()) {
 					for (String kw : entry.getValue()) {
@@ -207,7 +207,7 @@ public class DataPublisher {
 			}
 		}
 
-		Envelope bbox = object.getActualBBOX();
+		Envelope bbox = object.geographicExtentActual();
 		if (bbox != null) {
 			fte.setNativeBoundingBox(bbox.getMinX(), bbox.getMinY(),
 					bbox.getMaxX(), bbox.getMaxY(), "EPSG:4326");
@@ -233,9 +233,9 @@ public class DataPublisher {
 			VTGeometryEncoder gte = new VTGeometryEncoder(geometryName,
 					"MultiPolygon", "4326");
 			String sql = "SELECT * FROM " + this.srcLayer + " WHERE "
-					+ this.srcAttribute + " = '" + object.getCode() + "'";
+					+ this.srcAttribute + " = '" + object.code() + "'";
 			GSVirtualTableEncoder vte = new GSVirtualTableEncoder(
-					object.getTargetLayerName(), sql, null, Arrays.asList(gte),
+					object.targetLayerName(), sql, null, Arrays.asList(gte),
 					null);
 			fte.setMetadataVirtualTable(vte);
 		}
@@ -243,10 +243,10 @@ public class DataPublisher {
 		// metadata
 		final GSMetadataLinkInfoEncoder mde1 = new GSMetadataLinkInfoEncoder(
 				"text/xml", "ISO19115:2003", Utils.getXMLMetadataURL(
-						this.geonetworkBaseURL, object.getMetaIdentifier()));
+						this.geonetworkBaseURL, object.metaIdentifier()));
 		final GSMetadataLinkInfoEncoder mde2 = new GSMetadataLinkInfoEncoder(
 				"text/html", "ISO19115:2003", Utils.getHTMLMetadataURL(
-						this.geonetworkBaseURL, object.getMetaIdentifier()));
+						this.geonetworkBaseURL, object.metaIdentifier()));
 		fte.addMetadataLinkInfo(mde1);
 		fte.addMetadataLinkInfo(mde2);
 		
@@ -278,7 +278,7 @@ public class DataPublisher {
 
 		// add authorityURL & identifiers
 		for (Entry<GeographicMetaObjectProperty, List<String>> entry : object
-				.getSpecificProperties().entrySet()) {
+				.properties().entrySet()) {
 			if (entry.getKey().isThesaurus()) {
 				if (entry.getKey().containsURIs()) {
 					layerEncoder.addAuthorityURL(new GSAuthorityURLInfoEncoder(

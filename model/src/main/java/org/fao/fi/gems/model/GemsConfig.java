@@ -16,13 +16,14 @@ import com.thoughtworks.xstream.io.xml.StaxDriver;
 
 
 /**
- * Main Metadata configuration
+ * Main GEMS configuration
  * 
  * @author eblondel
  *
  */
-public class MetadataConfig {
+public class GemsConfig {
 	
+	private String scope;
 	private Settings settings;
 	private MetadataContent content;
 	
@@ -30,8 +31,16 @@ public class MetadataConfig {
 	 * Constructs a MetadataConfig
 	 * 
 	 */
-	public MetadataConfig(){
+	public GemsConfig(){
 		
+	}
+	
+	public String getScope() {
+		return scope;
+	}
+
+	public void setScope(String scope) {
+		this.scope = scope;
 	}
 	
 	/**
@@ -69,10 +78,10 @@ public class MetadataConfig {
 	 * @return
 	 * @throws IOException
 	 */
-	public static MetadataConfig fromXML(File file) {
+	public static GemsConfig fromXML(File file) {
 
 		XStream xstream = new XStream(new StaxDriver());
-		xstream.alias("configuration", MetadataConfig.class);
+		xstream.alias("configuration", GemsConfig.class);
 		
 		//settings
 		xstream.alias("worker", GeoWorkerInstance.class);
@@ -83,7 +92,7 @@ public class MetadataConfig {
 		xstream.alias("thesaurus", MetadataThesaurus.class);
 		xstream.alias("biblioRef", MetadataBiblioRef.class);
 
-		MetadataConfig config = (MetadataConfig) xstream
+		GemsConfig config = (GemsConfig) xstream
 				.fromXML(file);
 
 		return config;

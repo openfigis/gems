@@ -9,7 +9,7 @@ import java.util.Map;
 import org.fao.fi.gems.entity.EntityAddin;
 import org.fao.fi.gems.entity.GeographicEntity;
 import org.fao.fi.gems.feature.FeatureTypeProperty;
-import org.fao.fi.gems.model.MetadataConfig;
+import org.fao.fi.gems.model.GemsConfig;
 import org.fao.fi.gems.model.content.MetadataContact;
 import org.fao.fi.gems.model.content.MetadataContent;
 import org.fao.fi.gems.model.settings.BaseLayer;
@@ -31,9 +31,7 @@ import com.vividsolutions.jts.geom.Envelope;
  */
 public class GeographicMetaObjectImpl implements GeographicMetaObject {
 
-	protected GeographicServerSettings gsSettings;
-	private MetadataCatalogueSettings mdSettings;
-	private PublicationSettings pubSettings;
+	protected GemsConfig config;
 
 	protected String collection;
 	protected String owner;
@@ -64,16 +62,14 @@ public class GeographicMetaObjectImpl implements GeographicMetaObject {
 	public GeographicMetaObjectImpl(List<GeographicEntity> entities,
 			Map<GeographicMetaObjectProperty, List<String>> objectProperties,
 			Map<FeatureTypeProperty, Object> geoproperties,
-			MetadataConfig config) throws URISyntaxException {
+			GemsConfig config) throws URISyntaxException {
 
 		//settings
-		this.gsSettings = config.getSettings().getGeographicServerSettings();
-		this.mdSettings = config.getSettings().getMetadataCatalogueSettings();
-		this.pubSettings = config.getSettings().getPublicationSettings();
+		this.config = config;
 			
 		//identification
 		this.template = config.getContent();
-		this.collection = this.pubSettings.getCollectionType();
+		this.collection = this.config.getSettings().getPublicationSettings().getCollectionType();
 		for(MetadataContact org : config.getContent().getOrganizationContacts()){
 			if(org.getRole().matches("OWNER")){
 				this.owner = org.getAcronym();
@@ -88,11 +84,11 @@ public class GeographicMetaObjectImpl implements GeographicMetaObject {
 		this.setMetaTitle();
 		
 		this.setSpecificProperties(entities, objectProperties);
-		this.setTargetLayername(this.gsSettings.getTargetLayerPrefix());
+		this.setTargetLayername(this.config.getSettings().getGeographicServerSettings().getTargetLayerPrefix());
 		
 		//gis
 		this.geoproperties = geoproperties;
-		this.setLayerGraphicOverview();
+		this.setGraphicOverview();
 
 	}
 	
@@ -104,7 +100,7 @@ public class GeographicMetaObjectImpl implements GeographicMetaObject {
 	/**
 	 * @return the entities
 	 */
-	public List<GeographicEntity> getEntities() {
+	public List<GeographicEntity> entities() {
 		return entities;
 	}
 
@@ -119,7 +115,7 @@ public class GeographicMetaObjectImpl implements GeographicMetaObject {
 	 * Get Code
 	 * 
 	 */
-	public String getCode(){
+	public String code(){
 		return this.code;
 	}
 	
@@ -162,7 +158,7 @@ public class GeographicMetaObjectImpl implements GeographicMetaObject {
 	 * Get Ref Name
 	 * 
 	 */
-	public String getRefName() {
+	public String refName() {
 		return this.refName;
 	}
 	
@@ -213,7 +209,7 @@ public class GeographicMetaObjectImpl implements GeographicMetaObject {
 	 * Get Target layer name
 	 * 
 	 */
-	public String getTargetLayerName() {
+	public String targetLayerName() {
 		return this.targetLayername;
 	}
 	
@@ -224,9 +220,9 @@ public class GeographicMetaObjectImpl implements GeographicMetaObject {
 	 */
 	public void setTargetLayername(String trgLayerPrefix) {
 		if (trgLayerPrefix == null | trgLayerPrefix == "") {
-			this.targetLayername = this.getCode();
+			this.targetLayername = this.code();
 		} else {
-			this.targetLayername = trgLayerPrefix + "_" + this.getCode();
+			this.targetLayername = trgLayerPrefix + "_" + this.code();
 		}
 	}
 	
@@ -235,7 +231,7 @@ public class GeographicMetaObjectImpl implements GeographicMetaObject {
 	 * Get Collection prefix
 	 * 
 	 */
-	public String getCollection() {
+	public String collection() {
 		return this.collection;
 	}
 	
@@ -243,7 +239,7 @@ public class GeographicMetaObjectImpl implements GeographicMetaObject {
 	 * Get Meta Identifier
 	 * 
 	 */
-	public String getMetaIdentifier(){
+	public String metaIdentifier(){
 		return this.metaId;
 	}
 	
@@ -254,7 +250,7 @@ public class GeographicMetaObjectImpl implements GeographicMetaObject {
 	 */
 	public void setMetaIdentifier() {
 		MetadataContact owner = null;
-		for(MetadataContact contact : this.getTemplate().getOrganizationContacts()){
+		for(MetadataContact contact : this.template().getOrganizationContacts()){
 			if(contact.getRole().matches("OWNER")){
 				owner = contact;
 				break;
@@ -267,7 +263,7 @@ public class GeographicMetaObjectImpl implements GeographicMetaObject {
 	 * Get Ref Name
 	 * 
 	 */
-	public String getMetaTitle() {
+	public String metaTitle() {
 		return this.metaTitle;
 	}
 	
@@ -279,8 +275,8 @@ public class GeographicMetaObjectImpl implements GeographicMetaObject {
 	public void setMetaTitle(){
 		
 		this.metaTitle = "";
-		if(this.getTemplate().getHasBaseTitle()){
-			this.metaTitle += this.getTemplate().getBaseTitle();
+		if(this.template().getHasBaseTitle()){
+			this.metaTitle += this.template().getBaseTitle();
 		}
 		this.metaTitle += this.refName;
 		
@@ -292,7 +288,7 @@ public class GeographicMetaObjectImpl implements GeographicMetaObject {
 	 * 
 	 * @return
 	 */
-	public Map<EntityAddin,String> getAddins(){
+	public Map<EntityAddin,String> addins(){
 		return this.addins;
 	}
 	
@@ -314,23 +310,15 @@ public class GeographicMetaObjectImpl implements GeographicMetaObject {
 	 */
 	
 	
-	public GeographicServerSettings getGeographicServerSettings() {
-		return this.gsSettings;
+	public GemsConfig config() {
+		return this.config;
 	}
 
-	public MetadataCatalogueSettings getMetadataCatalogueSettings() {
-		return this.mdSettings;
-	}
-
-	public PublicationSettings getPublicationSettings() {
-		return this.pubSettings;
-	}
-
-	public MetadataContent getTemplate(){
+	public MetadataContent template(){
 		return this.template;
 	}
 
-	public Map<GeographicMetaObjectProperty, List<String>> getSpecificProperties() {
+	public Map<GeographicMetaObjectProperty, List<String>> properties() {
 		return this.specificProperties;
 	}
 	
@@ -349,7 +337,7 @@ public class GeographicMetaObjectImpl implements GeographicMetaObject {
 	}
 
 	
-	public Envelope getActualBBOX() {
+	public Envelope geographicExtentActual() {
 		Envelope bbox = null;
 		if(this.geoproperties != null){
 			if (this.geoproperties.containsKey(FeatureTypeProperty.BBOX_ACTUAL)) {
@@ -359,7 +347,7 @@ public class GeographicMetaObjectImpl implements GeographicMetaObject {
 		return bbox;
 	}
 	
-	public Envelope getPreviewBBOX() {
+	public Envelope geographicExtentPreview() {
 		Envelope bbox = null;
 		if(this.geoproperties != null){
 			if (this.geoproperties.containsKey(FeatureTypeProperty.BBOX_PREVIEW)) {
@@ -369,7 +357,7 @@ public class GeographicMetaObjectImpl implements GeographicMetaObject {
 		return bbox;
 	}
 
-	public int getFeaturesCount() {
+	public int featuresCount() {
 		Integer count = 0;
 		if(this.geoproperties != null){
 			if (this.geoproperties.containsKey(FeatureTypeProperty.COUNT)) {
@@ -380,7 +368,7 @@ public class GeographicMetaObjectImpl implements GeographicMetaObject {
 	}
 	
 
-	public CoordinateReferenceSystem getCRS() {
+	public CoordinateReferenceSystem crs() {
 		CoordinateReferenceSystem crs = null;
 		if(this.geoproperties != null){
 			if (this.geoproperties.containsKey(FeatureTypeProperty.CRS)) {
@@ -390,7 +378,7 @@ public class GeographicMetaObjectImpl implements GeographicMetaObject {
 		return crs;
 	}
 	
-	public TemporalPrimitive getTIME(){
+	public TemporalPrimitive temporalExtent(){
 		TemporalPrimitive time = null;
 		if(this.geoproperties != null){
 			if(this.geoproperties.containsKey(FeatureTypeProperty.TIME)){
@@ -405,7 +393,7 @@ public class GeographicMetaObjectImpl implements GeographicMetaObject {
 	 * Get Layer Graphic Overview
 	 * 
 	 */
-	public URI getLayerGraphicOverview() {
+	public URI graphicOverview() {
 		return this.graphicOverview;
 	}
 	
@@ -416,7 +404,7 @@ public class GeographicMetaObjectImpl implements GeographicMetaObject {
 	 * @return URI
 	 * @throws URISyntaxException
 	 */
-	public void setLayerGraphicOverview() throws URISyntaxException {
+	public void setGraphicOverview() throws URISyntaxException {
 
 		// compute the image size
 		double minX = -180.0;
@@ -426,7 +414,7 @@ public class GeographicMetaObjectImpl implements GeographicMetaObject {
 		int width = 600;
 		int height = 300;
 
-		Envelope bbox = this.getPreviewBBOX();
+		Envelope bbox = this.geographicExtentPreview();
 		if (bbox != null) {
 			minX = bbox.getMinX();
 			maxX = bbox.getMaxX();
@@ -449,7 +437,7 @@ public class GeographicMetaObjectImpl implements GeographicMetaObject {
 		// build the layer preview URI
 		String baselayers = null;
 		int i = 0;
-		for(BaseLayer baselayer : this.gsSettings.getBaseLayerList()){
+		for(BaseLayer baselayer : this.config.getSettings().getGeographicServerSettings().getBaseLayerList()){
 			if(i == 0){
 				baselayers = baselayer.getWorkspace() +":"+ baselayer.getName();
 			}else{
@@ -458,8 +446,8 @@ public class GeographicMetaObjectImpl implements GeographicMetaObject {
 			i++;
 		}
 
-		String completeLayerName = this.gsSettings.getTargetWorkspace() + ":" + this.targetLayername;
-		String graphicLink = this.gsSettings.getPublicUrl()
+		String completeLayerName = this.config.getSettings().getGeographicServerSettings().getTargetWorkspace() + ":" + this.targetLayername;
+		String graphicLink = this.config.getSettings().getGeographicServerSettings().getPublicUrl()
 				+ "/wms?service=WMS&version=1.1.0&request=GetMap" + "&layers="
 				+ baselayers+"," + completeLayerName + "&bbox=" + minX
 				+ "," + minY + "," + maxX + "," + maxY + "&width=" + width
