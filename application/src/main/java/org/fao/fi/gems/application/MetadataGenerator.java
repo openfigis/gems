@@ -101,7 +101,7 @@ public class MetadataGenerator {
 	
 				GeographicEntity entity = entityIterator.next();
 				LOGGER.info("==============");
-				LOGGER.info("Publishing single layer & metadata for: "+entity.getCode()+ " ("+entity.getRefName()+")");
+				LOGGER.info(action+" single layer & metadata for: "+entity.getCode()+ " ("+entity.getRefName()+")");
 	
 				Map<FeatureTypeProperty, Object> geoproperties = null;
 					
@@ -125,14 +125,14 @@ public class MetadataGenerator {
 						}
 						i++;
 					}
+					if(geoproperties == null) continue;
 				}
-				if(geoproperties == null) continue;
 					
 				Integer featureCount = 0;
 				if(action.matches("PUBLISH")) {
 					featureCount = (Integer) geoproperties.get(FeatureTypeProperty.COUNT);
+					if(featureCount == 0) continue;
 				}
-				if(featureCount == 0) continue;
 				
 				//pass specific properties to config
 				Iterator<GeographicMetaObjectProperty> it = entity.getSpecificProperties().keySet().iterator();
