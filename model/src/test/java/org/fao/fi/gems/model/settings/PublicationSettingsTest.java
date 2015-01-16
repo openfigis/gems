@@ -4,8 +4,7 @@ import java.io.File;
 import java.net.URISyntaxException;
 import java.util.List;
 
-
-import org.fao.fi.gems.model.settings.PublicationSettings;
+import org.fao.fi.gems.model.settings.publication.PublicationSettings;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;

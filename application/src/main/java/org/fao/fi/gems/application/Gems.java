@@ -19,9 +19,10 @@ import org.fao.fi.gems.metaobject.GeographicMetaObjectImpl;
 import org.fao.fi.gems.metaobject.GeographicMetaObjectProperty;
 import org.fao.fi.gems.model.GemsConfig;
 import org.fao.fi.gems.model.content.MetadataContact;
-import org.fao.fi.gems.model.settings.GeoWorkerInstance;
+import org.fao.fi.gems.model.settings.data.GeoWorkerInstance;
 import org.fao.fi.gems.publisher.Publisher;
 import org.fao.fi.gems.util.FeatureTypeUtils;
+import org.fao.fi.gems.util.Utils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -46,17 +47,11 @@ public class Gems {
 
 		//Read the configuration
 		LOGGER.info("(1) Loading the configuration file");
-		GemsConfig config = GemsConfig.fromXML(new File("D:/Mes documents/Documents/CLIENTS/FAO/Infrastructure/GEMS/vme_neafc_dev.xml"));
+		GemsConfig config = GemsConfig.fromXML(new File("D:/Mes documents/Documents/CLIENTS/FAO/Infrastructure/GEMS/vme_neafc_dev_global.xml"));
 		
 		//read the codelists
 		LOGGER.info("(2) Loading the reference list");
-		String owner = null;
-		for(MetadataContact organization : config.getContent().getOrganizationContacts()){
-			if(organization.getRole().matches("OWNER")){
-				owner = organization.getAcronym();
-				break;
-			}
-		}
+		String owner = Utils.whoIsOwner(config);
 		
 		LOGGER.info("Owner = "+owner);
 		String collectionType = config.getSettings().getPublicationSettings().getCollectionType();
@@ -64,10 +59,8 @@ public class Gems {
 		String codelistUrl = config.getSettings().getPublicationSettings().getCodelistURL().replaceAll("&amp;","&");
 		LOGGER.info("Codelist URL = "+codelistUrl);
 		
-		List<String> subset = null;
 		List<String> entities = config.getSettings().getPublicationSettings().getEntities();
 		if(entities.size() > 0){
-			subset = entities;
 			LOGGER.info("Publication Scope = SUBSET");
 			LOGGER.info("List of entities = "+entities.toString());
 		}else{
@@ -78,7 +71,7 @@ public class Gems {
 		ClassLoader loader = ClassLoader.getSystemClassLoader();
 		Class<?> parserClass = loader.loadClass(config.getSettings().getPublicationSettings().getCodelistParser());
 		CodelistParser codelistParser = (CodelistParser) parserClass.newInstance();
-		set = codelistParser.getCodelist(owner, collectionType, codelistUrl, subset);
+		set = codelistParser.getCodelist(config);
 		LOGGER.info("Codelist parser = "+config.getSettings().getPublicationSettings().getCodelistParser());
 			
 		// configure the publisher
@@ -101,7 +94,7 @@ public class Gems {
 	
 				GeographicEntity entity = entityIterator.next();
 				LOGGER.info("==============");
-				LOGGER.info(action+" single layer & metadata for: "+entity.getCode()+ " ("+entity.getRefName()+")");
+				LOGGER.info(action+" single layer & metadata for: "+entity.code()+ " ("+entity.refName()+")");
 	
 				Map<FeatureTypeProperty, Object> geoproperties = null;
 				
@@ -116,7 +109,7 @@ public class Gems {
 							geoproperties = FeatureTypeUtils
 									.computeFeatureTypeProperties(
 											config.getSettings().getGeographicServerSettings(),
-											entity.getCode(),
+											entity.codeStack(),
 											config.getSettings().getPublicationSettings().getBuffer());
 						}catch(Exception e){
 							LOGGER.info("Failed to calculate geoproperties at attempt "+i);
@@ -137,18 +130,18 @@ public class Gems {
 					
 				
 				//pass specific properties to config
-				Iterator<GeographicMetaObjectProperty> it = entity.getSpecificProperties().keySet().iterator();
+				Iterator<GeographicMetaObjectProperty> it = entity.properties().keySet().iterator();
 				while(it.hasNext()){
 					
 					GeographicMetaObjectProperty property = it.next();
 					
 					Object obj = property.getObject();
 					if(obj == EntityAddin.ABSTRACT){
-						String abstractText = entity.getSpecificProperties().get(property).get(0);
+						String abstractText = entity.properties().get(property).get(0);
 						config.getContent().setAbstract(abstractText);
 					
 					} else if(obj == EntityAddin.BASETITLE) {
-						String basetitleText = entity.getSpecificProperties().get(property).get(0);
+						String basetitleText = entity.properties().get(property).get(0);
 						config.getContent().setBaseTitle(basetitleText);
 					}
 					
@@ -167,12 +160,12 @@ public class Gems {
 				if(style == "") style = null;
 				
 				if(style == null){
-					Iterator<GeographicMetaObjectProperty> it2 = entity.getSpecificProperties().keySet().iterator();
+					Iterator<GeographicMetaObjectProperty> it2 = entity.properties().keySet().iterator();
 					while(it2.hasNext()){
 						GeographicMetaObjectProperty property = it2.next();
 						Object obj = property.getObject();
 						if(obj == EntityAddin.STYLE){
-							style = entity.getSpecificProperties().get(property).get(0);
+							style = entity.properties().get(property).get(0);
 							break;
 						}
 					}
@@ -197,8 +190,8 @@ public class Gems {
 							LOGGER.info(size + " published metalayers");
 						}
 					}catch(Exception e){
-						LOGGER.info("Failed to publish layer/metadata pair for " + entity.getCode());
-						failures.add(entity.getCode());
+						LOGGER.info("Failed to publish layer/metadata pair for " + entity.code());
+						failures.add(entity.code());
 					}
 	
 				// UNPUBLISH ACTION
@@ -213,8 +206,8 @@ public class Gems {
 							LOGGER.info(size + " unpublished metalayers");
 						}
 					}catch(Exception e){
-						LOGGER.info("Failed to unpublish layer/metadata pair for " + entity.getCode());
-						failures.add(entity.getCode());
+						LOGGER.info("Failed to unpublish layer/metadata pair for " + entity.code());
+						failures.add(entity.code());
 					}
 				}
 			}

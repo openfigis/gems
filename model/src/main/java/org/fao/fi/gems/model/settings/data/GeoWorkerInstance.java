@@ -1,4 +1,4 @@
-package org.fao.fi.gems.model.settings;
+package org.fao.fi.gems.model.settings.data;
 
 public class GeoWorkerInstance extends GeoInstance{
 

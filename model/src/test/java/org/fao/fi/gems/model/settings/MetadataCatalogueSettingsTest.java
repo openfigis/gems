@@ -3,8 +3,7 @@ package org.fao.fi.gems.model.settings;
 import java.io.File;
 import java.net.URISyntaxException;
 
-
-import org.fao.fi.gems.model.settings.MetadataCatalogueSettings;
+import org.fao.fi.gems.model.settings.metadata.MetadataCatalogueSettings;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;

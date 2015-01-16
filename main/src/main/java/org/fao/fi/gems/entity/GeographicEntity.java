@@ -13,18 +13,18 @@ import org.fao.fi.gems.metaobject.GeographicMetaObjectProperty;
  */
 public interface GeographicEntity {
 
-	//identification
+	List<EntityCode> codeStack();
 	
-	String getCode();
+	String code();
 
-	String getRefName();
+	String refName();
 	
-	String getOwner();
+	String owner();
 	
-	String getCollection();
+	String collection();
 	
-	String getMetaIdentifier();
+	String metaIdentifier();
 
-	Map<GeographicMetaObjectProperty, List<String>> getSpecificProperties();
+	Map<GeographicMetaObjectProperty, List<String>> properties();
 
 }

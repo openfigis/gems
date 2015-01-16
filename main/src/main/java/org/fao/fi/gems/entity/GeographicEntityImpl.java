@@ -18,32 +18,36 @@ public class GeographicEntityImpl implements GeographicEntity {
 
 	private String owner;
 	private String collection;
+	private List<EntityCode> codeStack;
 	private String code;
 	private String refName;	
 	private Map<GeographicMetaObjectProperty, List<String>> specificProperties;
 	private String metaIdentifier;
  
 	public GeographicEntityImpl(String owner, String collection,
-								String code, String refName,
+								List<EntityCode> codeStack, String refName,
 								Map<GeographicMetaObjectProperty, List<String>> properties) throws URISyntaxException {
 		this.owner = owner;
 		this.collection = collection;
-		this.code = code;
+		this.codeStack = codeStack;
+		this.code = Utils.buildCode(this.codeStack);
 		this.refName = refName;
 		this.specificProperties = properties;
 		this.setMetaIdentifier(Utils.buildMetadataIdentifier(this.owner, this.collection, this.code));
 	}
 	
-	/**
-	 * @return the code
-	 */
-	public String getCode() {
-		return code;
+	public List<EntityCode> codeStack() {
+		return codeStack;
 	}
 
-	/**
-	 * @param code the code to set
-	 */
+	public void setCodeStack(List<EntityCode> codeStack) {
+		this.codeStack = codeStack;
+	}
+	
+	public String code() {
+		return code;
+	}
+	
 	public void setCode(String code) {
 		this.code = code;
 	}
@@ -51,7 +55,7 @@ public class GeographicEntityImpl implements GeographicEntity {
 	/**
 	 * @return the refName
 	 */
-	public String getRefName() {
+	public String refName() {
 		return refName;
 	}
 
@@ -65,7 +69,7 @@ public class GeographicEntityImpl implements GeographicEntity {
 	/**
 	 * Get the owner id
 	 */
-	public String getOwner() {
+	public String owner() {
 		return this.owner;
 	}
 	
@@ -81,7 +85,7 @@ public class GeographicEntityImpl implements GeographicEntity {
 	/**
 	 * Get the collection id
 	 */
-	public String getCollection() {
+	public String collection() {
 		return this.collection;
 	}
 	
@@ -97,7 +101,7 @@ public class GeographicEntityImpl implements GeographicEntity {
 	/**
 	 * @return the specificProperties
 	 */
-	public Map<GeographicMetaObjectProperty, List<String>> getSpecificProperties() {
+	public Map<GeographicMetaObjectProperty, List<String>> properties() {
 		return specificProperties;
 	}
 
@@ -112,7 +116,7 @@ public class GeographicEntityImpl implements GeographicEntity {
 	 * Get the meta identifier
 	 * 
 	 */
-	public String getMetaIdentifier(){
+	public String metaIdentifier(){
 		return this.metaIdentifier;
 	}
 

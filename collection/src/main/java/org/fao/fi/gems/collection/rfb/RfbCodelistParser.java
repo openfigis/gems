@@ -16,9 +16,12 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import org.fao.fi.gems.codelist.CodelistParser;
 import org.fao.fi.gems.entity.EntityAddin;
 import org.fao.fi.gems.entity.EntityAuthority;
+import org.fao.fi.gems.entity.EntityCode;
 import org.fao.fi.gems.entity.FigisGeographicEntityImpl;
 import org.fao.fi.gems.entity.GeographicEntity;
 import org.fao.fi.gems.metaobject.GeographicMetaObjectProperty;
+import org.fao.fi.gems.model.GemsConfig;
+import org.fao.fi.gems.model.settings.data.filter.DataObjectFilter;
 import org.fao.fi.gems.util.Utils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -71,14 +74,16 @@ public class RfbCodelistParser implements CodelistParser{
 	}
 	
 	
-	public Set<GeographicEntity> getCodelist(String owner, String collection,
-			String url, List<String> subset) {
+	public Set<GeographicEntity> getCodelist(GemsConfig config) {
+		
+		String owner = Utils.whoIsOwner(config);
 		
 		Set<GeographicEntity> rfbCodelist = new HashSet<GeographicEntity>();
 		
 		InputStream is = null;
 		try {
 
+			String url = config.getSettings().getPublicationSettings().getCodelistURL();
 			URL dataURL = new URL(url);
 			DocumentBuilderFactory dbFactory = DocumentBuilderFactory
 					.newInstance();
@@ -96,6 +101,10 @@ public class RfbCodelistParser implements CodelistParser{
 
 					Element eElement = (Element) nNode;
 					String rfb = eElement.getAttribute("name");
+					DataObjectFilter rfbFilter = config.getSettings().getGeographicServerSettings().getFilters().getData().get(0);
+					EntityCode rfbCode = new EntityCode(rfbFilter, rfb);
+					List<EntityCode> rfbCodeStack = Arrays.asList(rfbCode);
+					
 					String style = eElement.getAttribute("style");
 					String fid = eElement.getAttribute("fid");
 					String label = ((Element) eElement.getElementsByTagName("descriptor").item(0)).getAttribute("title");
@@ -103,6 +112,7 @@ public class RfbCodelistParser implements CodelistParser{
 					//wrapEntity by default is true
 					//if there is a list of subset then wrap entity only for those ones
 					boolean wrapEntity = true;
+					List<String> subset = config.getSettings().getPublicationSettings().getEntities();
 					if(subset != null){
 						if(subset.size() > 0){
 							if(!subset.contains(rfb)) wrapEntity = false;
@@ -111,6 +121,7 @@ public class RfbCodelistParser implements CodelistParser{
 					if(wrapEntity){
 						Map<GeographicMetaObjectProperty, List<String>> properties = new HashMap<GeographicMetaObjectProperty, List<String>>();
 						//FAO
+						String collection = config.getSettings().getPublicationSettings().getCollectionType();
 						properties.put(RfbProperty.FAO, Arrays.asList(Utils.buildMetadataIdentifier(owner, collection, rfb)));
 						
 						//FIGIS
@@ -137,7 +148,7 @@ public class RfbCodelistParser implements CodelistParser{
 							properties.put(RfbProperty.ABSTRACT, Arrays.asList(abstractText));
 						}
 						
-						FigisGeographicEntityImpl entity = new FigisGeographicEntityImpl(owner, collection, rfb, label, properties);
+						FigisGeographicEntityImpl entity = new FigisGeographicEntityImpl(owner, collection, rfbCodeStack, label, properties);
 						
 						//Figis stuff
 						entity.setFigisDomain("rfbs");

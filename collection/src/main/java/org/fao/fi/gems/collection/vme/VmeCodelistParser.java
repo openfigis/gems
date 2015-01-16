@@ -12,21 +12,21 @@ import java.util.Map;
 import java.util.Set;
 
 import org.fao.fi.gems.codelist.CodelistParser;
-import org.fao.fi.gems.entity.EntityAddin;
-import org.fao.fi.gems.entity.EntityAuthority;
+import org.fao.fi.gems.entity.EntityCode;
 import org.fao.fi.gems.entity.FigisGeographicEntityImpl;
 import org.fao.fi.gems.entity.GeographicEntity;
 import org.fao.fi.gems.metaobject.GeographicMetaObjectProperty;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
+import org.fao.fi.gems.model.GemsConfig;
+import org.fao.fi.gems.model.settings.data.filter.DataObjectFilter;
+import org.fao.fi.gems.util.Utils;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.google.gson.stream.JsonReader;
 
 /**
- * VME codelist parser
+ * VME measure codelist parser
+ * (reference for publishing Metadata at VME measure resolution)
  * 
  * @author eblondel
  *
@@ -35,56 +35,16 @@ public class VmeCodelistParser implements CodelistParser{
 
 	private static final String VME_WS_SERVICE = "http://www.fao.org/figis/ws/vme/webservice/get?inventoryIdentifier=";
 	
-	private static Logger LOGGER = LoggerFactory.getLogger(VmeCodelistParser.class);
-	
-	public enum VmeProperty implements GeographicMetaObjectProperty{
-		
-		FAO (EntityAuthority.FAO, true, true, true),
-		FIGIS (EntityAuthority.FIGIS, true, true, false),
-		
-		VME ("VME", false, true, false),
-		GLOBALTYPE("GLOBALTYPE", false, false, false),
-		BASETITLE(EntityAddin.BASETITLE, false, false, false),
-		STYLE(EntityAddin.STYLE, false, false, false);
-		
-		private final Object object;
-		private final boolean isAuthority;
-		private final boolean isThesaurus;
-		private final boolean containsURIs;
-		
-		VmeProperty(Object object, boolean isAuthority, boolean isThesaurus, boolean containsURIs){
-			this.object = object;
-			this.isAuthority = isAuthority;
-			this.isThesaurus = isThesaurus;
-			this.containsURIs = containsURIs;
-		}
-		
-		public Object getObject(){
-			return this.object;
-		}
-		
-		public boolean isAuthority(){
-			return this.isAuthority;
-		}
-		
-		public boolean isThesaurus(){
-			return this.isThesaurus;
-		}
-
-		public boolean containsURIs() {
-			return this.containsURIs;
-		}
-		
-	}	
-	
-	public Set<GeographicEntity> getCodelist(String owner, String collection,
-			String url, List<String> subset) {
+	public Set<GeographicEntity> getCodelist(GemsConfig config) {
 		
 		Set<GeographicEntity> vmeCodelist = new HashSet<GeographicEntity>();
+		
+		String owner = Utils.whoIsOwner(config);
 		
 		JsonReader reader = null;
 		try {
 			// read Geoserver data
+			String url = config.getSettings().getPublicationSettings().getCodelistURL();
 			URL dataURL = new URL(url);
 		
 			reader = new JsonReader(new InputStreamReader(dataURL.openStream()));
@@ -97,10 +57,15 @@ public class VmeCodelistParser implements CodelistParser{
 				for(int i = 0;i<bindings.size();i++){
 					JsonObject obj = bindings.get(i).getAsJsonObject().get("properties").getAsJsonObject();
 					String vmeId = obj.get("VME_ID").getAsString();
+					DataObjectFilter vmeFilter = config.getSettings().getGeographicServerSettings().getFilters().getData().get(0);
+					EntityCode vmeEntityCode = new EntityCode(vmeFilter, vmeId);
+					
+					List<EntityCode> vmeCodeStack = Arrays.asList(vmeEntityCode);
 					
 					//wrapEntity by default is true
 					//if there is a list of subset then wrap entity only for those ones
 					boolean wrapEntity = true;
+					List<String> subset = config.getSettings().getPublicationSettings().getEntities();
 					if(subset != null){
 						if(subset.size() > 0){
 							if(!subset.contains(vmeId)) wrapEntity = false;
@@ -152,7 +117,7 @@ public class VmeCodelistParser implements CodelistParser{
 						try {
 							boolean addEntity = true;
 							for(GeographicEntity vmeEntity : vmeCodelist){
-								if(vmeEntity.getCode().matches(vmeId)){
+								if(vmeEntity.code().matches(vmeId)){
 									addEntity = false;
 									break;
 								}
@@ -172,8 +137,9 @@ public class VmeCodelistParser implements CodelistParser{
 								
 								//add style
 								properties.put(VmeProperty.STYLE, Arrays.asList(style));
-									
-								entity = new FigisGeographicEntityImpl(owner, collection, vmeId, title, properties);
+								
+								String collection = config.getSettings().getPublicationSettings().getCollectionType();
+								entity = new FigisGeographicEntityImpl(owner, collection, vmeCodeStack, title, properties);
 								if(figisId != null) entity.setFigisId(figisId);
 								entity.setFigisDomain("vme");
 								

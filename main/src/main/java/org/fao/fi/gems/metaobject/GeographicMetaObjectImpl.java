@@ -12,10 +12,10 @@ import org.fao.fi.gems.feature.FeatureTypeProperty;
 import org.fao.fi.gems.model.GemsConfig;
 import org.fao.fi.gems.model.content.MetadataContact;
 import org.fao.fi.gems.model.content.MetadataContent;
-import org.fao.fi.gems.model.settings.BaseLayer;
-import org.fao.fi.gems.model.settings.GeographicServerSettings;
-import org.fao.fi.gems.model.settings.MetadataCatalogueSettings;
-import org.fao.fi.gems.model.settings.PublicationSettings;
+import org.fao.fi.gems.model.settings.data.BaseLayer;
+import org.fao.fi.gems.model.settings.data.GeographicServerSettings;
+import org.fao.fi.gems.model.settings.metadata.MetadataCatalogueSettings;
+import org.fao.fi.gems.model.settings.publication.PublicationSettings;
 import org.fao.fi.gems.util.Utils;
 import org.opengis.referencing.crs.CoordinateReferenceSystem;
 import org.opengis.temporal.TemporalPrimitive;
@@ -37,7 +37,9 @@ public class GeographicMetaObjectImpl implements GeographicMetaObject {
 	protected String owner;
 	protected List<GeographicEntity> entities;
 	private MetadataContent template;
+	
 	private String code;
+	
 	private String refName;
 	private String metaId;
 	private String metaTitle;
@@ -128,9 +130,9 @@ public class GeographicMetaObjectImpl implements GeographicMetaObject {
 		String codes ="";
 		for(int i = 0; i <entities.size();i++){
 			if(i==0){
-				codes = entities.get(i).getCode();
+				codes = entities.get(i).code();
 			}else{
-				codes += "_x_"+entities.get(i).getCode();
+				codes += "_x_"+entities.get(i).code();
 			}
 		}
 		this.code = codes;
@@ -171,14 +173,14 @@ public class GeographicMetaObjectImpl implements GeographicMetaObject {
 		
 		String refName = "";
 		if(entities.size() == 1){
-			refName += entities.get(0).getRefName();
+			refName += entities.get(0).refName();
 		}else if(entities.size() > 1){
 		
 			for(int i=0;i<entities.size();i++){
 				if(i==0){
-					refName += entities.get(i).getRefName();
+					refName += entities.get(i).refName();
 				}else{
-					refName += " | "+entities.get(i).getRefName();
+					refName += " | "+entities.get(i).refName();
 				}
 			}
 		}
@@ -299,7 +301,7 @@ public class GeographicMetaObjectImpl implements GeographicMetaObject {
 		}
 		
 		for(GeographicEntity entity : entities){
-			this.specificProperties.putAll(entity.getSpecificProperties());
+			this.specificProperties.putAll(entity.properties());
 		}
 		
 	}

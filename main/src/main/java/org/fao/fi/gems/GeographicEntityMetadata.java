@@ -307,8 +307,10 @@ public class GeographicEntityMetadata extends DefaultMetadata {
 		quality.setScope(scope);
 
 		DefaultLineage lineage = new DefaultLineage();
-		lineage.setStatement(new SimpleInternationalString(object.template()
-				.getMethodology()));
+		String methodology = object.template().getMethodology()
+							 + "The data and metadata have been published with the FAO FI GEMS tool "
+							 + "(GIS Enforcing Metadata and Semantics) available at https://github.com/openfigis/gems ";
+		lineage.setStatement(new SimpleInternationalString(methodology));
 		quality.setLineage(lineage);
 		this.setDataQualityInfo(Arrays.asList(quality));
 	}

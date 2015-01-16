@@ -15,9 +15,12 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import org.fao.fi.gems.codelist.CodelistParser;
 import org.fao.fi.gems.entity.EntityAddin;
 import org.fao.fi.gems.entity.EntityAuthority;
+import org.fao.fi.gems.entity.EntityCode;
 import org.fao.fi.gems.entity.FigisGeographicEntityImpl;
 import org.fao.fi.gems.entity.GeographicEntity;
 import org.fao.fi.gems.metaobject.GeographicMetaObjectProperty;
+import org.fao.fi.gems.model.GemsConfig;
+import org.fao.fi.gems.model.settings.data.filter.DataObjectFilter;
 import org.fao.fi.gems.util.Utils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -77,7 +80,9 @@ public class SpeciesCodelistParser implements CodelistParser{
 		
 	}	
 	
-	public Set<GeographicEntity> getCodelist(String owner, String collection, String specieslist, List<String> subset) {
+	public Set<GeographicEntity> getCodelist(GemsConfig config) {
+		
+		String owner = Utils.whoIsOwner(config);
 		
 		//available styles
 		Random styleRandomizer = new Random();
@@ -89,6 +94,7 @@ public class SpeciesCodelistParser implements CodelistParser{
 		Set<GeographicEntity> codelist = new HashSet<GeographicEntity>();
 		try {
 
+			String specieslist = config.getSettings().getPublicationSettings().getCodelistURL();
 			URL url = new URL(specieslist);
 			DocumentBuilderFactory dbFactory = DocumentBuilderFactory
 					.newInstance();
@@ -110,11 +116,16 @@ public class SpeciesCodelistParser implements CodelistParser{
 					
 					//codes
 					String alphacode = eElement.getAttribute("a3c");
+					DataObjectFilter speciesFilter = config.getSettings().getGeographicServerSettings().getFilters().getData().get(0);
+					EntityCode speciesEntityCode = new EntityCode(speciesFilter, alphacode);
+					List<EntityCode> speciesCodeStack = Arrays.asList(speciesEntityCode);
+					
 					String FigisId = eElement.getAttribute("FigisID");
 					
 					//wrapEntity by default is true
 					//if there is a list of subset then wrap entity only for those ones
 					boolean wrapEntity = true;
+					List<String> subset = config.getSettings().getPublicationSettings().getEntities();
 					if(subset != null){
 						if(subset.size() > 0){
 							if(!subset.contains(alphacode)) wrapEntity = false;
@@ -151,6 +162,7 @@ public class SpeciesCodelistParser implements CodelistParser{
 						//properties
 						//----------
 						//FAO
+						String collection = config.getSettings().getPublicationSettings().getCollectionType();
 						properties.put(SpeciesProperty.FAO, Arrays.asList(Utils.buildMetadataIdentifier(owner, collection, alphacode)));
 						
 						//ASFIS
@@ -174,7 +186,7 @@ public class SpeciesCodelistParser implements CodelistParser{
 						properties.put(SpeciesProperty.STYLE, Arrays.asList(randomStyle));
 						
 						//create Geographic entity
-						FigisGeographicEntityImpl entity = new FigisGeographicEntityImpl(owner, collection, alphacode, scName, properties);
+						FigisGeographicEntityImpl entity = new FigisGeographicEntityImpl(owner, collection, speciesCodeStack, scName, properties);
 						
 						//specific Figis stuff required
 						entity.setFigisDomain("species");

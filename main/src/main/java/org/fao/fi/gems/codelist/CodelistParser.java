@@ -1,9 +1,9 @@
 package org.fao.fi.gems.codelist;
 
-import java.util.List;
 import java.util.Set;
 
 import org.fao.fi.gems.entity.GeographicEntity;
+import org.fao.fi.gems.model.GemsConfig;
 
 /**
  * CodelistParser interface
@@ -13,6 +13,6 @@ import org.fao.fi.gems.entity.GeographicEntity;
  */
 public interface CodelistParser {
 	
-	public Set<GeographicEntity> getCodelist(String owner, String collection, String url, List<String> subset);
+	public Set<GeographicEntity> getCodelist(GemsConfig config);
 
 }

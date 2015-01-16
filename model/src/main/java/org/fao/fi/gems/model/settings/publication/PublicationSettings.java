@@ -1,4 +1,4 @@
-package org.fao.fi.gems.model.settings;
+package org.fao.fi.gems.model.settings.publication;
 
 import java.io.File;
 import java.io.IOException;

@@ -23,16 +23,16 @@ public class FigisGeographicEntityImpl extends GeographicEntityImpl implements F
 	 * 
 	 * @param owner
 	 * @param collection
-	 * @param code
+	 * @param codeStack
 	 * @param refName
 	 * @param properties
 	 * @throws URISyntaxException
 	 */
 	public FigisGeographicEntityImpl(String owner, String collection,
-			String code, String refName,
+			List<EntityCode> codeStack, String refName,
 			Map<GeographicMetaObjectProperty, List<String>> properties)
 			throws URISyntaxException {
-		super(owner, collection, code, refName, properties);
+		super(owner, collection, codeStack, refName, properties);
 		
 	}
 	

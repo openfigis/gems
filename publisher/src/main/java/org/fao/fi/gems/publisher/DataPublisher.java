@@ -25,13 +25,18 @@ import java.util.List;
 import java.util.Map.Entry;
 
 import org.fao.fi.gems.entity.EntityAuthority;
+import org.fao.fi.gems.entity.EntityCode;
+import org.fao.fi.gems.entity.GeographicEntity;
 import org.fao.fi.gems.metaobject.GeographicMetaObject;
 import org.fao.fi.gems.metaobject.GeographicMetaObjectProperty;
-import org.fao.fi.gems.model.settings.GeoMasterInstance;
-import org.fao.fi.gems.model.settings.GeoWorkerInstance;
-import org.fao.fi.gems.model.settings.GeographicServerSettings;
-import org.fao.fi.gems.model.settings.MetadataCatalogueSettings;
-import org.fao.fi.gems.model.settings.TimeDimension;
+import org.fao.fi.gems.model.settings.data.GeoMasterInstance;
+import org.fao.fi.gems.model.settings.data.GeoWorkerInstance;
+import org.fao.fi.gems.model.settings.data.GeographicServerSettings;
+import org.fao.fi.gems.model.settings.data.dimension.TimeDimension;
+import org.fao.fi.gems.model.settings.data.filter.DataObjectFilter;
+import org.fao.fi.gems.model.settings.data.filter.ExtraDataFilter;
+import org.fao.fi.gems.model.settings.data.filter.FilterList;
+import org.fao.fi.gems.model.settings.metadata.MetadataCatalogueSettings;
 import org.fao.fi.gems.util.Utils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -57,10 +62,12 @@ public class DataPublisher {
 	public GeoServerRESTPublisher GSPublisher;
 	
 	String srcLayer;
-	String srcAttribute;
+	FilterList srcFilters;
+	
 	String trgWorkspace;
 	String trgDatastore;
 	String trgLayerPrefix;
+	
 	TimeDimension timeDimension;
 	
 	List<String> existingLayers;
@@ -85,10 +92,12 @@ public class DataPublisher {
 		this.GSPublisher = new GeoServerRESTPublisher(master.getUrl(), master.getUser(), master.getPassword());
 
 		this.srcLayer = settings.getSourceLayer();
-		this.srcAttribute = settings.getSourceAttribute();
+		this.srcFilters = settings.getFilters();
+		
 		this.trgWorkspace = settings.getTargetWorkspace();
 		this.trgDatastore = settings.getTargetDatastore();
 		this.trgLayerPrefix = settings.getTargetLayerPrefix();
+		
 		this.timeDimension = settings.getTimeDimension();
 		
 		this.existingLayers = GSReader.getLayers().getNames();
@@ -232,8 +241,47 @@ public class DataPublisher {
 			//configure the sql view
 			VTGeometryEncoder gte = new VTGeometryEncoder(geometryName,
 					"MultiPolygon", "4326");
-			String sql = "SELECT * FROM " + this.srcLayer + " WHERE "
-					+ this.srcAttribute + " = '" + object.code() + "'";
+			
+			String sql = "SELECT ";
+			String pf = "";
+			List<String> propertyFilters = this.srcFilters.getProperties();
+			if(propertyFilters.size() > 0){
+				for(int i = 0;i<propertyFilters.size();i++){
+					String p = propertyFilters.get(i);
+					pf += p;
+					if(i < propertyFilters.size()-1) pf += ",";
+				}
+			}else{
+				pf = "*";
+			}			
+			sql += pf+" FROM " + this.srcLayer + " WHERE ";
+			
+			Iterator<GeographicEntity> it = object.entities().iterator();
+			while(it.hasNext()){
+				GeographicEntity ge = it.next();
+				List<EntityCode> codestack = ge.codeStack();
+				for(int i = 0; i<codestack.size();i++){
+					EntityCode ec = codestack.get(i);
+					String filterCode = ec.getCode();
+					DataObjectFilter ecFilter = ec.getFilter();
+					if(ecFilter.getIsString()) filterCode = "'"+filterCode+"'";
+					sql += ecFilter.getProperty() + " = " + filterCode;
+					if(i<codestack.size()-1) sql += " AND ";
+				}
+			}
+			
+			List<ExtraDataFilter> extras = this.srcFilters.getExtras();
+			if(extras.size() > 0){
+				for(int i=0;i<extras.size();i++){
+					ExtraDataFilter ef = extras.get(i);
+					String efCode = ef.getValue();
+					if(ef.getIsString()) efCode = "'"+efCode+"'";
+					
+					if(object.entities().size() > 0 || (object.entities().size() == 0 && i > 0)) sql += " AND ";
+					sql += ef.getProperty() + " = " + efCode;
+				}
+			}
+			
 			GSVirtualTableEncoder vte = new GSVirtualTableEncoder(
 					object.targetLayerName(), sql, null, Arrays.asList(gte),
 					null);

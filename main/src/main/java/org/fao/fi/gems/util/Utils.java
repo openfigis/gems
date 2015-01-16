@@ -1,13 +1,58 @@
 package org.fao.fi.gems.util;
 
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
+import org.fao.fi.gems.entity.EntityCode;
 import org.fao.fi.gems.entity.GeographicEntity;
-import org.fao.fi.gems.metaobject.GeographicMetaObject;
+import org.fao.fi.gems.model.GemsConfig;
+import org.fao.fi.gems.model.content.MetadataContact;
 import org.geotoolkit.xml.Namespaces;
 
 public final class Utils {
 
+	
+	/**
+	 * Builds a code from a code stack
+	 * 
+	 * @param codeStack
+	 * @return a string code
+	 */
+	public static String buildCode(List<EntityCode> codeStack){
+		String code = null;
+		if(codeStack.size() > 0){
+			Iterator<EntityCode> it = codeStack.iterator();
+			EntityCode ec = it.next();
+			code = ec.getCode();
+			while(it.hasNext()){
+				EntityCode ecn = it.next();
+				code += "-"+ecn.getCode();
+			}
+		}
+		
+		return code;
+	}
+	
+	
+	/**
+	 * Util to get who is the owner for the GEMS products
+	 * 
+	 * @param config
+	 * @return the owner
+	 */
+	public static String whoIsOwner(GemsConfig config){
+		String owner = null;
+		for(MetadataContact organization : config.getContent().getOrganizationContacts()){
+			if(organization.getRole().matches("OWNER")){
+				owner = organization.getAcronym();
+				break;
+			}
+		}
+		return owner;
+	}
+	
+	
 	/**
 	 * Get the metadataURL
 	 * 
@@ -83,7 +128,7 @@ public final class Utils {
 		String metaId = null;
 		for(int i=0;i<entities.size();i++){
 			GeographicEntity entity = entities.get(i);
-			String ref = entity.getMetaIdentifier();
+			String ref = entity.metaIdentifier();
 			if(i==0){
 				metaId = ref;
 			}else{

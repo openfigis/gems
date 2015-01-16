@@ -1,8 +1,13 @@
-package org.fao.fi.gems.model.settings;
+package org.fao.fi.gems.model.settings.data;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
+
+import org.fao.fi.gems.model.settings.data.dimension.TimeDimension;
+import org.fao.fi.gems.model.settings.data.filter.DataObjectFilter;
+import org.fao.fi.gems.model.settings.data.filter.ExtraDataFilter;
+import org.fao.fi.gems.model.settings.data.filter.FilterList;
 
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.io.xml.StaxDriver;
@@ -22,10 +27,13 @@ public class GeographicServerSettings{
 	
 	private String sourceWorkspace;
 	private String sourceLayer;
-	private String sourceAttribute;
+	
+	private FilterList filters;
+	
 	private String targetWorkspace;
 	private String targetDatastore;
 	private String targetLayerPrefix;
+	
 	private TimeDimension timeDimension;
 	
 	private List<BaseLayer> baseLayerList;
@@ -97,19 +105,12 @@ public class GeographicServerSettings{
 		this.sourceLayer = sourceLayer;
 	}
 
-	/**
-	 * @return the sourceAttribute
-	 */
-	public String getSourceAttribute() {
-		return sourceAttribute;
+	public FilterList getFilters() {
+		return filters;
 	}
 
-	/**
-	 * @param sourceAttribute
-	 *            the sourceAttribute to set
-	 */
-	public void setSourceAttribute(String sourceAttribute) {
-		this.sourceAttribute = sourceAttribute;
+	public void setFilters(FilterList filters) {
+		this.filters = filters;
 	}
 
 	/**
@@ -229,6 +230,10 @@ public class GeographicServerSettings{
 		xstream.aliasType("instances", GeoInstanceList.class);
 		xstream.aliasType("master", GeoMasterInstance.class);
 		xstream.aliasType("worker", GeoWorkerInstance.class);
+		
+		xstream.aliasType("filters", FilterList.class);
+		xstream.aliasType("filter", DataObjectFilter.class);
+		xstream.aliasType("extra", ExtraDataFilter.class);
 		
 		xstream.aliasType("baseLayer", BaseLayer.class);
 		xstream.aliasType("timeDimension", TimeDimension.class);

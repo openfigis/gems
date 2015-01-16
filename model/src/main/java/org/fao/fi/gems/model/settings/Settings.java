@@ -2,6 +2,15 @@ package org.fao.fi.gems.model.settings;
 
 import java.io.File;
 import java.io.IOException;
+
+import org.fao.fi.gems.model.settings.data.BaseLayer;
+import org.fao.fi.gems.model.settings.data.GeoWorkerInstance;
+import org.fao.fi.gems.model.settings.data.GeographicServerSettings;
+import org.fao.fi.gems.model.settings.data.filter.DataObjectFilter;
+import org.fao.fi.gems.model.settings.data.filter.ExtraDataFilter;
+import org.fao.fi.gems.model.settings.metadata.MetadataCatalogueSettings;
+import org.fao.fi.gems.model.settings.publication.PublicationSettings;
+
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.io.xml.StaxDriver;
 
@@ -80,6 +89,8 @@ public class Settings{
 		XStream xstream = new XStream(new StaxDriver());
 		xstream.aliasType("settings", Settings.class);
 		xstream.aliasType("worker", GeoWorkerInstance.class);
+		xstream.aliasType("filter", DataObjectFilter.class);
+		xstream.aliasType("extra", ExtraDataFilter.class);
 		xstream.aliasType("baseLayer", BaseLayer.class);
 
 		Settings settings = (Settings) xstream

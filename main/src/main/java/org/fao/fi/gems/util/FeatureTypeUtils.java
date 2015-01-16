@@ -4,12 +4,17 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.sql.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
+
+import org.fao.fi.gems.entity.EntityCode;
 import org.fao.fi.gems.feature.FeatureTypeProperty;
-import org.fao.fi.gems.model.settings.GeographicServerSettings;
+import org.fao.fi.gems.model.settings.data.GeographicServerSettings;
+import org.fao.fi.gems.model.settings.data.filter.DataObjectFilter;
+import org.fao.fi.gems.model.settings.data.filter.ExtraDataFilter;
 import org.geotoolkit.data.FeatureCollection;
 import org.geotoolkit.data.FeatureIterator;
 import org.geotoolkit.data.FeatureStore;
@@ -33,6 +38,7 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
+
 import com.vividsolutions.jts.geom.Envelope;
 
 public final class FeatureTypeUtils {
@@ -50,7 +56,7 @@ public final class FeatureTypeUtils {
 	 */
 	public static Map<FeatureTypeProperty, Object> computeFeatureTypeProperties(
 			GeographicServerSettings settings,
-			String code, double buffer) throws Exception {
+			List<EntityCode> codeStack, double buffer) throws Exception {
 		
 		Map<FeatureTypeProperty, Object> map = null;
 
@@ -71,10 +77,43 @@ public final class FeatureTypeUtils {
 		
 		try{
 
+			//dirty stuff (for future envisage some middleware relying on GeoAPI, why not VR plugin?)
 			String wfsRequest= settings.getPublicUrl() + "/" + settings.getSourceWorkspace()
 					+ "/ows?service=wfs&version=1.0.0&request=GetFeature"
-					+ "&typeName=" + settings.getSourceLayer() + "&cql_filter=" + settings.getSourceAttribute()
-					+ "='" + code + "'";
+					+ "&typeName=" + settings.getSourceLayer();
+			
+			String cqlFilter = null;
+			if(codeStack.size() > 0){
+				cqlFilter = "&cql_filter=";
+				for(int i=0;i<codeStack.size();i++){
+					EntityCode ec = codeStack.get(i);
+					String filterCode = ec.getCode();
+					if(ec.getFilter().getIsString()) filterCode = "'"+filterCode+"'";
+					cqlFilter += ec.getFilter().getProperty() + "=" + filterCode;
+					if(i<codeStack.size()-1) cqlFilter += " AND ";
+				}
+				cqlFilter = cqlFilter.replaceAll(" ", "%20");
+			}
+			
+			List<ExtraDataFilter> extraFilters = settings.getFilters().getExtras();
+			if(extraFilters.size() > 0){
+				boolean hasFilter = cqlFilter != null;
+				if(!hasFilter){
+					cqlFilter = "&cql_filter=";
+				}
+				for(int i=0;i<extraFilters.size();i++){
+					ExtraDataFilter ef = extraFilters.get(i);
+					String efCode = ef.getValue();
+					if(ef.getIsString()) efCode = "'"+efCode+"'";
+					
+					if(hasFilter || (!hasFilter && i > 0)) cqlFilter += " AND ";
+					cqlFilter += ef.getProperty()+"="+efCode;
+				}
+				cqlFilter = cqlFilter.replaceAll(" ", "%20");
+			}
+			
+			if(cqlFilter != null) wfsRequest += cqlFilter;
+				
 			LOGGER.info("== WFS GetFeature Request ==");
 			LOGGER.info(wfsRequest);
 			URL url = new URL(wfsRequest);

@@ -6,8 +6,8 @@ import java.util.Iterator;
 
 import org.fao.fi.gems.GeographicEntityMetadata;
 import org.fao.fi.gems.metaobject.GeographicMetaObject;
-import org.fao.fi.gems.model.settings.MetadataCatalogueSettings;
-import org.fao.fi.gems.model.settings.PublicationSettings;
+import org.fao.fi.gems.model.settings.metadata.MetadataCatalogueSettings;
+import org.fao.fi.gems.model.settings.publication.PublicationSettings;
 import org.geotoolkit.xml.XML;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

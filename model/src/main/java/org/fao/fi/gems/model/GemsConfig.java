@@ -7,9 +7,11 @@ import org.fao.fi.gems.model.content.MetadataBiblioRef;
 import org.fao.fi.gems.model.content.MetadataContact;
 import org.fao.fi.gems.model.content.MetadataContent;
 import org.fao.fi.gems.model.content.MetadataThesaurus;
-import org.fao.fi.gems.model.settings.BaseLayer;
-import org.fao.fi.gems.model.settings.GeoWorkerInstance;
 import org.fao.fi.gems.model.settings.Settings;
+import org.fao.fi.gems.model.settings.data.BaseLayer;
+import org.fao.fi.gems.model.settings.data.GeoWorkerInstance;
+import org.fao.fi.gems.model.settings.data.filter.DataObjectFilter;
+import org.fao.fi.gems.model.settings.data.filter.ExtraDataFilter;
 
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.io.xml.StaxDriver;
@@ -85,6 +87,8 @@ public class GemsConfig {
 		
 		//settings
 		xstream.alias("worker", GeoWorkerInstance.class);
+		xstream.aliasType("filter", DataObjectFilter.class);
+		xstream.aliasType("extra", ExtraDataFilter.class);
 		xstream.alias("baseLayer", BaseLayer.class);
 		
 		//content

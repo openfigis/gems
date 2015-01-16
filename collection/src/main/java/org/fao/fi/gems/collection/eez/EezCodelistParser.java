@@ -13,9 +13,12 @@ import java.util.Set;
 
 import org.fao.fi.gems.codelist.CodelistParser;
 import org.fao.fi.gems.entity.EntityAuthority;
+import org.fao.fi.gems.entity.EntityCode;
 import org.fao.fi.gems.entity.GeographicEntity;
 import org.fao.fi.gems.entity.GeographicEntityImpl;
 import org.fao.fi.gems.metaobject.GeographicMetaObjectProperty;
+import org.fao.fi.gems.model.GemsConfig;
+import org.fao.fi.gems.model.settings.data.filter.DataObjectFilter;
 import org.fao.fi.gems.util.Utils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -72,14 +75,16 @@ public class EezCodelistParser implements CodelistParser{
 		
 	}
 	
-	public Set<GeographicEntity> getCodelist(String owner, String collection,
-			String url, List<String> subset) {
+	public Set<GeographicEntity> getCodelist(GemsConfig config) {
+		
+		String owner = Utils.whoIsOwner(config);
 		
 		Set<GeographicEntity> eezCodelist = new HashSet<GeographicEntity>();
 		
 		JsonReader reader = null;
 		try {
 			// read Geoserver data
+			String url = config.getSettings().getPublicationSettings().getCodelistURL();
 			URL dataURL = new URL(url);
 		
 			reader = new JsonReader(new InputStreamReader(dataURL.openStream()));
@@ -92,6 +97,10 @@ public class EezCodelistParser implements CodelistParser{
 				for(int i = 0;i<bindings.size();i++){
 					JsonObject obj = bindings.get(i).getAsJsonObject().get("properties").getAsJsonObject();
 					String mrgid = obj.get("mrgid").getAsString();
+					DataObjectFilter eezFilter = config.getSettings().getGeographicServerSettings().getFilters().getData().get(0);
+					EntityCode eezCode = new EntityCode(eezFilter,mrgid);
+					List<EntityCode> eezCodeStack = Arrays.asList(eezCode);
+					
 					String label = obj.get("eez").getAsString();
 					String country = obj.get("country").getAsString();
 					String iso_3digit = obj.get("iso_3digit").getAsString();
@@ -101,6 +110,7 @@ public class EezCodelistParser implements CodelistParser{
 					//wrapEntity by default is true
 					//if there is a list of subset then wrap entity only for those ones
 					boolean wrapEntity = true;
+					List<String> subset = config.getSettings().getPublicationSettings().getEntities();
 					if(subset != null){
 						if(subset.size() > 0){
 							if(!subset.contains(mrgid)) wrapEntity = false;
@@ -109,6 +119,7 @@ public class EezCodelistParser implements CodelistParser{
 					
 					if(wrapEntity){
 						try {
+							String collection = config.getSettings().getPublicationSettings().getCollectionType();
 							Map<GeographicMetaObjectProperty, List<String>> properties = new HashMap<GeographicMetaObjectProperty, List<String>>();
 							properties.put(EezProperty.VLIZ, Arrays.asList(Utils.buildMetadataIdentifier(owner, collection, mrgid)));
 							properties.put(EezProperty.MARINEREGIONS, Arrays.asList(mrgid, country, label));
@@ -120,7 +131,7 @@ public class EezCodelistParser implements CodelistParser{
 								properties.put(EezProperty.FLOD, Arrays.asList(flodEntity.getCodedEntity()));
 							}
 							
-							entity = new GeographicEntityImpl(owner, collection, mrgid, label, properties);
+							entity = new GeographicEntityImpl(owner, collection, eezCodeStack, label, properties);
 							eezCodelist.add(entity);
 						} catch (URISyntaxException e) {
 							e.printStackTrace();
