@@ -304,7 +304,10 @@ public final class FeatureTypeUtils {
 	 * @return
 	 * @throws DataStoreException 
 	 * @throws MalformedURLException
+	 * 
+	 * @deprecated
 	 */
+	@Deprecated
 	public static Map<FeatureTypeProperty, Object> computeFeatureTypeProperties(String url, double buffer) throws DataStoreException, MalformedURLException {
 	
 		Map<FeatureTypeProperty, Object> map = new HashMap<FeatureTypeProperty, Object>();

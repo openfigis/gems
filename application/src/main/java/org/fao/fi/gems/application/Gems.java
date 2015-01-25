@@ -18,7 +18,6 @@ import org.fao.fi.gems.metaobject.GeographicMetaObject;
 import org.fao.fi.gems.metaobject.GeographicMetaObjectImpl;
 import org.fao.fi.gems.metaobject.GeographicMetaObjectProperty;
 import org.fao.fi.gems.model.GemsConfig;
-import org.fao.fi.gems.model.content.MetadataContact;
 import org.fao.fi.gems.model.settings.data.GeoWorkerInstance;
 import org.fao.fi.gems.publisher.Publisher;
 import org.fao.fi.gems.util.FeatureTypeUtils;
@@ -48,7 +47,7 @@ public class Gems {
 		//Read the configuration
 		LOGGER.info("(1) Loading the configuration file");
 		GemsConfig config = GemsConfig.fromXML(new File(args[0]));
-		
+	
 		//read the codelists
 		LOGGER.info("(2) Loading the reference list");
 		String owner = Utils.whoIsOwner(config);
