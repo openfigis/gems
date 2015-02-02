@@ -10,7 +10,7 @@
 		<!-- Geographic Server settings -->
 		<geographicServerSettings>
 			
-			<publicUrl>http://www.organization.org/geoserver</publicUrl>
+			<!-- services -->
 			<instances>
 				<master>
 					<url>http://www.organization.org/geoserver.dv.1</url>
@@ -37,16 +37,42 @@
 				</workers>								
 			</instances>
 			
+			<!-- source information -->
 			<sourceWorkspace>sourceWS</sourceWorkspace>
 			<sourceLayer>layer</sourceLayer>
-			<sourceAttribute>att</sourceAttribute>
+			
+			<filters>
+				<properties>
+					<string>prop1</string>
+					<string>prop2</string>
+				</properties>
+				<data>
+					<filter>
+						<isString>true</isString>
+						<property>att</property>
+					</filter>
+				</data>
+				<extras>
+					<extra>
+						<isString>true</isString>
+						<property>att2</property>
+						<value>val2</value>
+					</extra>
+				</extras>
+			</filters>
+			
+			
+			<!-- target information -->
+			<publicUrl>http://www.organization.org/geoserver</publicUrl>
 			<targetWorkspace>targetWS</targetWorkspace>
 			<targetDatastore>targetDS</targetDatastore>
 			<targetLayerPrefix>someprefix</targetLayerPrefix>
+			
 			<timeDimension>
 				<startTime>START_YEAR</startTime>
 				<endTime>END_YEAR</endTime>
 			</timeDimension>
+			
 			<baseLayerList>
 				<baseLayer>
 					<workspace>baselayerWS1</workspace>
@@ -57,7 +83,8 @@
 					<name>baselayerName2</name>
 				</baseLayer>
 			</baseLayerList>
-			<method>SHAPEFILE</method>
+			
+			<method>SQLVIEW</method>
 			<shapefileURL>someURL</shapefileURL>
 		</geographicServerSettings>
 

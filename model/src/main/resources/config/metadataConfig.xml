@@ -43,16 +43,49 @@
 				</workers>								
 			</instances>
 			
-			<sourceWorkspace>sourceWS</sourceWorkspace>			<!-- workspace where to find the GIS source data collection layer -->
+			<!-- source information -->
+			<sourceWorkspace>sourceWS</sourceWorkspace> 		<!-- workspace where to find the GIS source data collection layer -->
 			<sourceLayer>layer</sourceLayer>					<!-- GIS data collection layer name -->
-			<sourceAttribute>att</sourceAttribute>				<!-- attribute name on which to build the filter -->
+			
+			<!-- filters -->
+			<filters>
+				<!-- data filters used o filter out data from collection
+					 and identify a geographic entity -->
+				<data>
+					<filter>
+						<isString>true</isString>
+						<property>att</property>
+					</filter>
+				</data>
+				
+				<!-- extra filters used to filter out data from collection
+					 These filters are not used to define a geographic entity -->
+				<extras>
+					<extra>
+						<isString>true</isString>
+						<property>att2</property>
+						<value>val2</value>
+					</extra>
+				</extras>
+				
+				<!-- limited list of properties to handle in the published data -->
+				<properties>
+					<string>prop1</string>
+					<string>prop2</string>
+				</properties>
+			</filters>
+			
+			<!-- target information -->
 			<targetWorkspace>targetWS</targetWorkspace>			<!-- target workspace where to publish the single GIS layers -->
 			<targetDatastore>targetDS</targetDatastore>			<!-- target datastore where to publish the single GIS layers -->
 			<targetLayerPrefix>someprefix</targetLayerPrefix>	<!-- some prefix to use for the target layer names -->
+			
+			<!-- time dimension -->
 			<timeDimension>
 				<startTime>START_YEAR</startTime>
 				<endTime>END_YEAR</endTime>
 			</timeDimension>
+			
 			<baseLayerList>										<!-- Background layers (each background layer should have a valid workspace and layer names -->
 				<baseLayer>
 					<workspace>baselayerWS1</workspace>
