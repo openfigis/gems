@@ -1,5 +1,8 @@
 <configuration>
 
+	<!-- scope -->
+	<scope>DATASET</scope>
+
 	<!-- ============= -->
 	<!--    SETTINGS   -->
 	<!-- ============= -->
