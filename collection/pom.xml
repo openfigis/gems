@@ -10,10 +10,9 @@
 		<version>${gems.version}</version>
 	</parent>
 	
-	<groupId>org.fao.fi</groupId>
 	<artifactId>gems-collection</artifactId>
-	
-	<name>GEMS collection module</name>
+	<name>gems-collection</name>
+	<description>GEMS collection module</description>
 	
 	<dependencies>
 		<dependency>

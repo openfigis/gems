@@ -7,7 +7,8 @@
 	<packaging>pom</packaging>
 	<version>${gems.version}</version>
 	
-	<name>GEMS - GIS Enforcing Metadata and Semantic</name>
+	<name>gems-parent</name>
+	<description>GEMS - GIS Enforcing Metadata and Semantic</description>
 	<url>https://github.com/openfigis/gems</url>
 	
 	<!-- GEMS modules -->
@@ -32,15 +33,20 @@
 		</developer>
 	</developers>
 
+	<!-- PROPERTIES -->
 	<properties>
 		<!-- gems -->
 		<gems.version>1.2-SNAPSHOT</gems.version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		
 		<!-- dependency versions -->
-		<geotoolkit.version>3.21</geotoolkit.version>
+		<version.geotk>3.21</version.geotk>
+		<version.gsman>1.7-SNAPSHOT</version.gsman>
+		<version.gnman>1.0.0</version.gnman>
+		
 	</properties>
 
+	<!-- DEPENDENCIES -->
 	<dependencyManagement>
 		<dependencies>
 			<dependency>
@@ -54,36 +60,36 @@
 			<dependency>
 				<groupId>it.geosolutions</groupId>
 				<artifactId>geoserver-manager</artifactId>
-				<version>1.7-SNAPSHOT</version>
+				<version>${version.gsman}</version>
 			</dependency>
 			
 			<!-- Geonetwork manager -->
 			<dependency>
 				<groupId>it.geosolutions</groupId>
 				<artifactId>geonetwork-manager</artifactId>
-				<version>1.0.0</version>
+				<version>${version.gnman}</version>
 			</dependency>
 
 			<!-- GeoToolKit -->
 			<dependency>
 				<groupId>org.geotoolkit</groupId>
 				<artifactId>geotk-utility</artifactId>
-				<version>${geotoolkit.version}</version>
+				<version>${version.geotk}</version>
 			</dependency>
 			<dependency>
 				<groupId>org.geotoolkit</groupId>
 				<artifactId>geotk-referencing</artifactId>
-				<version>${geotoolkit.version}</version>
+				<version>${version.geotk}</version>
 			</dependency>
 			<dependency>
 				<groupId>org.geotoolkit</groupId>
 				<artifactId>geotk-metadata</artifactId>
-				<version>${geotoolkit.version}</version>
+				<version>${version.geotk}</version>
 			</dependency>
 			<dependency>
 				<groupId>org.geotoolkit.pending</groupId>
 				<artifactId>geotk-shapefile</artifactId>
-				<version>${geotoolkit.version}</version>
+				<version>${version.geotk}</version>
 			</dependency>
 
 			<!-- JTS -->
@@ -153,17 +159,6 @@
 
 	<!-- Repositories -->
 	<repositories>
-		<repository>
-			<id>osgeo</id>
-			<name>Open Source Geospatial Foundation Repository</name>
-			<url>http://repo.opengeo.org</url>
-			<snapshots>
-				<enabled>true</enabled>
-			</snapshots>
-			<releases>
-				<enabled>true</enabled>
-			</releases>
-		</repository>
 
 		<!-- Geotoolkit -->
 		<repository>
@@ -181,9 +176,6 @@
 			<snapshots>
 				<enabled>true</enabled>
 			</snapshots>
-			<releases>
-				<enabled>true</enabled>
-			</releases>
 		</repository>
 	</repositories>
 	

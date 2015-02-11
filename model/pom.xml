@@ -10,17 +10,15 @@
 		<version>${gems.version}</version>
 	</parent>
 	
-	<groupId>org.fao.fi</groupId>
 	<artifactId>gems-model</artifactId>
-	
-	<name>GEMS configuration model</name>
+	<name>gems-model</name>
+	<description>GEMS configuration model</description>
 	
 	<dependencies>
 		<dependency>
 			<groupId>org.slf4j</groupId>
 			<artifactId>slf4j-simple</artifactId>
-			<version>1.5.6</version>
-		</dependency>
+			</dependency>
 	
 		<!-- XStream -->
 		<dependency>

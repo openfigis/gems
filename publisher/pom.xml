@@ -10,10 +10,9 @@
 		<version>${gems.version}</version>
 	</parent>
 	
-	<groupId>org.fao.fi</groupId>
 	<artifactId>gems-publisher</artifactId>
-	
-	<name>GEMS data and metadata publisher</name>
+	<name>gems-publisher</name>
+	<description>GEMS data and metadata publisher</description>
 
 	<dependencies>
 	
@@ -22,6 +21,7 @@
 			<groupId>it.geosolutions</groupId>
 			<artifactId>geoserver-manager</artifactId>
 		</dependency>
+		
 		<!-- Geonetwork manager -->
 		<dependency>
 			<groupId>it.geosolutions</groupId>
