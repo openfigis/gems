@@ -4,11 +4,11 @@ import java.io.File;
 import java.util.EnumSet;
 import java.util.Iterator;
 
+import org.apache.sis.xml.XML;
 import org.fao.fi.gems.GeographicEntityMetadata;
 import org.fao.fi.gems.metaobject.GeographicMetaObject;
 import org.fao.fi.gems.model.settings.metadata.MetadataCatalogueSettings;
 import org.fao.fi.gems.model.settings.publication.PublicationSettings;
-import org.geotoolkit.xml.XML;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -111,7 +111,7 @@ public class MetadataPublisher {
 			icfg.setStyleSheet("_none_");
 			icfg.setValidate(Boolean.FALSE);
 
-			File tmp = File.createTempFile(metadata.getFileIdentifier(), ".xml");
+			File tmp = File.createTempFile(metadata.getMetadataIdentifier().getCode(), ".xml");
 			XML.marshal(metadata, tmp);
 
 			long id = client.insertMetadata(icfg, tmp); // insert metadata
@@ -124,7 +124,7 @@ public class MetadataPublisher {
 			client.setPrivileges(id, pcfg); // set public view privilege
 
 			// metadataURL
-			metadataID = metadata.getFileIdentifier();
+			metadataID = metadata.getMetadataIdentifier().getCode();
 
 		} catch (Exception e) {
 			throw new Exception("Failed to publish metadata", e);

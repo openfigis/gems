@@ -1,5 +1,5 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	
 	<groupId>org.fao.fi</groupId>
@@ -40,7 +40,7 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		
 		<!-- dependency versions -->
-		<version.geotk>3.21</version.geotk>
+		<version.geotk>4.x-SNAPSHOT</version.geotk>
 		<version.gsman>1.7-SNAPSHOT</version.gsman>
 		<version.gnman>1.0.0</version.gnman>
 		
@@ -83,14 +83,15 @@
 			</dependency>
 			<dependency>
 				<groupId>org.geotoolkit</groupId>
-				<artifactId>geotk-metadata</artifactId>
+				<artifactId>geotk-temporal</artifactId>
 				<version>${version.geotk}</version>
 			</dependency>
 			<dependency>
-				<groupId>org.geotoolkit.pending</groupId>
-				<artifactId>geotk-shapefile</artifactId>
+				<groupId>org.geotoolkit</groupId>
+				<artifactId>geotk-metadata</artifactId>
 				<version>${version.geotk}</version>
 			</dependency>
+			
 
 			<!-- JTS -->
 			<dependency>

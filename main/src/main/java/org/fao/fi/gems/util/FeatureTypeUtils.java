@@ -1,6 +1,5 @@
 package org.fao.fi.gems.util;
 
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.sql.Date;
 import java.util.HashMap;
@@ -10,28 +9,17 @@ import java.util.Map;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
+import org.apache.sis.metadata.iso.citation.Citations;
+import org.apache.sis.referencing.CommonCRS;
+import org.apache.sis.referencing.NamedIdentifier;
 import org.fao.fi.gems.entity.EntityCode;
 import org.fao.fi.gems.feature.FeatureTypeProperty;
 import org.fao.fi.gems.model.settings.data.GeographicServerSettings;
-import org.fao.fi.gems.model.settings.data.filter.DataObjectFilter;
 import org.fao.fi.gems.model.settings.data.filter.ExtraDataFilter;
-import org.geotoolkit.data.FeatureCollection;
-import org.geotoolkit.data.FeatureIterator;
-import org.geotoolkit.data.FeatureStore;
-import org.geotoolkit.data.FeatureStoreFinder;
-import org.geotoolkit.data.query.QueryBuilder;
-import org.geotoolkit.data.shapefile.ShapefileDataStoreFactory;
-import org.geotoolkit.parameter.Parameters;
-import org.geotoolkit.referencing.crs.DefaultGeographicCRS;
-import org.geotoolkit.storage.DataStoreException;
 import org.geotoolkit.temporal.object.DefaultInstant;
 import org.geotoolkit.temporal.object.DefaultPeriod;
-import org.geotoolkit.temporal.object.DefaultPosition;
 import org.geotoolkit.temporal.object.DefaultTemporalPrimitive;
-import org.opengis.feature.Feature;
-import org.opengis.feature.type.Name;
-import org.opengis.geometry.BoundingBox;
-import org.opengis.parameter.ParameterValueGroup;
+import org.opengis.referencing.IdentifiedObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
@@ -204,14 +192,27 @@ public final class FeatureTypeUtils {
 					// time extent
 					if(hasTime){
 						//temporal primitive
-						DefaultInstant startInstant = new DefaultInstant(new DefaultPosition(startTime));
+						NamedIdentifier startName = new NamedIdentifier(Citations.ISO, "Beginning");
+						final Map<String, Object> startProperties = new HashMap<>();
+						startProperties.put(IdentifiedObject.NAME_KEY, startName);
+						DefaultInstant startInstant = new DefaultInstant(startProperties, startTime);
+						
 						DefaultInstant endInstant = null;
-						if(endTime != null) endInstant = new DefaultInstant(new DefaultPosition(endTime));
+						if(endTime != null){
+							NamedIdentifier endName = new NamedIdentifier(Citations.ISO, "Ending");
+							final Map<String, Object> endProperties = new HashMap<>();
+							endProperties.put(IdentifiedObject.NAME_KEY, endName);
+							endInstant = new DefaultInstant(endProperties, endTime);
+						}
+						
 						DefaultTemporalPrimitive temporalPrimitive = null;
 						if(endInstant == null || startTime.equals(endTime)){
 							temporalPrimitive = startInstant;
 						}else{
-							temporalPrimitive = new DefaultPeriod(startInstant, endInstant);
+							NamedIdentifier periodName = new NamedIdentifier(Citations.ISO, "Period");
+							final Map<String, Object> periodProperties = new HashMap<>();
+							periodProperties.put(IdentifiedObject.NAME_KEY, periodName);
+							temporalPrimitive = new DefaultPeriod(periodProperties,startInstant, endInstant);
 						}
 						map.put(FeatureTypeProperty.TIME, temporalPrimitive);
 					}
@@ -282,8 +283,8 @@ public final class FeatureTypeUtils {
 						LOGGER.info("max X = "+String.valueOf(bboxMaxX));
 						LOGGER.info("min Y = "+String.valueOf(bboxMinY));
 						LOGGER.info("max Y = "+String.valueOf(bboxMaxY));
-						
-						map.put(FeatureTypeProperty.CRS, DefaultGeographicCRS.WGS84); //TODO in the future we should manage the crs....
+
+						map.put(FeatureTypeProperty.CRS, CommonCRS.WGS84.geographic());
 					}
 				}else{
 					//no feature members
@@ -294,150 +295,6 @@ public final class FeatureTypeUtils {
 		} catch (Exception e) {
 			throw new Exception("Error trying to perform WFS GetFeature request", e);
 		}
-
-		return map;
-	}
-	
-	/**
-	 * 
-	 * @param url
-	 * @return
-	 * @throws DataStoreException 
-	 * @throws MalformedURLException
-	 * 
-	 * @deprecated
-	 */
-	@Deprecated
-	public static Map<FeatureTypeProperty, Object> computeFeatureTypeProperties(String url, double buffer) throws DataStoreException, MalformedURLException {
-	
-		Map<FeatureTypeProperty, Object> map = new HashMap<FeatureTypeProperty, Object>();
-		
-		URL pURL = new URL(url);
-		final ParameterValueGroup params = ShapefileDataStoreFactory.PARAMETERS_DESCRIPTOR.createValue();
-	    Parameters.getOrCreate(ShapefileDataStoreFactory.URLP, params).setValue(pURL);
-	    final FeatureStore shpStore = FeatureStoreFinder.open(params);
-		Name pName = shpStore.getNames().iterator().next();
-		FeatureCollection<Feature> pFC = shpStore.createSession(true).getFeatureCollection(QueryBuilder.all(pName));
-		
-		//optimize bbox
-		// bbox coordinates
-		double bboxMinX = 0;
-		double bboxMinY = 0;
-		double bboxMaxX = 0;
-		double bboxMaxY = 0;
-		
-		double maxNegX = -180;
-		double maxPosX = 180;
-		
-		//first bbox calculation
-		Feature f1 = pFC.iterator().next();
-		bboxMinX = f1.getBounds().getMinX();
-		bboxMinY = f1.getBounds().getMinY();
-		bboxMaxX = f1.getBounds().getMaxX();
-		bboxMaxY = f1.getBounds().getMaxY();
-		
-		FeatureIterator<Feature> it = pFC.iterator();
-		try{
-			while(it.hasNext()){
-				Feature f = it.next();
-				BoundingBox env = f.getBounds();
-				
-				double minX = env.getMinX();
-				double minY = env.getMinY();
-				double maxX = env.getMaxX();
-				double maxY = env.getMaxY();
-
-				// classic bbox expansion rule
-				if (minX < bboxMinX)
-					bboxMinX = minX;
-				if (minY < bboxMinY)
-					bboxMinY = minY;
-				if (maxX > bboxMaxX)
-					bboxMaxX = maxX;
-				if (maxY > bboxMaxY)
-					bboxMaxY = maxY;
-
-				if (maxX > maxNegX & maxX < 0)
-					maxNegX = maxX;
-				if (minX < maxPosX & minX > 0)
-					maxPosX = minX;	
-			}
-		}finally{
-			it.close();
-			shpStore.dispose();
-		}
-		
-		// final adjustment
-		// ***************
-		// in case maxNegX & maxPosX unchanged
-		if (maxNegX == -180)
-			maxNegX = -90;
-		if (maxPosX == 180)
-			maxPosX = 90;
-
-		// for date-limit geographic distributions
-		if (maxNegX < -90 & maxPosX > 90) {
-			bboxMinX = maxPosX;
-			bboxMaxX = 360 - Math.abs(maxNegX);
-		}
-
-		// control for globally distributed layers
-		if (bboxMinX < -175.0 && bboxMaxX > 175.0) {
-			bboxMinX = -180.0;
-			bboxMaxX = 180.0;
-			bboxMinY = -90.0;
-			bboxMaxY = 90.0;
-		}
-
-		// control for overlimit latitude
-		if (bboxMinY < -90)
-			bboxMinY = -90;
-		if (bboxMaxY > 90)
-			bboxMaxY = 90;
-
-		// set null if the connection was lost (coords = 0)
-		// the main app will have to recalculate the bbox until
-		// while bbox == null
-		Envelope bounds = null;
-		if (!(bboxMinX == 0 & bboxMaxX == 0 & bboxMinY == 0 & bboxMaxY == 0)) {
-
-			//actual bbox
-			bounds = new Envelope(bboxMinX, bboxMaxX, bboxMinY, bboxMaxY);
-			map.put(FeatureTypeProperty.BBOX_ACTUAL, bounds);
-
-			LOGGER.info("Actual Bounding Box");
-			LOGGER.info("min X = "+String.valueOf(bboxMinX));
-			LOGGER.info("max X = "+String.valueOf(bboxMaxX));
-			LOGGER.info("min Y = "+String.valueOf(bboxMinY));
-			LOGGER.info("max Y = "+String.valueOf(bboxMaxY));
-			
-			// Preview bbox (apply buffer)
-			if (!(bboxMinX < -180 + buffer)
-					&& !(bboxMaxX > 180 - buffer)) {
-				bboxMinX = bboxMinX - buffer;
-				bboxMaxX = bboxMaxX + buffer;
-			}
-
-			if (!(bboxMinY < -90 + buffer)) {
-				bboxMinY = bboxMinY - buffer;
-			}
-			if (!(bboxMaxY > 90 - buffer)) {
-				bboxMaxY = bboxMaxY + buffer;
-
-			}
-			bounds = new Envelope(bboxMinX, bboxMaxX, bboxMinY, bboxMaxY);
-			map.put(FeatureTypeProperty.BBOX_PREVIEW, bounds);
-			LOGGER.info("Preview Bounding Box");
-			LOGGER.info("min X = "+String.valueOf(bboxMinX));
-			LOGGER.info("max X = "+String.valueOf(bboxMaxX));
-			LOGGER.info("min Y = "+String.valueOf(bboxMinY));
-			LOGGER.info("max Y = "+String.valueOf(bboxMaxY));
-
-		}
-		
-		map.put(FeatureTypeProperty.CRS, pFC.getFeatureType().getCoordinateReferenceSystem());
-		map.put(FeatureTypeProperty.COUNT, pFC.size());
-		
 
 		return map;
 	}

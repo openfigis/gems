@@ -27,11 +27,11 @@
 		</dependency>
 		<dependency>
 			<groupId>org.geotoolkit</groupId>
-			<artifactId>geotk-metadata</artifactId>
+			<artifactId>geotk-temporal</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>org.geotoolkit.pending</groupId>
-			<artifactId>geotk-shapefile</artifactId>
+			<groupId>org.geotoolkit</groupId>
+			<artifactId>geotk-metadata</artifactId>
 		</dependency>
 		
 		<!-- JTS -->

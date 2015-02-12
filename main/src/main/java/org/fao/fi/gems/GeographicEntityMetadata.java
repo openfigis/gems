@@ -2,6 +2,7 @@ package org.fao.fi.gems;
 
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.nio.charset.Charset;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -16,6 +17,34 @@ import java.util.Map.Entry;
 import java.util.Set;
 import java.util.UUID;
 
+import org.apache.sis.internal.jaxb.gmx.Anchor;
+import org.apache.sis.metadata.iso.DefaultIdentifier;
+import org.apache.sis.metadata.iso.DefaultMetadata;
+import org.apache.sis.metadata.iso.DefaultMetadataScope;
+import org.apache.sis.metadata.iso.citation.DefaultAddress;
+import org.apache.sis.metadata.iso.citation.DefaultCitation;
+import org.apache.sis.metadata.iso.citation.DefaultCitationDate;
+import org.apache.sis.metadata.iso.citation.DefaultContact;
+import org.apache.sis.metadata.iso.citation.DefaultOnlineResource;
+import org.apache.sis.metadata.iso.citation.DefaultResponsibleParty;
+import org.apache.sis.metadata.iso.citation.DefaultTelephone;
+import org.apache.sis.metadata.iso.constraint.DefaultLegalConstraints;
+import org.apache.sis.metadata.iso.distribution.DefaultDigitalTransferOptions;
+import org.apache.sis.metadata.iso.distribution.DefaultDistribution;
+import org.apache.sis.metadata.iso.extent.DefaultExtent;
+import org.apache.sis.metadata.iso.extent.DefaultGeographicBoundingBox;
+import org.apache.sis.metadata.iso.extent.DefaultTemporalExtent;
+import org.apache.sis.metadata.iso.identification.DefaultBrowseGraphic;
+import org.apache.sis.metadata.iso.identification.DefaultDataIdentification;
+import org.apache.sis.metadata.iso.identification.DefaultKeywords;
+import org.apache.sis.metadata.iso.lineage.DefaultLineage;
+import org.apache.sis.metadata.iso.maintenance.DefaultMaintenanceInformation;
+import org.apache.sis.metadata.iso.maintenance.DefaultScope;
+import org.apache.sis.metadata.iso.quality.DefaultDataQuality;
+import org.apache.sis.metadata.iso.spatial.DefaultGeometricObjects;
+import org.apache.sis.metadata.iso.spatial.DefaultVectorSpatialRepresentation;
+import org.apache.sis.util.iso.SimpleInternationalString;
+
 import org.fao.fi.gems.entity.EntityAuthority;
 import org.fao.fi.gems.metaobject.FigisGeographicMetaObjectImpl;
 import org.fao.fi.gems.metaobject.GeographicMetaObject;
@@ -24,32 +53,7 @@ import org.fao.fi.gems.model.content.MetadataBiblioRef;
 import org.fao.fi.gems.model.content.MetadataContact;
 import org.fao.fi.gems.model.content.MetadataThesaurus;
 import org.fao.fi.gems.util.Utils;
-import org.geotoolkit.internal.jaxb.gmx.Anchor;
-import org.geotoolkit.metadata.iso.DefaultIdentifier;
-import org.geotoolkit.metadata.iso.DefaultMetadata;
-import org.geotoolkit.metadata.iso.citation.DefaultAddress;
-import org.geotoolkit.metadata.iso.citation.DefaultCitation;
-import org.geotoolkit.metadata.iso.citation.DefaultCitationDate;
-import org.geotoolkit.metadata.iso.citation.DefaultContact;
-import org.geotoolkit.metadata.iso.citation.DefaultOnlineResource;
-import org.geotoolkit.metadata.iso.citation.DefaultResponsibleParty;
-import org.geotoolkit.metadata.iso.citation.DefaultTelephone;
-import org.geotoolkit.metadata.iso.constraint.DefaultLegalConstraints;
-import org.geotoolkit.metadata.iso.distribution.DefaultDigitalTransferOptions;
-import org.geotoolkit.metadata.iso.distribution.DefaultDistribution;
-import org.geotoolkit.metadata.iso.extent.DefaultExtent;
-import org.geotoolkit.metadata.iso.extent.DefaultGeographicBoundingBox;
-import org.geotoolkit.metadata.iso.extent.DefaultTemporalExtent;
-import org.geotoolkit.metadata.iso.identification.DefaultBrowseGraphic;
-import org.geotoolkit.metadata.iso.identification.DefaultDataIdentification;
-import org.geotoolkit.metadata.iso.identification.DefaultKeywords;
-import org.geotoolkit.metadata.iso.lineage.DefaultLineage;
-import org.geotoolkit.metadata.iso.maintenance.DefaultMaintenanceInformation;
-import org.geotoolkit.metadata.iso.quality.DefaultDataQuality;
-import org.geotoolkit.metadata.iso.quality.DefaultScope;
-import org.geotoolkit.metadata.iso.spatial.DefaultGeometricObjects;
-import org.geotoolkit.metadata.iso.spatial.DefaultVectorSpatialRepresentation;
-import org.geotoolkit.util.SimpleInternationalString;
+
 import org.opengis.metadata.citation.DateType;
 import org.opengis.metadata.citation.OnLineFunction;
 import org.opengis.metadata.citation.OnlineResource;
@@ -57,10 +61,10 @@ import org.opengis.metadata.citation.PresentationForm;
 import org.opengis.metadata.citation.ResponsibleParty;
 import org.opengis.metadata.citation.Role;
 import org.opengis.metadata.citation.Telephone;
+import org.opengis.metadata.citation.TelephoneType;
 import org.opengis.metadata.constraint.Constraints;
 import org.opengis.metadata.constraint.Restriction;
 import org.opengis.metadata.distribution.DigitalTransferOptions;
-import org.opengis.metadata.identification.CharacterSet;
 import org.opengis.metadata.identification.KeywordType;
 import org.opengis.metadata.identification.TopicCategory;
 import org.opengis.metadata.maintenance.MaintenanceFrequency;
@@ -68,6 +72,7 @@ import org.opengis.metadata.maintenance.ScopeCode;
 import org.opengis.metadata.spatial.GeometricObjectType;
 import org.opengis.metadata.spatial.TopologyLevel;
 import org.opengis.temporal.TemporalPrimitive;
+
 import com.vividsolutions.jts.geom.Envelope;
 
 /**
@@ -78,9 +83,10 @@ import com.vividsolutions.jts.geom.Envelope;
  * a domain object such as SPECIES, RFB, VME
  * 
  * 
- * @author eblondel
+ * @author Emmanuel Blondel <emmanuel.blondel@fao.org>
  * 
  */
+@SuppressWarnings("deprecation")
 public class GeographicEntityMetadata extends DefaultMetadata {
 	
 	private static final String INSPIRE_THESAURUS_CITATION = "GEMET - INSPIRE themes, version 1.0";
@@ -119,16 +125,29 @@ public class GeographicEntityMetadata extends DefaultMetadata {
 		this.lastVersion = version;
 
 		// build the metadata
-		this.setIdentifier(object.metaIdentifier()); // identifier
-		this.setDateStamp(this.lastRevisionDate);
+		//-------------------
+		// identifier
+		this.setIdentifier(object.metaIdentifier()); 
+		
+		//citation date
+		DefaultCitationDate citationDate = new DefaultCitationDate();
+		citationDate.setDateType(DateType.REVISION);
+		citationDate.setDate(this.lastRevisionDate);
+		this.setDateInfo(Arrays.asList(citationDate));
 
-		this.setLocales(Arrays.asList(Locale.ENGLISH)); // Locales
-		this.setLanguage(Locale.ENGLISH); // Language
-		this.setCharacterSet(CharacterSet.UTF_8); // Encoding
+		this.setLanguages(Arrays.asList(Locale.ENGLISH));
+		this.setCharacterSets(Arrays.asList(Charset.forName("UTF-8")));
 
-		this.setMetadataStandardName("ISO 19115:2003/19139"); // standard
-		this.setMetadataStandardVersion("1.0"); // version
-		this.getHierarchyLevels().add(ScopeCode.DATASET); // hierarchical level
+		//metadata standard
+		DefaultCitation mdCitation = new DefaultCitation();
+		mdCitation.setTitle(new SimpleInternationalString("ISO 19115:2003/19139"));
+		mdCitation.setEdition(new SimpleInternationalString("1.0"));
+		this.getMetadataStandards().add(mdCitation);
+		
+		// hierarchical level
+		DefaultMetadataScope mdScope = new DefaultMetadataScope();
+		mdScope.setResourceScope(ScopeCode.DATASET);
+		this.getMetadataScopes().add(mdScope);
 
 		this.setOrganizationContacts(); // organization contacts
 		this.setIndividualContacts(); // individual contacts
@@ -167,13 +186,18 @@ public class GeographicEntityMetadata extends DefaultMetadata {
 	 * @param fileIdentifier
 	 */
 	private void setIdentifier(String fileIdentifier) {
+		
+		String identifier = null;
 		if (fileIdentifier != null) {
-			this.setFileIdentifier(fileIdentifier);
+			identifier = fileIdentifier;
 		} else {
 			UUID uuid = UUID.randomUUID();
-			String fileId = uuid.toString();
-			this.setFileIdentifier(fileId);
+			identifier = uuid.toString();
 		}
+		
+		DefaultIdentifier id = new DefaultIdentifier();
+		id.setCode(identifier);
+		this.setMetadataIdentifier(id);
 
 	}
 
@@ -188,24 +212,25 @@ public class GeographicEntityMetadata extends DefaultMetadata {
 		
 		for(MetadataContact contact : object.template().getOrganizationContacts()){
 			
-			final DefaultResponsibleParty rp = new DefaultResponsibleParty();
+			final DefaultResponsibleParty rp = new DefaultResponsibleParty(); 
 			
 			// contact info
 			final DefaultContact contactORG = new DefaultContact();
 			final DefaultOnlineResource resourceORG = new DefaultOnlineResource();
-			resourceORG.setName(contact.getName());
+			resourceORG.setName(new SimpleInternationalString(contact.getName()));
 			resourceORG.setLinkage(new URI(contact.getUrl()));
-			contactORG.setOnlineResource(resourceORG);
-
+			contactORG.setOnlineResources(Arrays.asList(resourceORG));
+			
 			// Address
 			final DefaultAddress addressORG = new DefaultAddress();
-			addressORG.getDeliveryPoints().add(contact.getAddress()); // deliveryPoint
+			addressORG.getDeliveryPoints().add(new SimpleInternationalString(contact.getAddress())); // deliveryPoint
 			addressORG.setCity(new SimpleInternationalString(contact.getCity())); // city
 			addressORG.setPostalCode(contact.getPostalCode()); // postal code
 			addressORG.setCountry(new SimpleInternationalString(contact.getCountry())); // country
-			contactORG.setAddress(addressORG);
+			contactORG.setAddresses(Arrays.asList(addressORG));
 
 			rp.setContactInfo(contactORG);
+			
 			rp.setOrganisationName(new SimpleInternationalString(contact.getOrgName()));
 			rp.setRole(Role.valueOf(contact.getRole()));
 			contacts.add(rp);
@@ -235,26 +260,26 @@ public class GeographicEntityMetadata extends DefaultMetadata {
 			// contact info
 			final DefaultContact contact = new DefaultContact();
 			final DefaultOnlineResource resource = new DefaultOnlineResource();
-			resource.setName(iContact.getName());
+			resource.setName(new SimpleInternationalString(iContact.getName()));
 			resource.setLinkage(new URI(iContact.getUrl()));
 			contact.setOnlineResource(resource);
 			
 			// telephone
-			DefaultTelephone tel = null;
+			List<Telephone> tels = new ArrayList<Telephone>();
 			if(iContact.getMainPhone() != null){
-				if(tel == null){
-					tel = new DefaultTelephone();
-				}
-				tel.getVoices().add(iContact.getMainPhone());
+				DefaultTelephone tel = new DefaultTelephone();
+				tel.setNumber(iContact.getMainPhone());
+				tel.setNumberType(TelephoneType.VOICE);
+				tels.add(tel);
 			}
 			if(iContact.getFax() != null){
-				if(tel == null){
-					tel = new DefaultTelephone();
-				}
-				tel.getVoices().add(iContact.getFax());
+				DefaultTelephone tel = new DefaultTelephone();
+				tel.setNumber(iContact.getMainPhone());
+				tel.setNumberType(TelephoneType.VOICE);
+				tels.add(tel);
 			}
-			if(tel != null){
-				contact.setPhone((Telephone) tel);
+			if(tels.size() > 0){
+				contact.setPhones(tels);
 			}
 
 			// Address
@@ -263,7 +288,7 @@ public class GeographicEntityMetadata extends DefaultMetadata {
 				if(address == null){
 					address = new DefaultAddress();
 				}
-				address.getDeliveryPoints().add(iContact.getAddress());
+				address.getDeliveryPoints().add(new SimpleInternationalString(iContact.getAddress()));
 				address.setCity(new SimpleInternationalString(iContact.getCity()));
 				address.setPostalCode(iContact.getPostalCode());
 				address.setCountry(new SimpleInternationalString(iContact.getCountry()));
@@ -346,7 +371,7 @@ public class GeographicEntityMetadata extends DefaultMetadata {
 		// Legal constraints
 		DefaultLegalConstraints legalConstraints = new DefaultLegalConstraints();
 		legalConstraints.setUseConstraints(Arrays.asList(Restriction.COPYRIGHT,
-				Restriction.LICENSE));
+				Restriction.LICENCE));
 		
 		//prepare bibliography item
 		MetadataBiblioRef mdBiblioRef = object.template().getBiblioRef();
@@ -448,7 +473,7 @@ public class GeographicEntityMetadata extends DefaultMetadata {
 			// "&srs="+object.getGisProperties().get(GisProperty.PROJECTION)+
 			// "&styles="+object.getGisProperties().get(GisProperty.STYLE)));
 			wmsResource.setProtocol("OGC:WMS-1.3.0-http-get-map");
-			wmsResource.setName(object.targetLayerName());
+			wmsResource.setName(new SimpleInternationalString(object.targetLayerName()));
 			wmsResource.setDescription(new SimpleInternationalString(object.metaTitle()));
 			resources.add(wmsResource);
 
@@ -461,7 +486,7 @@ public class GeographicEntityMetadata extends DefaultMetadata {
 					+ "/ows?service=WFS&request=GetFeature&version=1.0.0"
 					+ "&typeName=" + object.targetLayerName()));
 			wfsResource1.setProtocol("OGC:WFS-1.0.0-http-get-feature");
-			wfsResource1.setName(object.targetLayerName());
+			wfsResource1.setName(new SimpleInternationalString(object.targetLayerName()));
 			wfsResource1.setDescription(new SimpleInternationalString(
 					"GIS data (WFS - GML)"));
 			wfsResource1.setFunction(OnLineFunction.DOWNLOAD);
@@ -481,7 +506,7 @@ public class GeographicEntityMetadata extends DefaultMetadata {
 					+ shpFileName + ".zip"));
 
 			wfsResource2.setProtocol("OGC:WFS-1.0.0-http-get-feature");
-			wfsResource2.setName(object.targetLayerName());
+			wfsResource2.setName(new SimpleInternationalString(object.targetLayerName()));
 			wfsResource2.setDescription(new SimpleInternationalString(
 					"GIS data (WFS - Shapefile)"));
 			wfsResource2.setFunction(OnLineFunction.DOWNLOAD);
@@ -496,7 +521,7 @@ public class GeographicEntityMetadata extends DefaultMetadata {
 			xmlResource.setLinkage(new URI(Utils.getXMLMetadataURL(
 					object.config().getSettings().getMetadataCatalogueSettings().getUrl(), this.getFileIdentifier())));
 			xmlResource.setProtocol("WWW:LINK-1.0-http--link");
-			xmlResource.setName("XML");
+			xmlResource.setName(new SimpleInternationalString("XML"));
 			xmlResource.setDescription(new SimpleInternationalString(
 					"metadata (XML)"));
 			resources.add(xmlResource);
@@ -505,7 +530,7 @@ public class GeographicEntityMetadata extends DefaultMetadata {
 			Set<DigitalTransferOptions> options = new HashSet<DigitalTransferOptions>();
 			options.add(option);
 			distribution.setTransferOptions(options);
-			this.setDistributionInfo(distribution);
+			this.setDistributionInfo(Arrays.asList(distribution));
 
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -679,7 +704,7 @@ public class GeographicEntityMetadata extends DefaultMetadata {
 
 		// character set
 		// -------------
-		identification.getCharacterSets().add(CharacterSet.UTF_8);
+		identification.getCharacterSets().add(Charset.forName("UTF-8"));
 
 		// topic category
 		// --------------

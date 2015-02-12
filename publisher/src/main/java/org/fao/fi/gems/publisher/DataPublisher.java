@@ -32,6 +32,7 @@ import org.fao.fi.gems.metaobject.GeographicMetaObjectProperty;
 import org.fao.fi.gems.model.settings.data.GeoMasterInstance;
 import org.fao.fi.gems.model.settings.data.GeoWorkerInstance;
 import org.fao.fi.gems.model.settings.data.GeographicServerSettings;
+import org.fao.fi.gems.model.settings.data.GemsMethod;
 import org.fao.fi.gems.model.settings.data.dimension.TimeDimension;
 import org.fao.fi.gems.model.settings.data.filter.DataObjectFilter;
 import org.fao.fi.gems.model.settings.data.filter.ExtraDataFilter;
@@ -187,7 +188,7 @@ public class DataPublisher {
 	 * @param object
 	 * @throws IOException 
 	 */
-	public boolean publishLayer(GeographicMetaObject object, String style, PublicationMethod method, String shapefile) throws IOException {
+	public boolean publishLayer(GeographicMetaObject object, String style, GemsMethod method, String shapefile) throws IOException {
 
 		
 		// Using geoserver-manager
@@ -226,7 +227,7 @@ public class DataPublisher {
 		}
 		
 		// virtual table (sql view)
-		if(method == PublicationMethod.SQLVIEW){
+		if(method == GemsMethod.SQLVIEW){
 			
 			//determine the geometry name
 			String geometryName = "the_geom";
@@ -341,7 +342,7 @@ public class DataPublisher {
 		
 		// publication
 		boolean publish = false;
-		if(method == PublicationMethod.SQLVIEW){
+		if(method == GemsMethod.SQLVIEW){
 			publish = GSPublisher.publishDBLayer(trgWorkspace, trgDatastore, fte, layerEncoder);
 			
 		}

@@ -5,6 +5,7 @@ import java.net.MalformedURLException;
 import org.fao.fi.gems.metaobject.GeographicMetaObject;
 import org.fao.fi.gems.model.GemsConfig;
 import org.fao.fi.gems.model.settings.Settings;
+import org.fao.fi.gems.model.settings.data.GemsMethod;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -88,7 +89,7 @@ public class Publisher {
 						this.getDataPublisher().publishLayer(
 								object,
 								style,
-								PublicationMethod.valueOf(this.settings.getGeographicServerSettings().getMethod()),
+								GemsMethod.valueOf(this.settings.getGeographicServerSettings().getMethod()),
 								this.settings.getGeographicServerSettings().getShapefileURL()
 								);
 						LOGGER.info("Successfull layer update");
@@ -99,7 +100,7 @@ public class Publisher {
 					this.getDataPublisher().publishLayer(
 							object,
 							style,
-							PublicationMethod.valueOf(this.settings.getGeographicServerSettings().getMethod()),
+							GemsMethod.valueOf(this.settings.getGeographicServerSettings().getMethod()),
 							this.settings.getGeographicServerSettings().getShapefileURL());
 					LOGGER.info("Successfull layer publication");
 		
@@ -235,7 +236,7 @@ public class Publisher {
 					this.getDataPublisher().publishLayer(
 							object,
 							style,
-							PublicationMethod.valueOf(this.settings.getGeographicServerSettings().getMethod()),
+							GemsMethod.valueOf(this.settings.getGeographicServerSettings().getMethod()),
 							this.settings.getGeographicServerSettings().getShapefileURL());
 					LOGGER.info("Successfull layer unpublication roll-back");
 					

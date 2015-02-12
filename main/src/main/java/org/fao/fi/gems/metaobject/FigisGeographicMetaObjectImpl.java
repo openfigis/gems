@@ -5,11 +5,12 @@ import java.net.URISyntaxException;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.sis.metadata.iso.extent.DefaultTemporalExtent;
 import org.fao.fi.gems.entity.GeographicEntity;
 import org.fao.fi.gems.entity.FigisGeographicEntityImpl;
 import org.fao.fi.gems.feature.FeatureTypeProperty;
 import org.fao.fi.gems.model.GemsConfig;
-import org.geotoolkit.metadata.iso.extent.DefaultTemporalExtent;
+
 import com.vividsolutions.jts.geom.Envelope;
 
 /**

@@ -2,13 +2,13 @@ package org.fao.fi.gems.util;
 
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
+
+import org.apache.sis.xml.Namespaces;
 
 import org.fao.fi.gems.entity.EntityCode;
 import org.fao.fi.gems.entity.GeographicEntity;
 import org.fao.fi.gems.model.GemsConfig;
 import org.fao.fi.gems.model.content.MetadataContact;
-import org.geotoolkit.xml.Namespaces;
 
 public final class Utils {
 
