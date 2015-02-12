@@ -9,17 +9,17 @@ import java.util.Map;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
+import org.apache.sis.internal.util.TemporalUtilities;
 import org.apache.sis.metadata.iso.citation.Citations;
 import org.apache.sis.referencing.CommonCRS;
 import org.apache.sis.referencing.NamedIdentifier;
+import org.apache.sis.xml.IdentifiedObject;
+import org.apache.sis.xml.IdentifierSpace;
 import org.fao.fi.gems.entity.EntityCode;
 import org.fao.fi.gems.feature.FeatureTypeProperty;
 import org.fao.fi.gems.model.settings.data.GeographicServerSettings;
 import org.fao.fi.gems.model.settings.data.filter.ExtraDataFilter;
-import org.geotoolkit.temporal.object.DefaultInstant;
-import org.geotoolkit.temporal.object.DefaultPeriod;
-import org.geotoolkit.temporal.object.DefaultTemporalPrimitive;
-import org.opengis.referencing.IdentifiedObject;
+import org.opengis.temporal.TemporalPrimitive;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
@@ -192,28 +192,7 @@ public final class FeatureTypeUtils {
 					// time extent
 					if(hasTime){
 						//temporal primitive
-						NamedIdentifier startName = new NamedIdentifier(Citations.ISO, "Beginning");
-						final Map<String, Object> startProperties = new HashMap<>();
-						startProperties.put(IdentifiedObject.NAME_KEY, startName);
-						DefaultInstant startInstant = new DefaultInstant(startProperties, startTime);
-						
-						DefaultInstant endInstant = null;
-						if(endTime != null){
-							NamedIdentifier endName = new NamedIdentifier(Citations.ISO, "Ending");
-							final Map<String, Object> endProperties = new HashMap<>();
-							endProperties.put(IdentifiedObject.NAME_KEY, endName);
-							endInstant = new DefaultInstant(endProperties, endTime);
-						}
-						
-						DefaultTemporalPrimitive temporalPrimitive = null;
-						if(endInstant == null || startTime.equals(endTime)){
-							temporalPrimitive = startInstant;
-						}else{
-							NamedIdentifier periodName = new NamedIdentifier(Citations.ISO, "Period");
-							final Map<String, Object> periodProperties = new HashMap<>();
-							periodProperties.put(IdentifiedObject.NAME_KEY, periodName);
-							temporalPrimitive = new DefaultPeriod(periodProperties,startInstant, endInstant);
-						}
+						TemporalPrimitive temporalPrimitive = TemporalUtilities.createPeriod(startTime,endTime);
 						map.put(FeatureTypeProperty.TIME, temporalPrimitive);
 					}
 
@@ -293,6 +272,7 @@ public final class FeatureTypeUtils {
 				}
 			}
 		} catch (Exception e) {
+			LOGGER.info(e.getMessage());
 			throw new Exception("Error trying to perform WFS GetFeature request", e);
 		}
 
