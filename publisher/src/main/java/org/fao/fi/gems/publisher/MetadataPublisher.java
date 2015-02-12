@@ -1,8 +1,16 @@
 package org.fao.fi.gems.publisher;
 
 import java.io.File;
+import java.io.FileOutputStream;
 import java.util.EnumSet;
+import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Locale;
+import java.util.Map;
+import java.util.TimeZone;
+
+import javax.xml.transform.Result;
+import javax.xml.transform.stream.StreamResult;
 
 import org.apache.sis.xml.XML;
 import org.fao.fi.gems.GeographicEntityMetadata;
@@ -112,8 +120,14 @@ public class MetadataPublisher {
 			icfg.setValidate(Boolean.FALSE);
 
 			File tmp = File.createTempFile(metadata.getMetadataIdentifier().getCode(), ".xml");
-			XML.marshal(metadata, tmp);
-
+			Result out = new StreamResult(tmp);
+			
+			Map<String,Object> properties = new HashMap<>();
+			properties.put(XML.STRING_SUBSTITUTES, new String[] {"filename","mimetype"});
+			properties.put(XML.LOCALE, Locale.ENGLISH);
+			properties.put(XML.TIMEZONE, TimeZone.getDefault());
+			XML.marshal(metadata, out, properties);
+			
 			long id = client.insertMetadata(icfg, tmp); // insert metadata
 			tmp.delete(); // delete metadata file
 
