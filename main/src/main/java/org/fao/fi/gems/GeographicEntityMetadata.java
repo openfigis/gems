@@ -44,7 +44,6 @@ import org.apache.sis.metadata.iso.quality.DefaultDataQuality;
 import org.apache.sis.metadata.iso.spatial.DefaultGeometricObjects;
 import org.apache.sis.metadata.iso.spatial.DefaultVectorSpatialRepresentation;
 import org.apache.sis.util.iso.SimpleInternationalString;
-
 import org.fao.fi.gems.entity.EntityAuthority;
 import org.fao.fi.gems.metaobject.FigisGeographicMetaObjectImpl;
 import org.fao.fi.gems.metaobject.GeographicMetaObject;
@@ -53,7 +52,6 @@ import org.fao.fi.gems.model.content.MetadataBiblioRef;
 import org.fao.fi.gems.model.content.MetadataContact;
 import org.fao.fi.gems.model.content.MetadataThesaurus;
 import org.fao.fi.gems.util.Utils;
-
 import org.opengis.metadata.citation.DateType;
 import org.opengis.metadata.citation.OnLineFunction;
 import org.opengis.metadata.citation.OnlineResource;
@@ -274,8 +272,8 @@ public class GeographicEntityMetadata extends DefaultMetadata {
 			}
 			if(iContact.getFax() != null){
 				DefaultTelephone tel = new DefaultTelephone();
-				tel.setNumber(iContact.getMainPhone());
-				tel.setNumberType(TelephoneType.VOICE);
+				tel.setNumber(iContact.getFax());
+				tel.setNumberType(TelephoneType.FACSIMILE);
 				tels.add(tel);
 			}
 			if(tels.size() > 0){
