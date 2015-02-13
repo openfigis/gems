@@ -20,9 +20,6 @@ import org.fao.fi.gems.metaobject.GeographicMetaObjectProperty;
 import org.fao.fi.gems.model.GemsConfig;
 import org.fao.fi.gems.model.settings.data.filter.DataObjectFilter;
 import org.fao.fi.gems.util.Utils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
@@ -35,8 +32,6 @@ import com.google.gson.stream.JsonReader;
  *
  */
 public class EezCodelistParser implements CodelistParser{
-	
-	private static Logger LOGGER = LoggerFactory.getLogger(EezCodelistParser.class);
 
 	public enum EezProperty implements GeographicMetaObjectProperty{
 		

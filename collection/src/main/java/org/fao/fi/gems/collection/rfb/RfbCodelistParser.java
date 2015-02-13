@@ -23,16 +23,12 @@ import org.fao.fi.gems.metaobject.GeographicMetaObjectProperty;
 import org.fao.fi.gems.model.GemsConfig;
 import org.fao.fi.gems.model.settings.data.filter.DataObjectFilter;
 import org.fao.fi.gems.util.Utils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 public class RfbCodelistParser implements CodelistParser{
-
-	private static Logger LOGGER = LoggerFactory.getLogger(RfbCodelistParser.class);
 	
 	public enum RfbProperty implements GeographicMetaObjectProperty{
 		

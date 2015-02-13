@@ -219,7 +219,7 @@ public class WfsFeatureClient extends FeatureClientImpl{
 	 * @return
 	 * @throws Exception
 	 */
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	private List<Feature> getFeatures(FeatureType type) throws Exception{
 		
 		List<Feature> features;
