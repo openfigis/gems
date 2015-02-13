@@ -118,16 +118,15 @@ public class Gems {
 							LOGGER.info("Failed to calculate geoproperties at attempt "+i);
 						}finally{
 							if(geoproperties != null){
+								featureCount = (Integer) geoproperties.get(FeatureTypeProperty.COUNT);
 								break;
 							}
 						}
 						i++;
 					}
-					if(geoproperties == null){
+					
+					if(geoproperties == null || featureCount == 0){
 						continue;
-					}else{	
-						featureCount = (Integer) geoproperties.get(FeatureTypeProperty.COUNT);
-						if(featureCount == 0) continue;
 					}
 				}
 					
