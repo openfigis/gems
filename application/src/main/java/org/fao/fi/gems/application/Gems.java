@@ -10,6 +10,8 @@ import java.util.Set;
 
 import org.fao.fi.gems.codelist.CodelistParser;
 import org.fao.fi.gems.feature.FeatureTypeProperty;
+import org.fao.fi.gems.feature.FeatureUtils;
+import org.fao.fi.gems.feature.WfsFeatureClient;
 import org.fao.fi.gems.entity.EntityAddin;
 import org.fao.fi.gems.entity.FigisGeographicEntityImpl;
 import org.fao.fi.gems.entity.GeographicEntity;
@@ -20,8 +22,8 @@ import org.fao.fi.gems.metaobject.GeographicMetaObjectProperty;
 import org.fao.fi.gems.model.GemsConfig;
 import org.fao.fi.gems.model.settings.data.GeoWorkerInstance;
 import org.fao.fi.gems.publisher.Publisher;
-import org.fao.fi.gems.util.FeatureTypeUtils;
 import org.fao.fi.gems.util.Utils;
+import org.opengis.feature.Feature;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -37,7 +39,7 @@ public class Gems {
 	
 	
 	/**
-	 * Main
+	 * Main Gems application
 	 * 
 	 * @param args
 	 * @throws Exception
@@ -105,11 +107,13 @@ public class Gems {
 					while (geoproperties == null && i <= 3) {
 						try{
 							LOGGER.info("Calculating geoproperties - Attempt "+i);
-							geoproperties = FeatureTypeUtils
-									.computeFeatureTypeProperties(
-											config.getSettings().getGeographicServerSettings(),
-											entity.codeStack(),
-											config.getSettings().getPublicationSettings().getBuffer());
+							
+							WfsFeatureClient wfs = new WfsFeatureClient(config, entity.codeStack());
+							List<Feature> features = wfs.features();
+							geoproperties = FeatureUtils.computeFeatureTypeProperties(
+												features, config.getSettings().getPublicationSettings().getBuffer(),
+												config.getSettings().getGeographicServerSettings().getTimeDimension());
+						
 						}catch(Exception e){
 							LOGGER.info("Failed to calculate geoproperties at attempt "+i);
 						}finally{

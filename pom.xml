@@ -15,6 +15,7 @@
 	<modules>
 		<module>main</module>
 		<module>model</module>
+		<module>feature</module>
 		<module>publisher</module>
 		<module>collection</module>
 		<module>application</module>
@@ -43,6 +44,7 @@
 		<version.geotk>4.x-SNAPSHOT</version.geotk>
 		<version.gsman>1.7-SNAPSHOT</version.gsman>
 		<version.gnman>1.0.0</version.gnman>
+		<version.jersey>2.13</version.jersey>
 		
 	</properties>
 
@@ -73,25 +75,43 @@
 			<!-- GeoToolKit -->
 			<dependency>
 				<groupId>org.geotoolkit</groupId>
-				<artifactId>geotk-utility</artifactId>
-				<version>${version.geotk}</version>
-			</dependency>
-			<dependency>
-				<groupId>org.geotoolkit</groupId>
-				<artifactId>geotk-referencing</artifactId>
-				<version>${version.geotk}</version>
-			</dependency>
-			<dependency>
-				<groupId>org.geotoolkit</groupId>
-				<artifactId>geotk-temporal</artifactId>
-				<version>${version.geotk}</version>
-			</dependency>
-			<dependency>
-				<groupId>org.geotoolkit</groupId>
 				<artifactId>geotk-metadata</artifactId>
 				<version>${version.geotk}</version>
 			</dependency>
-			
+			<dependency>
+				<groupId>org.geotoolkit</groupId>
+				<artifactId>geotk-xml-wfs</artifactId>
+				<version>${version.geotk}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.geotoolkit</groupId>
+				<artifactId>geotk-jaxp-core</artifactId>
+				<version>${version.geotk}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.geotoolkit</groupId>
+				<artifactId>geotk-jaxp-gml</artifactId>
+				<version>${version.geotk}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.geotoolkit</groupId>
+				<artifactId>geotk-feature</artifactId>
+				<version>${version.geotk}</version>
+			</dependency>
+
+			<!-- RS-API -->
+			<dependency>
+				<groupId>javax.ws.rs</groupId>
+				<artifactId>javax.ws.rs-api</artifactId>
+				<version>2.0.1</version>
+			</dependency>
+	
+			<!-- Jersey -->
+			<dependency>
+				<groupId>org.glassfish.jersey.core</groupId>
+				<artifactId>jersey-client</artifactId>
+				<version>${version.jersey}</version>
+			</dependency>
 
 			<!-- JTS -->
 			<dependency>
@@ -130,6 +150,11 @@
 			<dependency>
 				<groupId>org.fao.fi</groupId>
 				<artifactId>gems-model</artifactId>
+				<version>${gems.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.fao.fi</groupId>
+				<artifactId>gems-feature</artifactId>
 				<version>${gems.version}</version>
 			</dependency>
 			<dependency>

@@ -1,7 +1,6 @@
 package org.fao.fi.gems.publisher;
 
 import java.io.File;
-import java.io.FileOutputStream;
 import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -109,8 +108,7 @@ public class MetadataPublisher {
 		String metadataID = null;
 		try {
 
-			final GeographicEntityMetadata metadata = new GeographicEntityMetadata(
-					object, this.version);
+			final GeographicEntityMetadata metadata = new GeographicEntityMetadata(object, this.version);	
 
 			// metadata insert configuration
 			GNInsertConfiguration icfg = new GNInsertConfiguration();
@@ -126,8 +124,9 @@ public class MetadataPublisher {
 			properties.put(XML.STRING_SUBSTITUTES, new String[] {"filename","mimetype"});
 			properties.put(XML.LOCALE, Locale.ENGLISH);
 			properties.put(XML.TIMEZONE, TimeZone.getDefault());
-			XML.marshal(metadata, out, properties);
 			
+			XML.marshal(metadata, out, properties);
+		
 			long id = client.insertMetadata(icfg, tmp); // insert metadata
 			tmp.delete(); // delete metadata file
 
@@ -141,6 +140,7 @@ public class MetadataPublisher {
 			metadataID = metadata.getMetadataIdentifier().getCode();
 
 		} catch (Exception e) {
+			e.printStackTrace();
 			throw new Exception("Failed to publish metadata", e);
 		}
 

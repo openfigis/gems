@@ -21,6 +21,10 @@
 		</dependency>
 		<dependency>
 			<groupId>org.fao.fi</groupId>
+			<artifactId>gems-feature</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.fao.fi</groupId>
 			<artifactId>gems-publisher</artifactId>
 		</dependency>
 		<dependency>

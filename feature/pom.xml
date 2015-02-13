@@ -10,28 +10,40 @@
 		<version>${gems.version}</version>
 	</parent>
 	
-	<artifactId>gems-publisher</artifactId>
-	<name>gems-publisher</name>
-	<description>GEMS data and metadata publisher</description>
+	<artifactId>gems-feature</artifactId>
+	<name>gems-feature</name>
+	<description>GEMS Feature module</description>
 
 	<dependencies>
+
+		<!-- RS-API -->
+		<dependency>
+			<groupId>javax.ws.rs</groupId>
+			<artifactId>javax.ws.rs-api</artifactId>
+		</dependency>
+
+		<!-- Jersey -->
+		<dependency>
+			<groupId>org.glassfish.jersey.core</groupId>
+			<artifactId>jersey-client</artifactId>
+		</dependency>
 	
-		<!-- Geoserver manager -->
-		<dependency>
-			<groupId>it.geosolutions</groupId>
-			<artifactId>geoserver-manager</artifactId>
-		</dependency>
-		
-		<!-- Geonetwork manager -->
-		<dependency>
-			<groupId>it.geosolutions</groupId>
-			<artifactId>geonetwork-manager</artifactId>
-		</dependency>
-		
 		<!-- Geotk -->
 		<dependency>
 			<groupId>org.geotoolkit</groupId>
-			<artifactId>geotk-metadata</artifactId>
+			<artifactId>geotk-xml-wfs</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.geotoolkit</groupId>
+			<artifactId>geotk-jaxp-core</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.geotoolkit</groupId>
+			<artifactId>geotk-jaxp-gml</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.geotoolkit</groupId>
+			<artifactId>geotk-feature</artifactId>
 		</dependency>
 
 		<!-- GEMS modules -->
