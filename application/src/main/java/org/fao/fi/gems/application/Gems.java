@@ -12,6 +12,7 @@ import org.fao.fi.gems.codelist.CodelistParser;
 import org.fao.fi.gems.feature.FeatureTypeProperty;
 import org.fao.fi.gems.feature.FeatureUtils;
 import org.fao.fi.gems.feature.WfsFeatureClient;
+import org.fao.fi.gems.feature.WfsFeatureClient.WfsVersion;
 import org.fao.fi.gems.entity.EntityAddin;
 import org.fao.fi.gems.entity.FigisGeographicEntityImpl;
 import org.fao.fi.gems.entity.GeographicEntity;
@@ -108,7 +109,7 @@ public class Gems {
 						try{
 							LOGGER.info("Calculating geoproperties - Attempt "+i);
 							
-							WfsFeatureClient wfs = new WfsFeatureClient(config, entity.codeStack());
+							WfsFeatureClient wfs = new WfsFeatureClient(WfsVersion.v100, config, entity.codeStack());
 							List<Feature> features = wfs.features();
 							geoproperties = FeatureUtils.computeFeatureTypeProperties(
 												features, config.getSettings().getPublicationSettings().getBuffer(),

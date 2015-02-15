@@ -44,8 +44,30 @@ import org.opengis.feature.FeatureType;
  */
 public class WfsFeatureClient extends FeatureClientImpl{
 
+	public static enum WfsVersion {
+	
+		v100("1.0.0"),
+		v110("1.1.0");
+	
+		private final String value;
+	
+		WfsVersion(String value) {
+			this.value=value;
+		}
+
+		public String value() {
+			return value;
+		}
+	
+		public boolean before(WfsVersion v) {
+			return this.ordinal()<v.ordinal();
+		}
+	}
+	
 	private String typeName;
 	
+	private WfsVersion serviceVersion;
+
 	private Client client;
 	
 	private List<Feature> features;
@@ -53,16 +75,17 @@ public class WfsFeatureClient extends FeatureClientImpl{
 	/**
 	 * Constructs a WfsFeatureClient
 	 * 
+	 * @param version
 	 * @param config
-	 * @param method
 	 * @param codeStack
 	 * @throws Exception
 	 */
-	public WfsFeatureClient(GemsConfig config, List<EntityCode> codeStack) throws Exception {
-		super(config, codeStack);
+	public WfsFeatureClient(WfsVersion version, GemsConfig config,
+			List<EntityCode> codeStack) throws Exception {
 		
-		configure(config, codeStack);
-	
+		super(config, codeStack);
+
+		configure(version, config, codeStack);
 	}
 	
 
@@ -82,8 +105,9 @@ public class WfsFeatureClient extends FeatureClientImpl{
 	 * @param codeStack
 	 * @throws Exception 
 	 */
-	private void configure(GemsConfig config, List<EntityCode> codeStack) throws Exception{
+	private void configure(WfsVersion version, GemsConfig config, List<EntityCode> codeStack) throws Exception{
 		
+		serviceVersion = version;
 		typeName = config.getSettings().getGeographicServerSettings().getSourceLayer();
 		client = configureClient();
 		
@@ -125,7 +149,7 @@ public class WfsFeatureClient extends FeatureClientImpl{
 		
 		WebTarget target = client.target(serviceUrl)
 								.queryParam("service","wfs")
-								.queryParam("version","1.0.0")
+								.queryParam("version",serviceVersion)
 								.queryParam("request", request)
 								.queryParam("typeName", typeName);
 		
@@ -215,8 +239,8 @@ public class WfsFeatureClient extends FeatureClientImpl{
 	/**
 	 * Get the list of features
 	 * 
-	 * @param type
-	 * @return
+	 * @param type a {org.opengis.feature.FeatureType}
+	 * @return a list of {@link org.opengis.feature.Feature}
 	 * @throws Exception
 	 */
 	@SuppressWarnings({ "unchecked", "rawtypes" })
