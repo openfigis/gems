@@ -149,10 +149,9 @@ public class WfsFeatureClient extends FeatureClientImpl{
 		
 		WebTarget target = client.target(serviceUrl)
 								.queryParam("service","wfs")
-								.queryParam("version",serviceVersion)
+								.queryParam("version",serviceVersion.value())
 								.queryParam("request", request)
 								.queryParam("typeName", typeName);
-		
 
 		if(request.equals("GetFeature")){
 			//add cql filter
