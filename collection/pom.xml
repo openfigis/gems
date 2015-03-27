@@ -15,15 +15,17 @@
 	<description>GEMS collection module</description>
 	
 	<dependencies>
-		<dependency>
-			<groupId>com.google.code.gson</groupId>
-			<artifactId>gson</artifactId>
-		</dependency>
+
 	
 		<!-- GEMS modules -->
 		<dependency>
 			<groupId>org.fao.fi</groupId>
 			<artifactId>gems-main</artifactId>
 		</dependency>
+		<dependency>
+			<groupId>org.fao.fi</groupId>
+			<artifactId>gems-lod</artifactId>
+		</dependency>
+		
 	</dependencies>
 </project>

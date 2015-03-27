@@ -16,10 +16,12 @@ import org.fao.fi.gems.entity.EntityAuthority;
 import org.fao.fi.gems.entity.EntityCode;
 import org.fao.fi.gems.entity.GeographicEntity;
 import org.fao.fi.gems.entity.GeographicEntityImpl;
+import org.fao.fi.gems.lod.entity.common.FLODEezEntity;
 import org.fao.fi.gems.metaobject.GeographicMetaObjectProperty;
 import org.fao.fi.gems.model.GemsConfig;
 import org.fao.fi.gems.model.settings.data.filter.DataObjectFilter;
 import org.fao.fi.gems.util.Utils;
+
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
@@ -122,13 +124,16 @@ public class EezCodelistParser implements CodelistParser{
 							
 							
 							FLODEezEntity flodEntity = new FLODEezEntity(mrgid);
-							if(flodEntity.getFlodContent() != null){
-								properties.put(EezProperty.FLOD, Arrays.asList(flodEntity.getCodedEntity()));
+							if(flodEntity.content() != null){
+								properties.put(EezProperty.FLOD, Arrays.asList(flodEntity.authorityUri()));
 							}
 							
 							entity = new GeographicEntityImpl(owner, collection, eezCodeStack, label, properties);
 							eezCodelist.add(entity);
 						} catch (URISyntaxException e) {
+							e.printStackTrace();
+						} catch (Exception e) {
+							// TODO Auto-generated catch block
 							e.printStackTrace();
 						}
 					}

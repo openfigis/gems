@@ -167,6 +167,12 @@
 			</dependency>
 			<dependency>
 				<groupId>org.fao.fi</groupId>
+				<artifactId>gems-lod</artifactId>
+				<version>${gems.version}</version>
+			</dependency>
+			
+			<dependency>
+				<groupId>org.fao.fi</groupId>
 				<artifactId>gems-publisher</artifactId>
 				<version>${gems.version}</version>
 			</dependency>

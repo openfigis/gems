@@ -19,6 +19,7 @@ import org.fao.fi.gems.entity.EntityAuthority;
 import org.fao.fi.gems.entity.EntityCode;
 import org.fao.fi.gems.entity.FigisGeographicEntityImpl;
 import org.fao.fi.gems.entity.GeographicEntity;
+import org.fao.fi.gems.lod.entity.common.FLODRfbEntity;
 import org.fao.fi.gems.metaobject.GeographicMetaObjectProperty;
 import org.fao.fi.gems.model.GemsConfig;
 import org.fao.fi.gems.model.settings.data.filter.DataObjectFilter;
@@ -125,8 +126,8 @@ public class RfbCodelistParser implements CodelistParser{
 						
 						//FLOD
 						FLODRfbEntity flodEntity = new FLODRfbEntity(rfb);
-						if(flodEntity.getFlodContent() != null){
-							properties.put(RfbProperty.FLOD, Arrays.asList(flodEntity.getRfbCodedEntity()));
+						if(flodEntity.content() != null){
+							properties.put(RfbProperty.FLOD, Arrays.asList(flodEntity.authorityUri()));
 						}
 						
 						//Style

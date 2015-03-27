@@ -18,6 +18,7 @@ import org.fao.fi.gems.entity.EntityAuthority;
 import org.fao.fi.gems.entity.EntityCode;
 import org.fao.fi.gems.entity.FigisGeographicEntityImpl;
 import org.fao.fi.gems.entity.GeographicEntity;
+import org.fao.fi.gems.lod.entity.common.FLODSpeciesEntity;
 import org.fao.fi.gems.metaobject.GeographicMetaObjectProperty;
 import org.fao.fi.gems.model.GemsConfig;
 import org.fao.fi.gems.model.settings.data.filter.DataObjectFilter;
@@ -169,11 +170,11 @@ public class SpeciesCodelistParser implements CodelistParser{
 						
 						//FLOD & WoRMS (inherited from FLOD)
 						FLODSpeciesEntity flodEntity = new FLODSpeciesEntity(alphacode);
-						if(flodEntity.getFlodContent() != null){
-							properties.put(SpeciesProperty.FLOD, Arrays.asList(flodEntity.getASFISCodedEntity()));
+						if(flodEntity.content() != null){
+							properties.put(SpeciesProperty.FLOD, Arrays.asList(flodEntity.authorityUri()));
 							
-							if(flodEntity.getAphiaID() != null){//control because not all species in FLOD have worms info
-								properties.put(SpeciesProperty.WORMS, Arrays.asList(flodEntity.getAphiaID(), flodEntity.getWormsScientificName()));
+							if(flodEntity.wormsAphiaID() != null){//control because not all species in FLOD have worms info
+								properties.put(SpeciesProperty.WORMS, Arrays.asList(flodEntity.wormsAphiaID(), flodEntity.wormsScientificName()));
 							}	
 						}
 						
