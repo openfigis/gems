@@ -298,7 +298,7 @@ public class DataPublisher {
 		fte.addMetadataLinkInfo(mde2);
 		
 		//time dimension
-		if(this.timeDimension != null){
+		if(this.timeDimension.getStartTime() != null){
 			GSFeatureDimensionInfoEncoder time = new GSFeatureDimensionInfoEncoder(this.timeDimension.getStartTime());
 			if(this.timeDimension.getEndTime() != null) time.setEndAttribute(this.timeDimension.getEndTime());
 			Presentation presentation = null;

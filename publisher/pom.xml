@@ -29,10 +29,6 @@
 		</dependency>
 		
 		<!-- Geotk -->
-		<dependency>
-			<groupId>org.geotoolkit</groupId>
-			<artifactId>geotk-metadata</artifactId>
-		</dependency>
 
 		<!-- GEMS modules -->
 		<dependency>

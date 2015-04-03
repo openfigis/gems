@@ -13,7 +13,7 @@ import com.google.gson.JsonElement;
  */
 public class FLODRfbEntity extends BasicLodEntity implements LodEntity {
 
-	private static String endpoint = "http://figisapps.fao.org/grade/service/prod/query/ce4rfb/results.json";
+	private static String endpoint = "http://www.fao.org/figis/grade/service/prod/query/ce4rfb/results.json";
 
 	public FLODRfbEntity(String code) throws Exception {
 		super(endpoint, code);
