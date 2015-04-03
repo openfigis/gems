@@ -18,7 +18,7 @@ public class LodClientImplTest {
 	@Test
 	public void testWithFlod() throws Exception{
 		
-		String endpoint = "http://figisapps.fao.org/grade/service/prod/query/ce4species/results.json";
+		String endpoint = "http://www.fao.org/figis/grade/service/prod/query/ce4species/results.json";
 		LodClientImpl client = new LodClientImpl(endpoint, "COD");
 		
 		assertEquals(endpoint, client.endpoint());
