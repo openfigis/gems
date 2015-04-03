@@ -241,8 +241,7 @@ public final class FeatureUtils {
 	 * @throws Exception
 	 */
 	public static Map<FeatureTypeProperty, Object> computeFeatureTypeProperties(
-			List<Feature> features, double buffer, TimeDimension timeDimension)
-			throws Exception {
+			List<Feature> features, double buffer, TimeDimension timeDimension) throws Exception {
 
 		Map<FeatureTypeProperty, Object> map = null;
 		
@@ -267,14 +266,24 @@ public final class FeatureUtils {
 			
 			//adding time dimension
 			if(timeDimension != null){
-				TemporalPrimitive time = time(features, timeDimension);
-				String timeString = (time instanceof Period) ?
-						"from=" + ((Period) time).getBeginning().getDate().toString() +" - "+
-						"to=" + ((Period) time).getEnding().getDate().toString()
-						: 
-						"instant=" + ((Instant) time).getDate().toString();
-				LOGGER.info("* Temporal extent: " + timeString);
-				map.put(FeatureTypeProperty.TIME, time);
+				if(timeDimension.getStartTime() != null){
+
+					TemporalPrimitive time = null;
+					try {
+						time = time(features, timeDimension);
+					} catch (Exception e) {
+						throw new Exception("Failed to add time dimension", e);
+					}
+					
+					String timeString = (time instanceof Period) ?
+							"from=" + ((Period) time).getBeginning().getDate().toString() +" - "+
+							"to=" + ((Period) time).getEnding().getDate().toString()
+							: 
+							"instant=" + ((Instant) time).getDate().toString();
+					LOGGER.info("* Temporal extent: " + timeString);
+					
+					map.put(FeatureTypeProperty.TIME, time);
+				}
 			}
 			
 		}
