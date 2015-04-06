@@ -32,6 +32,13 @@ public class LodClientImpl implements LodClient{
 	private Builder builder;
 	private JsonObject content;
 	
+	/**
+	 * LodClient constructor
+	 * 
+	 * @param endpoint
+	 * @param code
+	 * @throws Exception
+	 */
 	public LodClientImpl(String endpoint, String code) throws Exception{
 		
 		this.endpoint = endpoint;
@@ -43,14 +50,31 @@ public class LodClientImpl implements LodClient{
 		
 	};
 	
+	/**
+	 * Get the LodClient endpoint
+	 * 
+	 * @return the endpoint
+	 */
 	public String endpoint(){
 		return this.endpoint;
 	}
 	
+	/**
+	 * Get the LodClient code
+	 * 
+	 * @return the code
+	 */
 	public String code(){
 		return this.code;
 	}
 	
+	
+	/**
+	 * Get the Json service response
+	 * 
+	 * @the the service response in JsonObject
+	 * 
+	 */
 	public JsonObject content(){		
 		return this.content;
 	}
