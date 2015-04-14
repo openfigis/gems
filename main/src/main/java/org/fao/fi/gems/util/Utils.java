@@ -4,11 +4,11 @@ import java.util.Iterator;
 import java.util.List;
 
 import org.apache.sis.xml.Namespaces;
-
 import org.fao.fi.gems.entity.EntityCode;
 import org.fao.fi.gems.entity.GeographicEntity;
 import org.fao.fi.gems.model.GemsConfig;
 import org.fao.fi.gems.model.content.MetadataContact;
+import org.fao.fi.gems.model.settings.publication.EntityList;
 
 public final class Utils {
 
@@ -50,6 +50,35 @@ public final class Utils {
 			}
 		}
 		return owner;
+	}
+	
+	/**
+	 * Util to indicate if an entity should be wrapped by the codelist parser
+	 * 
+	 * @param config
+	 * @param code
+	 * @return true if the entity should be wrapped by Codelist parser
+	 */
+	public static boolean wrapEntity(GemsConfig config, String code){
+		
+		boolean wrapEntity = true;
+		EntityList entities = config.getSettings().getPublicationSettings().getEntities();
+		if(entities != null){
+			List<String> included = entities.getInclude();
+			if(included != null){
+				if(included.size() > 0){
+					if(!included.contains(code)) wrapEntity = false;
+				}
+			}
+			
+			List<String> excluded = entities.getInclude();
+			if(excluded != null){
+				if(excluded.size() > 0){
+					if(excluded.contains(code)) wrapEntity = false;
+				}
+			}
+		}
+		return wrapEntity;
 	}
 	
 	

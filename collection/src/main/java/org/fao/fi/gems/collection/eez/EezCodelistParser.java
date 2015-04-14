@@ -20,6 +20,7 @@ import org.fao.fi.gems.lod.entity.common.FLODEezEntity;
 import org.fao.fi.gems.metaobject.GeographicMetaObjectProperty;
 import org.fao.fi.gems.model.GemsConfig;
 import org.fao.fi.gems.model.settings.data.filter.DataObjectFilter;
+import org.fao.fi.gems.model.settings.publication.EntityList;
 import org.fao.fi.gems.util.Utils;
 
 import com.google.gson.JsonArray;
@@ -106,13 +107,7 @@ public class EezCodelistParser implements CodelistParser{
 					
 					//wrapEntity by default is true
 					//if there is a list of subset then wrap entity only for those ones
-					boolean wrapEntity = true;
-					List<String> subset = config.getSettings().getPublicationSettings().getEntities();
-					if(subset != null){
-						if(subset.size() > 0){
-							if(!subset.contains(mrgid)) wrapEntity = false;
-						}
-					}
+					boolean wrapEntity = Utils.wrapEntity(config, mrgid);
 					
 					if(wrapEntity){
 						try {

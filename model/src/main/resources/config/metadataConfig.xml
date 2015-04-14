@@ -132,8 +132,14 @@
 			
 			<!-- Subset (in case publishing should be applied to a subset only) -->
 			<entities>
-				<string>thecode1</string>
-				<string>thecode2</string>
+				<include>
+					<string>thecode1</string>
+					<string>thecode2</string>
+					<string>thecode3</string>
+				</include>
+				<exclude>
+					<string>thecode3</string>
+				</exclude>
 			</entities>
 			
 			<!--  FIGIS specific -->

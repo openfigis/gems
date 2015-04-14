@@ -32,7 +32,7 @@ public class PublicationSettings{
 	private String style;
 	private double buffer;
 	
-	private List<String> entities = new ArrayList<String>();
+	private EntityList entities;
 	
 	private String figisViewerUrl;
 	private String figisFactsheetUrl;
@@ -225,7 +225,7 @@ public class PublicationSettings{
 	/**
 	 * @return the entities
 	 */
-	public List<String> getEntities() {
+	public EntityList getEntities() {
 		return entities;
 	}
 
@@ -233,17 +233,10 @@ public class PublicationSettings{
 	/**
 	 * @param entities the entities to set
 	 */
-	public void setEntities(List<String> entities) {
+	public void setEntities(EntityList entities) {
 		this.entities = entities;
 	}
-	
-	
-	/**
-	 * @param entity
-	 */
-	public void addEntity(String entity){
-		this.entities.add(entity);
-	}
+
 
 	/**
 	 * @return the figisViewerUrl

@@ -22,6 +22,7 @@ import org.fao.fi.gems.metaobject.GeographicMetaObjectImpl;
 import org.fao.fi.gems.metaobject.GeographicMetaObjectProperty;
 import org.fao.fi.gems.model.GemsConfig;
 import org.fao.fi.gems.model.settings.data.GeoWorkerInstance;
+import org.fao.fi.gems.model.settings.publication.EntityList;
 import org.fao.fi.gems.publisher.Publisher;
 import org.fao.fi.gems.util.Utils;
 import org.opengis.feature.Feature;
@@ -49,7 +50,7 @@ public class Gems {
 
 		//Read the configuration
 		LOGGER.info("(1) Loading the configuration file");
-		GemsConfig config = GemsConfig.fromXML(new File(args[0]));
+		GemsConfig config = GemsConfig.fromXML(new File("D:/Mes documents/Documents/CLIENTS/FAO/Infrastructure/GEMS/rfb_new.xml"));
 	
 		//read the codelists
 		LOGGER.info("(2) Loading the reference list");
@@ -61,13 +62,27 @@ public class Gems {
 		String codelistUrl = config.getSettings().getPublicationSettings().getCodelistURL().replaceAll("&amp;","&");
 		LOGGER.info("Codelist URL = "+codelistUrl);
 		
-		List<String> entities = config.getSettings().getPublicationSettings().getEntities();
-		if(entities.size() > 0){
-			LOGGER.info("Publication Scope = SUBSET");
-			LOGGER.info("List of entities = "+entities.toString());
-		}else{
-			LOGGER.info("Publication Scope = COMPLETE");
+		EntityList entities = config.getSettings().getPublicationSettings().getEntities();
+		if(entities != null){
+			List<String> include = entities.getInclude();
+			if(include.size() > 0){
+				LOGGER.info("Publication Scope = SUBSET");
+				LOGGER.info("List of entities = "+include.toString());
+			}
+			
+			List<String> exclude = entities.getExclude();
+			if(include.size() > 0){
+				LOGGER.info("Publication Scope = SUBSET");
+				LOGGER.info("List of entities = "+exclude.toString());
+			}
+			
+			
+			if(include.size() == 0 | exclude.size() == 0){
+				LOGGER.info("Publication Scope = COMPLETE");
+			}
+			
 		}
+		
 		
 		//load the codelist parser
 		ClassLoader loader = ClassLoader.getSystemClassLoader();
