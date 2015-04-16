@@ -50,7 +50,7 @@ public class Gems {
 
 		//Read the configuration
 		LOGGER.info("(1) Loading the configuration file");
-		GemsConfig config = GemsConfig.fromXML(new File("D:/Mes documents/Documents/CLIENTS/FAO/Infrastructure/GEMS/rfb_new.xml"));
+		GemsConfig config = GemsConfig.fromXML(new File(args[0]));
 	
 		//read the codelists
 		LOGGER.info("(2) Loading the reference list");
@@ -65,20 +65,32 @@ public class Gems {
 		EntityList entities = config.getSettings().getPublicationSettings().getEntities();
 		if(entities != null){
 			List<String> include = entities.getInclude();
-			if(include.size() > 0){
-				LOGGER.info("Publication Scope = SUBSET");
-				LOGGER.info("List of entities = "+include.toString());
-			}
-			
 			List<String> exclude = entities.getExclude();
-			if(include.size() > 0){
-				LOGGER.info("Publication Scope = SUBSET");
-				LOGGER.info("List of entities = "+exclude.toString());
+			
+			if(include != null){
+				if(include.size() > 0){
+					LOGGER.info("Publication Scope = SUBSET");
+					LOGGER.info("List of entities = "+include.toString());
+				}else{
+					if(exclude != null){
+						if(exclude.size() == 0){
+							LOGGER.info("Publication Scope = COMPLETE");
+						}
+					}
+				}
 			}
-			
-			
-			if(include.size() == 0 | exclude.size() == 0){
-				LOGGER.info("Publication Scope = COMPLETE");
+				
+			if(exclude != null){
+				if(exclude.size() > 0){
+					LOGGER.info("Publication Scope = SUBSET");
+					LOGGER.info("List of entities = "+exclude.toString());
+				}else{
+					if(include != null){
+						if(include.size() == 0){
+							LOGGER.info("Publication Scope = COMPLETE");
+						}
+					}
+				}
 			}
 			
 		}
