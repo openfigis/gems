@@ -71,7 +71,7 @@ public final class Utils {
 				}
 			}
 			
-			List<String> excluded = entities.getInclude();
+			List<String> excluded = entities.getExclude();
 			if(excluded != null){
 				if(excluded.size() > 0){
 					if(excluded.contains(code)) wrapEntity = false;
