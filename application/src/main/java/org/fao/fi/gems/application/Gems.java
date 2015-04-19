@@ -48,6 +48,8 @@ public class Gems {
 	 */
 	public static void main(String[] args) throws Exception {
 
+		long start = System.currentTimeMillis();
+		
 		//Read the configuration
 		LOGGER.info("(1) Loading the configuration file");
 		GemsConfig config = GemsConfig.fromXML(new File(args[0]));
@@ -257,7 +259,12 @@ public class Gems {
 				}
 			}
 			
+			long end = System.currentTimeMillis();
+			long duration = (end - start) / 1000;
+			long durationMinutes = duration / 60;
+			
 			LOGGER.info("GEMS publication complete!");
+			LOGGER.info("Duration: "+duration+" s ("+durationMinutes+" min)");
 		}
 		
 		if(failures.size() > 0) LOGGER.info("== GEMS FAILURES ==");
