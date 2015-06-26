@@ -23,9 +23,9 @@
 				<!-- instance considered as the master one, used for REST resource publication/unpublication -->
 				<master>
 					<url>http://www.organization.org/geoserver.dv.1</url> 	<!-- Geographic server base url -->
-					<user>user</user>										<!-- Geographic server User -->
-					<password>pwd</password>								<!-- Geographic server password -->
-					<version>version</version> 								<!-- Geographic server version -->
+					<user>user</user>					<!-- Geographic server User -->
+					<password>pwd</password>				<!-- Geographic server password -->
+					<version>version</version> 				<!-- Geographic server version -->
 				</master>
 				
 				<!-- additional instances targeted by a load balancing for which the in-memory catalog will be reloaded -->
