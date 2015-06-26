@@ -7,7 +7,9 @@
 	<!--    SETTINGS   -->
 	<!-- ============= -->
 	<settings>
+		
 		<!-- Geographic Server settings -->
+		<!-- __________________________ -->
 		<geographicServerSettings>
 		
 			<!-- geographic server base url used for OWS online resources 
@@ -17,12 +19,13 @@
 			
 			<!-- instances of geographic servers with whom REST communication will be done -->
 			<instances>
+				
 				<!-- instance considered as the master one, used for REST resource publication/unpublication -->
 				<master>
 					<url>http://www.organization.org/geoserver.dv.1</url> 	<!-- Geographic server base url -->
-					<user>user</user>										<!-- Geographic server User -->
-					<password>pwd</password>								<!-- Geographic server password -->
-					<version>version</version> 								<!-- Geographic server version -->
+					<user>user</user>					<!-- Geographic server User -->
+					<password>pwd</password>				<!-- Geographic server password -->
+					<version>version</version> 				<!-- Geographic server version -->
 				</master>
 				
 				<!-- additional instances targeted by a load balancing for which the in-memory catalog will be reloaded -->
@@ -47,13 +50,14 @@
 			</instances>
 			
 			<!-- source information -->
+			<!-- In GEMS, to make easier the data exploitation, source data is taken from WFS -->
 			<sourceWorkspace>sourceWS</sourceWorkspace> 		<!-- workspace where to find the GIS source data collection layer -->
-			<sourceLayer>layer</sourceLayer>					<!-- GIS data collection layer name -->
+			<sourceLayer>layer</sourceLayer>			<!-- GIS data collection layer name -->
 			
 			<!-- filters -->
 			<filters>
-				<!-- data filters used o filter out data from collection
-					 and identify a geographic entity -->
+				<!-- data filters used to filter out data from collection
+				Used to identify a geographic entity -->
 				<data>
 					<filter>
 						<isString>true</isString>
@@ -61,8 +65,8 @@
 					</filter>
 				</data>
 				
-				<!-- extra filters used to filter out data from collection
-					 These filters are not used to define a geographic entity -->
+				<!-- extra filters used to filter out data from collection (optional)
+				Not used to identify a geographic entity -->
 				<extras>
 					<extra>
 						<isString>true</isString>
@@ -71,7 +75,8 @@
 					</extra>
 				</extras>
 				
-				<!-- limited list of properties to handle in the published data -->
+				<!-- limited list of properties to handle in the published data (optional)
+				Only used if the featureType of final products wants to be restrained to some fields -->
 				<properties>
 					<string>prop1</string>
 					<string>prop2</string>
@@ -79,17 +84,18 @@
 			</filters>
 			
 			<!-- target information -->
-			<targetWorkspace>targetWS</targetWorkspace>			<!-- target workspace where to publish the single GIS layers -->
-			<targetDatastore>targetDS</targetDatastore>			<!-- target datastore where to publish the single GIS layers -->
+			<targetWorkspace>targetWS</targetWorkspace>		<!-- target workspace where to publish the single GIS layers -->
+			<targetDatastore>targetDS</targetDatastore>		<!-- target datastore where to publish the single GIS layers -->
 			<targetLayerPrefix>someprefix</targetLayerPrefix>	<!-- some prefix to use for the target layer names -->
 			
-			<!-- time dimension -->
+			<!-- time dimension (optional) -->
 			<timeDimension>
 				<startTime>START_YEAR</startTime>
 				<endTime>END_YEAR</endTime>
 			</timeDimension>
 			
-			<baseLayerList>										<!-- Background layers (each background layer should have a valid workspace and layer names -->
+			<!-- Background layers (each background layer should have a valid workspace and layer names -->
+			<baseLayerList>
 				<baseLayer>
 					<workspace>baselayerWS1</workspace>
 					<name>baselayerName1</name>
@@ -99,38 +105,45 @@
 					<name>baselayerName2</name>
 				</baseLayer>
 			</baseLayerList>
-			<method>SHAPEFILE</method>							<!-- the method to publish the resource (if SHAPEFILE, all "source" settings will be ignored)-->
-			<shapefileURL>someURL</shapefileURL>				<!-- the url where to find the shapefile -->			
+			
+			<!-- publication method -->
+			<!-- At now only SQLVIEW is supported. SHAPEFILE method is under investigation
+			but requires contribution to the geoserver-manager (provide an advanced Shapefile manager) -->
+			<method>SQLVIEW</method>		<!-- the method to publish the resource (if SHAPEFILE, all "source" settings will be ignored)-->
+			<shapefileURL>someURL</shapefileURL>	<!-- the url where to find the shapefile (in case of SHAPEFILE) -->			
+		
 		</geographicServerSettings>
 
 		<!-- Metadata catalogue settings -->
+		<!-- ___________________________ -->
 		<metadataCatalogueSettings>								
 			<url>http://www.organization.org/catalogue</url>	<!-- Metadata catalogue base url-->
-			<user>user</user>									<!-- Metadata catalogue user-->
-			<password>pwd</password>							<!-- Metadata catalogue password-->
+			<user>user</user>					<!-- Metadata catalogue user-->
+			<password>pwd</password>				<!-- Metadata catalogue password-->
 		</metadataCatalogueSettings>
 
 		<!-- Publication settings -->
+		<!-- ____________________ -->
 		<publicationSettings>
 
 			<!-- actions -->
 			<action>PUBLISH</action>
-			<actionData>true</actionData>					<!-- action to perform on data -->
-			<actionMetadata>true</actionMetadata>			<!-- action to perform on metadata -->
-			<forceData>true</forceData>						<!-- force the data publication -->
-			<forceMetadata>true</forceMetadata>				<!-- force the metadata publication -->
+			<actionData>true</actionData>		<!-- action to perform on data -->
+			<actionMetadata>true</actionMetadata>	<!-- action to perform on metadata -->
+			<forceData>true</forceData>		<!-- force the data publication -->
+			<forceMetadata>true</forceMetadata>	<!-- force the metadata publication -->
 
 			<!-- reference list for batch process -->
 			<codelistURL>http://www.organization.org/codelist</codelistURL>
 			<codelistParser>org.fao.fi.gems.collection.anobject.parser</codelistParser>
 
 			<!-- publication parameters -->
-			<collectionType>mycollection</collectionType>		<!-- reference collection name -->
-			<version>1.0</version>								<!-- version -->
-			<buffer>2</buffer>									<!-- numeric buffer value (in degrees) to set a geographic buffer for map bounding box -->
-			<style>somestyle</style>							<!-- style to apply to the published layer -->
+			<collectionType>mycollection</collectionType>	<!-- reference collection name -->
+			<version>1.0</version>				<!-- version -->
+			<buffer>2</buffer>				<!-- numeric buffer value (in degrees) to set a geographic buffer for map bounding box -->
+			<style>somestyle</style>			<!-- style to apply to the published layer (optional) -->
 			
-			<!-- Subset (in case publishing should be applied to a subset only) -->
+			<!-- Subset - optional (in case publishing should be applied to a subset only) -->
 			<entities>
 				<include>
 					<string>thecode1</string>
@@ -142,9 +155,9 @@
 				</exclude>
 			</entities>
 			
-			<!--  FIGIS specific -->
-			<figisViewerUrl>http://www.fao.org/figis/geoserver/factsheets</figisViewerUrl> <!-- FIGIS Viewer base URL -->
-			<figisFactsheetUrl>http://www.fao.org/fishery</figisFactsheetUrl> <!-- FIGIS Factsheet base URL -->
+			<!--  FIGIS specific configuration -->
+			<figisViewerUrl>http://www.fao.org/figis/geoserver/factsheets</figisViewerUrl> 	<!-- FIGIS Viewer base URL -->
+			<figisFactsheetUrl>http://www.fao.org/fishery</figisFactsheetUrl> 		<!-- FIGIS Factsheet base URL -->
 
 		</publicationSettings>
 
