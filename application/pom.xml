@@ -62,7 +62,7 @@
 							<transformers>
 								<transformer
 									implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
-									<mainClass>org.fao.fi.gems.application.MetadataGenerator</mainClass>
+									<mainClass>org.fao.fi.gems.application.Gems</mainClass>
 								</transformer>
 							</transformers>
 						</configuration>
