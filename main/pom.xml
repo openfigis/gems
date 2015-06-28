@@ -16,10 +16,10 @@
 
 	<dependencies>
 
-		<!-- GeoToolKit -->
+		<!-- Apache SIS -->
 		<dependency>
-			<groupId>org.geotoolkit</groupId>
-			<artifactId>geotk-metadata</artifactId>
+			<groupId>org.apache.sis.core</groupId>
+			<artifactId>sis-metadata</artifactId>
 		</dependency>
 		
 		<!-- JTS -->
