@@ -52,12 +52,16 @@ public final class FeatureUtils {
 			
 			//get base envelope
 			String geometryName = null;
-			for(PropertyType prop : feature.getType().getProperties(true)){
+			for(PropertyType prop : feature.getType().getProperties(false)){
 				if(prop.getClass().equals(DefaultGeometryType.class)){
 					geometryName = prop.getName().toString();
+					//expects "http://something:THE_GEOM"
+					//gets "http://www.opengis.net/gml:GeometryPropertyType"
+					
 					break;
 				}
 			}
+
 			Geometry geometry = (Geometry) feature.getPropertyValue(geometryName);
 			Envelope baseEnvelope = geometry.getEnvelopeInternal();
 			

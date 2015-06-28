@@ -224,8 +224,8 @@ public class WfsFeatureClient extends FeatureClientImpl{
 			map.put(typeName, types);
 		}
 
-		for(FeatureType type : types){
-			if(typeName.contains(type.getName().toString())){
+		for(FeatureType type : types){			
+			if(type.getName().toString().contains(typeName)){
 				featureType = type;
 				break;
 			}
