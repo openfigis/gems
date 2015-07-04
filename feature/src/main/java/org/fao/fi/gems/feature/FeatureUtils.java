@@ -10,9 +10,10 @@ import org.apache.sis.internal.util.TemporalUtilities;
 import org.apache.sis.referencing.CommonCRS;
 import org.fao.fi.gems.feature.FeatureTypeProperty;
 import org.fao.fi.gems.model.settings.data.dimension.TimeDimension;
-import org.geotoolkit.feature.type.DefaultGeometryType;
+import org.geotoolkit.feature.DefaultFeature;
+import org.geotoolkit.feature.type.GeometryType;
+import org.geotoolkit.feature.type.PropertyDescriptor;
 import org.opengis.feature.Feature;
-import org.opengis.feature.PropertyType;
 import org.opengis.temporal.Instant;
 import org.opengis.temporal.Period;
 import org.opengis.temporal.TemporalPrimitive;
@@ -34,6 +35,7 @@ public final class FeatureUtils {
 	 * @param features a list of {@link org.opengis.feature.Feature}
 	 * @return an object of class {@link com.vividsolutions.jts.geom.Envelope}
 	 */
+	@SuppressWarnings("deprecation")
 	public static Envelope envelopeActual(List<Feature> features){
 		
 		// bbox coordinates
@@ -48,16 +50,13 @@ public final class FeatureUtils {
 		Iterator<Feature> it = features.iterator();
 		while(it.hasNext()){
 			
-			Feature feature = it.next();
+			DefaultFeature feature = (DefaultFeature) it.next();
 			
 			//get base envelope
 			String geometryName = null;
-			for(PropertyType prop : feature.getType().getProperties(false)){
-				if(prop.getClass().equals(DefaultGeometryType.class)){
-					geometryName = prop.getName().toString();
-					//expects "http://something:THE_GEOM"
-					//gets "http://www.opengis.net/gml:GeometryPropertyType"
-					
+			for(PropertyDescriptor prop : feature.getType().getDescriptors()){
+				if(prop.getType() instanceof GeometryType){
+					geometryName = prop.getName().tip().toString();
 					break;
 				}
 			}
