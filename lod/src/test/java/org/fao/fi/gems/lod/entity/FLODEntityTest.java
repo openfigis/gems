@@ -3,12 +3,13 @@ package org.fao.fi.gems.lod.entity;
 import static org.junit.Assert.*;
 
 import org.fao.fi.gems.lod.entity.common.FLODEezEntity;
+import org.fao.fi.gems.lod.entity.common.FLODFsaEntity;
 import org.fao.fi.gems.lod.entity.common.FLODRfbEntity;
 import org.fao.fi.gems.lod.entity.common.FLODSpeciesEntity;
 import org.junit.Test;
 
 /**
- * Unit tests for FLOD Species entity
+ * Unit tests for FLOD common entities
  * 
  * @author Emmanuel Blondel <emmanuel.blondel@fao.org>
  *
@@ -56,6 +57,17 @@ public class FLODEntityTest {
 		assertEquals("Faeroe Islands Exclusive Economic Zone", eez.authorityName());
 		assertEquals("Faeroe Islands Exclusive Economic Zone", eez.englishName());
 		assertEquals("http://www.fao.org/figis/lod/eez/entities/codedentity/48a4a155d9da8fa33415035e6b4ff721e1142869", eez.authorityUri());
+		
+	}
+	
+	@Test
+	public void testFsa() throws Exception {
+		
+		FLODFsaEntity fsa = new FLODFsaEntity("27.1");
+		
+		assertEquals("27.1", fsa.code());
+		assertEquals("27.1",fsa.authorityName());
+		assertEquals("http://www.fao.org/figis/lod/flod/entities/codedentity/b1f184153bfa34847a66aadb3bf37300ac84a96f", fsa.authorityUri());
 		
 	}
 
