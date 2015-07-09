@@ -1,4 +1,4 @@
-package org.fao.fi.gems.collection.rfb;
+package org.fao.fi.gems.collection.parsers;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -14,8 +14,7 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
 import org.fao.fi.gems.codelist.CodelistParser;
-import org.fao.fi.gems.entity.EntityAddin;
-import org.fao.fi.gems.entity.EntityAuthority;
+import org.fao.fi.gems.collection.properties.RfbProperty;
 import org.fao.fi.gems.entity.EntityCode;
 import org.fao.fi.gems.entity.FigisGeographicEntityImpl;
 import org.fao.fi.gems.entity.GeographicEntity;
@@ -23,7 +22,6 @@ import org.fao.fi.gems.lod.entity.common.FLODRfbEntity;
 import org.fao.fi.gems.metaobject.GeographicMetaObjectProperty;
 import org.fao.fi.gems.model.GemsConfig;
 import org.fao.fi.gems.model.settings.data.filter.DataObjectFilter;
-import org.fao.fi.gems.model.settings.publication.EntityList;
 import org.fao.fi.gems.util.Utils;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -31,46 +29,6 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 public class RfbCodelistParser implements CodelistParser{
-	
-	public enum RfbProperty implements GeographicMetaObjectProperty{
-		
-		FAO (EntityAuthority.FAO, true, true, true),
-		FLOD (EntityAuthority.FLOD, true, true, true),		
-		FIGIS(EntityAuthority.FIGIS, true, true, false),
-		
-		STYLE(EntityAddin.STYLE, false, false, false),
-		ABSTRACT(EntityAddin.ABSTRACT, false, false, false);
-		
-		private final Object object;
-		private final boolean isAuthority;
-		private final boolean isThesaurus;
-		private final boolean containsURIs;
-		
-		RfbProperty(Object object, boolean isAuthority, boolean isThesaurus, boolean containsURIs){
-			this.object = object;
-			this.isAuthority = isAuthority;
-			this.isThesaurus = isThesaurus;
-			this.containsURIs = containsURIs;
-		}
-		
-		public Object getObject(){
-			return this.object;
-		}
-
-		public boolean isAuthority(){
-			return this.isAuthority;
-		}
-		
-		public boolean isThesaurus() {
-			return this.isThesaurus;
-		}
-
-		public boolean containsURIs() {
-			return this.containsURIs;
-		}
-		
-	}
-	
 	
 	public Set<GeographicEntity> getCodelist(GemsConfig config) {
 		

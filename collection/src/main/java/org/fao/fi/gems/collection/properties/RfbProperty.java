@@ -1,45 +1,45 @@
-package org.fao.fi.gems.collection.vme;
+package org.fao.fi.gems.collection.properties;
+
 import org.fao.fi.gems.entity.EntityAddin;
 import org.fao.fi.gems.entity.EntityAuthority;
 import org.fao.fi.gems.metaobject.GeographicMetaObjectProperty;
 
 /**
- * Vme Property enumeration
- * (to use in Vme codelists)
+ * Rfb Property enumeration
+ * (to use in Rfb codelists)
  * 
  * @author eblondel
  *
  */
-public enum VmeProperty implements GeographicMetaObjectProperty {
-
-	FAO(EntityAuthority.FAO, true, true, true), FIGIS(EntityAuthority.FIGIS,
-			true, true, false),
-
-	VME("VME", false, true, false), GLOBALTYPE("GLOBALTYPE", false, false,
-			false), BASETITLE(EntityAddin.BASETITLE, false, false, false), STYLE(
-			EntityAddin.STYLE, false, false, false);
-
+public enum RfbProperty implements GeographicMetaObjectProperty{
+	
+	FAO (EntityAuthority.FAO, true, true, true),
+	FLOD (EntityAuthority.FLOD, true, true, true),		
+	FIGIS(EntityAuthority.FIGIS, true, true, false),
+	
+	STYLE(EntityAddin.STYLE, false, false, false),
+	ABSTRACT(EntityAddin.ABSTRACT, false, false, false);
+	
 	private final Object object;
 	private final boolean isAuthority;
 	private final boolean isThesaurus;
 	private final boolean containsURIs;
-
-	VmeProperty(Object object, boolean isAuthority, boolean isThesaurus,
-			boolean containsURIs) {
+	
+	RfbProperty(Object object, boolean isAuthority, boolean isThesaurus, boolean containsURIs){
 		this.object = object;
 		this.isAuthority = isAuthority;
 		this.isThesaurus = isThesaurus;
 		this.containsURIs = containsURIs;
 	}
-
-	public Object getObject() {
+	
+	public Object getObject(){
 		return this.object;
 	}
 
-	public boolean isAuthority() {
+	public boolean isAuthority(){
 		return this.isAuthority;
 	}
-
+	
 	public boolean isThesaurus() {
 		return this.isThesaurus;
 	}
@@ -47,5 +47,6 @@ public enum VmeProperty implements GeographicMetaObjectProperty {
 	public boolean containsURIs() {
 		return this.containsURIs;
 	}
+	
+}
 
-}	
