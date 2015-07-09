@@ -77,7 +77,7 @@ public class Publisher {
 		boolean published = false;		
 		
 		//data publication
-		boolean layerExists = (this.getDataPublisher().checkLayerExistence(object) != null);
+		boolean layerExists = this.getDataPublisher().checkLayerExistence(object);
 		boolean layerPublished = false;
 		try{
 			if (this.settings.getPublicationSettings().isActionData()) {

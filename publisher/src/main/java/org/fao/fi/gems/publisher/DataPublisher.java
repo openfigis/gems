@@ -124,13 +124,13 @@ public class DataPublisher {
 	 * @return
 	 * @throws Exception
 	 */
-	public String checkLayerExistence(GeographicMetaObject object) {
+	public boolean checkLayerExistence(GeographicMetaObject object) {
 		
-		String layername = this.trgLayerPrefix + "_" + object.code();
+		String layername = object.targetLayerName();
 		List<String> layers = this.getExistingLayers();
 		
-		String existingLayer = null;
-		if(layers.contains(layername)) existingLayer = layername;
+		boolean existingLayer = false;
+		if(layers.contains(layername)) existingLayer = true;
 		return existingLayer;
 	}
 
@@ -143,10 +143,10 @@ public class DataPublisher {
 	 */
 	public boolean deleteLayer(GeographicMetaObject object) throws Exception {
 		String layername = object.targetLayerName();
-		String existingLayer = this.checkLayerExistence(object);
+		boolean existingLayer = this.checkLayerExistence(object);
 		
 		boolean deleted = false;
-		if(existingLayer != null){
+		if(existingLayer){
 			try{
 				deleted = GSPublisher.unpublishFeatureType(trgWorkspace, trgDatastore, layername);
 			}catch(Exception e){

@@ -28,6 +28,11 @@ import com.vividsolutions.jts.geom.Envelope;
  */
 public class GeographicMetaObjectImpl implements GeographicMetaObject {
 
+	final static String SEPARATOR_PREFIX = "_";
+	final static String SEPARATOR_INTERSECT_CODE = "_x_";
+	final static String SEPARATOR_INTERSECT_NAME = " | ";
+	final static String SEPARATOR_DOT_REPLACEMENT = "-";
+	
 	protected GemsConfig config;
 
 	protected String collection;
@@ -129,7 +134,7 @@ public class GeographicMetaObjectImpl implements GeographicMetaObject {
 			if(i==0){
 				codes = entities.get(i).code();
 			}else{
-				codes += "_x_"+entities.get(i).code();
+				codes += SEPARATOR_INTERSECT_CODE + entities.get(i).code();
 			}
 		}
 		this.code = codes;
@@ -147,7 +152,7 @@ public class GeographicMetaObjectImpl implements GeographicMetaObject {
 			if(i==0){
 				refCodes = codes[i];
 			}else{
-				refCodes += "_x_"+codes[i];
+				refCodes += SEPARATOR_INTERSECT_CODE + codes[i];
 			}
 		}
 		this.code = refCodes;
@@ -218,10 +223,18 @@ public class GeographicMetaObjectImpl implements GeographicMetaObject {
 	 * @param trgLayerPrefix
 	 */
 	public void setTargetLayername(String trgLayerPrefix) {
+		
+		String code = this.code();
+		
+		//control and prevent the presence of "." in targetLayerName
+		if(code.contains(".")){
+			code = code.replaceAll("[.]", SEPARATOR_DOT_REPLACEMENT);
+		}
+		
 		if (trgLayerPrefix == null | trgLayerPrefix == "") {
-			this.targetLayername = this.code();
+			this.targetLayername = code;
 		} else {
-			this.targetLayername = trgLayerPrefix + "_" + this.code();
+			this.targetLayername = trgLayerPrefix + SEPARATOR_PREFIX + code;
 		}
 	}
 	
