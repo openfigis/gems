@@ -1,8 +1,12 @@
+/**
+ * (c) 2015 FAO / UN (project: gems-main)
+ */
 package org.fao.fi.gems.entity;
+
 /**
  * An enum of Authority Entity
  * 
- * @author eblondel
+ * @author Emmanuel Blondel <emmanuel.blondel@fao.org>
  *
  */
 public enum EntityAuthority {

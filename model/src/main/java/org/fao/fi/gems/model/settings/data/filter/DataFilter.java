@@ -1,9 +1,12 @@
+/**
+ * (c) 2015 FAO / UN (project: gems-model)
+ */
 package org.fao.fi.gems.model.settings.data.filter;
 
 /**
  * A basic data filter
  * 
- * @author eblondel
+ * @author Emmanuel Blondel <emmanuel.blondel@fao.org>
  *
  */
 public abstract class DataFilter {

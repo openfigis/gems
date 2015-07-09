@@ -1,3 +1,6 @@
+/**
+ * (c) 2015 FAO / UN (project: gems-publisher)
+ */
 package org.fao.fi.gems.publisher;
 
 import java.net.MalformedURLException;
@@ -12,7 +15,7 @@ import org.slf4j.LoggerFactory;
 /**
  * Data & Metadata Publisher
  * 
- * @author eblondel (FAO)
+ * @author Emmanuel Blondel <emmanuel.blondel@fao.org>
  *
  */
 public class Publisher {

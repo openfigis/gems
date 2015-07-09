@@ -1,3 +1,6 @@
+/**
+ * (c) 2015 FAO / UN (project: gems-collection)
+ */
 package org.fao.fi.gems.collection.parsers;
 
 import java.net.URISyntaxException;
@@ -23,7 +26,7 @@ import org.fao.fi.gems.util.Utils;
  * Vme global type codelist parser
  * (reference for publishing Metadata at global type resolution)
  * 
- * @author eblondel
+ * @author Emmanuel Blondel <emmanuel.blondel@fao.org>
  *
  */
 public class VmeGlobalCodelistParser implements CodelistParser{

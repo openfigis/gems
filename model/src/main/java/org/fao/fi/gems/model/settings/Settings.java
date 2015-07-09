@@ -1,3 +1,6 @@
+/**
+ * (c) 2015 FAO / UN (project: gems-model)
+ */
 package org.fao.fi.gems.model.settings;
 
 import java.io.File;
@@ -17,7 +20,7 @@ import com.thoughtworks.xstream.io.xml.StaxDriver;
 /**
  * Configures the settings
  * 
- * @author eblondel
+ * @author Emmanuel Blondel <emmanuel.blondel@fao.org>
  *
  */
 public class Settings{

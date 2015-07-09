@@ -1,3 +1,6 @@
+/**
+ * (c) 2015 FAO / UN (project: gems-collection)
+ */
 package org.fao.fi.gems.collection.parsers;
 
 import java.io.IOException;
@@ -31,7 +34,7 @@ import com.google.gson.stream.JsonReader;
 /**
  * A codelist parser for FAO Areas
  * 
- * @author eblondel <emmanuel.blondel@fao.org>
+ * @author Emmanuel Blondel <emmanuel.blondel@fao.org>
  *
  */
 public class FsaCodelistParser implements CodelistParser {

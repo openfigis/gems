@@ -1,3 +1,6 @@
+/**
+ * (c) 2015 FAO / UN (project: gems-lod)
+ */
 package org.fao.fi.gems.lod.client;
 
 import static org.junit.Assert.*;

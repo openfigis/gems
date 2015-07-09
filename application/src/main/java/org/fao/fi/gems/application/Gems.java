@@ -1,3 +1,6 @@
+/**
+ * (c) 2015 FAO / UN (project: gems-application)
+ */
 package org.fao.fi.gems.application;
 
 import java.io.File;
@@ -30,7 +33,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * Main App to launch the batch data/metadata publication
+ * Main App to launch the batch GEMS data/metadata publication from
+ * an XML configuration file
+ * 
+ * @author Emmanuel Blondel <emmanuel.blondel@fao.org>
  * 
  */
 public class Gems {

@@ -1,3 +1,6 @@
+/**
+ * (c) 2015 FAO / UN (project: gems-model)
+ */
 package org.fao.fi.gems.model.content;
 
 import java.io.File;
@@ -15,7 +18,7 @@ import org.junit.Test;
  * 
  * Test MetadataContent decoder
  * 
- * @author eblondel
+ * @author Emmanuel Blondel <emmanuel.blondel@fao.org>
  *
  */
 public class MetadataContentTest {

@@ -1,3 +1,6 @@
+/**
+ * (c) 2015 FAO / UN (project: gems-model)
+ */
 package org.fao.fi.gems.model.settings;
 
 import static org.junit.Assert.*;
@@ -13,7 +16,7 @@ import org.junit.Test;
 /**
  * Settings Test
  * 
- * @author eblondel
+ * @author Emmanuel Blondel <emmanuel.blondel@fao.org>
  *
  */
 public class SettingsTest {

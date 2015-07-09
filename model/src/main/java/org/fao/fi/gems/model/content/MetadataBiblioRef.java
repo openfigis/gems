@@ -1,5 +1,14 @@
+/**
+ * (c) 2015 FAO / UN (project: gems-model)
+ */
 package org.fao.fi.gems.model.content;
 
+/**
+ * MetadataBiblioRef
+ * 
+ * @author Emmanuel Blondel <emmanuel.blondel@fao.org>
+ *
+ */
 public class MetadataBiblioRef {
 	
 	private String scope = "DATASET";

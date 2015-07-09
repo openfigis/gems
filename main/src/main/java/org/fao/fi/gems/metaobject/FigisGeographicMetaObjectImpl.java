@@ -1,3 +1,6 @@
+/**
+ * (c) 2015 FAO / UN (project: gems-main)
+ */
 package org.fao.fi.gems.metaobject;
 
 import java.net.URI;
@@ -16,7 +19,7 @@ import com.vividsolutions.jts.geom.Envelope;
 /**
  * A FIGIS-specific implementation of a GeographicMetaObject
  * 
- * @author eblondel
+ * @author Emmanuel Blondel <emmanuel.blondel@fao.org>
  *
  */
 public class FigisGeographicMetaObjectImpl extends GeographicMetaObjectImpl implements FigisGeographicMetaObject{

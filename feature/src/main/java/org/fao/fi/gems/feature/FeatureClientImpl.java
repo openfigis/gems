@@ -1,3 +1,6 @@
+/**
+ * (c) 2015 FAO / UN (project: gems-feature)
+ */
 package org.fao.fi.gems.feature;
 
 import java.util.List;

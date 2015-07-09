@@ -1,10 +1,13 @@
+/**
+ * (c) 2015 FAO / UN (project: gems-model)
+ */
 package org.fao.fi.gems.model.settings.data;
 
 /**
  * BaseLayer model
  * 
  * 
- * @author eblondel
+ * @author Emmanuel Blondel <emmanuel.blondel@fao.org>
  *
  */
 public class BaseLayer {

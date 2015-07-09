@@ -1,3 +1,6 @@
+/**
+ * (c) 2015 FAO / UN (project: gems-main)
+ */
 package org.fao.fi.gems.entity;
 
 import java.util.List;
@@ -8,7 +11,7 @@ import org.fao.fi.gems.metaobject.GeographicMetaObjectProperty;
 /**
  * GeographicEntity interface
  * 
- * @author eblondel
+ * @author Emmanuel Blondel <emmanuel.blondel@fao.org>
  *
  */
 public interface GeographicEntity {

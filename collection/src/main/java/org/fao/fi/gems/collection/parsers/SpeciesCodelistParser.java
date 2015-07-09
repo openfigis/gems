@@ -1,3 +1,6 @@
+/**
+ * (c) 2015 FAO / UN (project: gems-collection)
+ */
 package org.fao.fi.gems.collection.parsers;
 
 import java.net.URL;
@@ -30,7 +33,7 @@ import org.w3c.dom.NodeList;
 /**
  * Species Codelist parser
  * 
- * @author eblondel
+ * @author Emmanuel Blondel <emmanuel.blondel@fao.org>
  *
  */
 public class SpeciesCodelistParser implements CodelistParser{

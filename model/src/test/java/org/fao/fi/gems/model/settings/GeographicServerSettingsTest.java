@@ -1,3 +1,6 @@
+/**
+ * (c) 2015 FAO / UN (project: gems-model)
+ */
 package org.fao.fi.gems.model.settings;
 
 import static org.junit.Assert.*;
@@ -17,6 +20,12 @@ import org.fao.fi.gems.model.settings.data.filter.FilterList;
 import org.junit.Before;
 import org.junit.Test;
 
+/**
+ * GeographicServerSettingsTest
+ * 
+ * @author Emmanuel Blondel <emmanuel.blondel@fao.org>
+ *
+ */
 public class GeographicServerSettingsTest {
 
 	GeographicServerSettings server;

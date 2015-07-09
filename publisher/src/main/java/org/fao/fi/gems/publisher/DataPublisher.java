@@ -1,3 +1,6 @@
+/**
+ * (c) 2015 FAO / UN (project: gems-publisher)
+ */
 package org.fao.fi.gems.publisher;
 
 import it.geosolutions.geoserver.rest.GeoServerRESTPublisher;
@@ -47,7 +50,7 @@ import com.vividsolutions.jts.geom.Envelope;
 /**
  * DataPublisher
  * 
- * @author eblondel (FAO)
+ * @author Emmanuel Blondel <emmanuel.blondel@fao.org>
  * 
  */
 public class DataPublisher {

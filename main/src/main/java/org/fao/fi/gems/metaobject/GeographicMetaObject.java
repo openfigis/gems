@@ -1,3 +1,6 @@
+/**
+ * (c) 2015 FAO / UN (project: gems-main)
+ */
 package org.fao.fi.gems.metaobject;
 
 import java.net.URI;
@@ -12,6 +15,12 @@ import org.opengis.temporal.TemporalPrimitive;
 
 import com.vividsolutions.jts.geom.Envelope;
 
+/**
+ * Geographic Meta Object
+ * 
+ * @author Emmanuel Blondel <emmanuel.blondel@fao.org>
+ *
+ */
 public interface GeographicMetaObject {
 
 	/*

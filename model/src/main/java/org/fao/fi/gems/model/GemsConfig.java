@@ -1,3 +1,6 @@
+/**
+ * (c) 2015 FAO / UN (project: gems-model)
+ */
 package org.fao.fi.gems.model;
 
 import java.io.File;
@@ -20,7 +23,7 @@ import com.thoughtworks.xstream.io.xml.StaxDriver;
 /**
  * Main GEMS configuration
  * 
- * @author eblondel
+ * @author Emmanuel Blondel <emmanuel.blondel@fao.org>
  *
  */
 public class GemsConfig {

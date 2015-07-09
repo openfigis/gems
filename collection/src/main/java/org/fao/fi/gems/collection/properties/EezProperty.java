@@ -1,3 +1,6 @@
+/**
+ * (c) 2015 FAO / UN (project: gems-collection)
+ */
 package org.fao.fi.gems.collection.properties;
 
 import org.fao.fi.gems.entity.EntityAuthority;
@@ -7,7 +10,7 @@ import org.fao.fi.gems.metaobject.GeographicMetaObjectProperty;
  * Eez Property enumeration
  * (to use in Eez codelists)
  * 
- * @author eblondel
+ * @author Emmanuel Blondel <emmanuel.blondel@fao.org>
  *
  */
 public enum EezProperty implements GeographicMetaObjectProperty{

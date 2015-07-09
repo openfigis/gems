@@ -1,3 +1,6 @@
+/**
+ * (c) 2015 FAO / UN (project: gems-feature)
+ */
 package org.fao.fi.gems.feature;
 
 import java.sql.Date;
@@ -23,6 +26,12 @@ import org.slf4j.LoggerFactory;
 import com.vividsolutions.jts.geom.Envelope;
 import com.vividsolutions.jts.geom.Geometry;
 
+/**
+ * A set of Feature utilities
+ * 
+ * @author Emmanuel Blondel <emmanuel.blondel@fao.org>
+ *
+ */
 public final class FeatureUtils {
 
 	private static Logger LOGGER = LoggerFactory.getLogger(FeatureUtils.class);

@@ -1,3 +1,6 @@
+/**
+ * (c) 2015 FAO / UN (project: gems-collection)
+ */
 package org.fao.fi.gems.collection.parsers;
 
 import java.io.IOException;
@@ -28,6 +31,12 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
+/**
+ * RFB codelist parser
+ * 
+ * @author Emmanuel Blondel <emmanuel.blondel@fao.org>
+ *
+ */
 public class RfbCodelistParser implements CodelistParser{
 	
 	public Set<GeographicEntity> getCodelist(GemsConfig config) {

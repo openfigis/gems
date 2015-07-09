@@ -1,3 +1,6 @@
+/**
+ * (c) 2015 FAO / UN (project: gems-model)
+ */
 package org.fao.fi.gems.model.content;
 
 import java.io.File;
@@ -11,7 +14,7 @@ import com.thoughtworks.xstream.io.xml.StaxDriver;
 /**
  * A metadata Content template class
  * 
- * @author eblondel
+ * @author Emmanuel Blondel <emmanuel.blondel@fao.org>
  *
  */
 public class MetadataContent {

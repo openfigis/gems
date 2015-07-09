@@ -1,3 +1,6 @@
+/**
+ * (c) 2015 FAO / UN (project: gems-main)
+ */
 package org.fao.fi.gems.entity;
 
 import java.net.URISyntaxException;
@@ -11,7 +14,7 @@ import org.fao.fi.gems.util.Utils;
  * GeographicEntityImpl
  * 
  * 
- * @author eblondel
+ * @author Emmanuel Blondel <emmanuel.blondel@fao.org>
  *
  */
 public class GeographicEntityImpl implements GeographicEntity {

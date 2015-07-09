@@ -1,3 +1,6 @@
+/**
+ * (c) 2015 FAO / UN (project: gems-main)
+ */
 package org.fao.fi.gems.util;
 
 import java.util.Iterator;
@@ -10,6 +13,12 @@ import org.fao.fi.gems.model.GemsConfig;
 import org.fao.fi.gems.model.content.MetadataContact;
 import org.fao.fi.gems.model.settings.publication.EntityList;
 
+/**
+ * Utils
+ * 
+ * @author Emmanuel Blondel <emmanuel.blondel@fao.org>
+ *
+ */
 public final class Utils {
 
 	

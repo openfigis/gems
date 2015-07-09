@@ -1,3 +1,6 @@
+/**
+ * (c) 2015 FAO / UN (project: gems-collection)
+ */
 package org.fao.fi.gems.collection.parsers;
 
 import java.io.IOException;
@@ -30,7 +33,7 @@ import com.google.gson.stream.JsonReader;
  * VME measure codelist parser
  * (reference for publishing Metadata at VME measure resolution)
  * 
- * @author eblondel
+ * @author Emmanuel Blondel <emmanuel.blondel@fao.org>
  *
  */
 public class VmeCodelistParser implements CodelistParser{

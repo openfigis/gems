@@ -1,3 +1,6 @@
+/**
+ * (c) 2015 FAO / UN (project: gems-collection)
+ */
 package org.fao.fi.gems.collection.properties;
 
 import org.fao.fi.gems.entity.EntityAddin;
@@ -8,7 +11,7 @@ import org.fao.fi.gems.metaobject.GeographicMetaObjectProperty;
  * Rfb Property enumeration
  * (to use in Rfb codelists)
  * 
- * @author eblondel
+ * @author Emmanuel Blondel <emmanuel.blondel@fao.org>
  *
  */
 public enum RfbProperty implements GeographicMetaObjectProperty{

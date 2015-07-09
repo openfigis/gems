@@ -1,4 +1,8 @@
+/**
+ * (c) 2015 FAO / UN (project: gems-collection)
+ */
 package org.fao.fi.gems.collection.properties;
+
 import org.fao.fi.gems.entity.EntityAddin;
 import org.fao.fi.gems.entity.EntityAuthority;
 import org.fao.fi.gems.metaobject.GeographicMetaObjectProperty;
@@ -7,7 +11,7 @@ import org.fao.fi.gems.metaobject.GeographicMetaObjectProperty;
  * Vme Property enumeration
  * (to use in Vme codelists)
  * 
- * @author eblondel
+ * @author Emmanuel Blondel <emmanuel.blondel@fao.org>
  *
  */
 public enum VmeProperty implements GeographicMetaObjectProperty {

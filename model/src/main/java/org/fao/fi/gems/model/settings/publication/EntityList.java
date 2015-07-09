@@ -1,7 +1,16 @@
+/**
+ * (c) 2015 FAO / UN (project: gems-model)
+ */
 package org.fao.fi.gems.model.settings.publication;
 
 import java.util.List;
 
+/**
+ * EntityList
+ * 
+ * @author Emmanuel Blondel <emmanuel.blondel@fao.org>
+ *
+ */
 public class EntityList {
 	
 	private List<String> include;

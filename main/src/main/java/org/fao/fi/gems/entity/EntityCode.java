@@ -1,7 +1,16 @@
+/**
+ * (c) 2015 FAO / UN (project: gems-main)
+ */
 package org.fao.fi.gems.entity;
 
 import org.fao.fi.gems.model.settings.data.filter.DataObjectFilter;
 
+/**
+ * EntityCode
+ * 
+ * @author Emmanuel Blondel <emmanuel.blondel@fao.org>
+ *
+ */
 public class EntityCode {
 
 	private DataObjectFilter filter;

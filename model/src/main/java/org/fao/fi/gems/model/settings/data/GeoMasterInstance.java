@@ -1,5 +1,14 @@
+/**
+ * (c) 2015 FAO / UN (project: gems-model)
+ */
 package org.fao.fi.gems.model.settings.data;
 
+/**
+ * GeoMasterInstance
+ * 
+ * @author Emmanuel Blondel <emmanuel.blondel@fao.org>
+ *
+ */
 public class GeoMasterInstance extends GeoInstance{
 	
 	private String version;

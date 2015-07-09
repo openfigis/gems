@@ -1,3 +1,6 @@
+/**
+ * (c) 2015 FAO / UN (project: gems-publisher)
+ */
 package org.fao.fi.gems.publisher;
 
 import java.io.File;
@@ -32,7 +35,7 @@ import it.geosolutions.geonetwork.util.GNSearchResponse.GNMetadata;
  * Metadata Publisher Allows to publish ISO 19115/19139 compliant metadata in a
  * Geonetwork catalogue.
  * 
- * @author eblondel (FAO)
+ * @author Emmanuel Blondel <emmanuel.blondel@fao.org>
  * 
  */
 public class MetadataPublisher {

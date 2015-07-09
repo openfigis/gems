@@ -1,3 +1,6 @@
+/**
+ * (c) 2015 FAO / UN (project: gems-model)
+ */
 package org.fao.fi.gems.model.settings.data.filter;
 
 import java.util.ArrayList;
@@ -9,7 +12,7 @@ import java.util.List;
  * - a list of extra data filters (with values specified at configuration level)
  * - a list of properties to restrain the featureType of the final GEMS product
  * 
- * @author eblondel
+ * @author Emmanuel Blondel <emmanuel.blondel@fao.org>
  *
  */
 public class FilterList {
