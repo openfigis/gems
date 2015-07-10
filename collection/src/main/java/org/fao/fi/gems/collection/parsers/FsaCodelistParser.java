@@ -27,6 +27,7 @@ import org.fao.fi.gems.model.settings.data.filter.DataObjectFilter;
 import org.fao.fi.gems.util.Utils;
 
 import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.google.gson.stream.JsonReader;
@@ -61,7 +62,12 @@ public class FsaCodelistParser implements CodelistParser {
 			if (bindings.size() > 0) {
 				for(int i = 0;i<bindings.size();i++){
 					JsonObject obj = bindings.get(i).getAsJsonObject().get("properties").getAsJsonObject();
-					String fsa = obj.get("F_CODE").getAsString();
+					String codeName = "F_CODE";
+					JsonElement fsaElem = obj.get(codeName);
+					if(fsaElem == null){
+						fsaElem = obj.get(codeName.toLowerCase());
+					}
+					String fsa = fsaElem.getAsString();
 					DataObjectFilter fsaFilter = config.getSettings().getGeographicServerSettings().getFilters().getData().get(0);
 					EntityCode fsaCode = new EntityCode(fsaFilter, fsa);
 					List<EntityCode> fsaCodeStack = Arrays.asList(fsaCode);
