@@ -20,7 +20,7 @@ import org.fao.fi.gems.collection.properties.FsaProperty;
 import org.fao.fi.gems.entity.EntityCode;
 import org.fao.fi.gems.entity.GeographicEntity;
 import org.fao.fi.gems.entity.GeographicEntityImpl;
-import org.fao.fi.gems.lod.entity.common.FLODEezEntity;
+import org.fao.fi.gems.lod.entity.common.FLODFsaEntity;
 import org.fao.fi.gems.metaobject.GeographicMetaObjectProperty;
 import org.fao.fi.gems.model.GemsConfig;
 import org.fao.fi.gems.model.settings.data.filter.DataObjectFilter;
@@ -87,7 +87,7 @@ public class FsaCodelistParser implements CodelistParser {
 							properties.put(FsaProperty.CWP, Arrays.asList(fsa));
 							
 							
-							FLODEezEntity flodEntity = new FLODEezEntity(fsa);
+							FLODFsaEntity flodEntity = new FLODFsaEntity(fsa);
 							if(flodEntity.content() != null){
 								properties.put(EezProperty.FLOD, Arrays.asList(flodEntity.authorityUri()));
 							}
