@@ -3,6 +3,7 @@
  */
 package org.fao.fi.gems.collection.properties;
 
+import org.fao.fi.gems.entity.EntityAddin;
 import org.fao.fi.gems.entity.EntityAuthority;
 import org.fao.fi.gems.metaobject.GeographicMetaObjectProperty;
 
@@ -17,7 +18,9 @@ public enum FsaProperty implements GeographicMetaObjectProperty{
 		
 	FAO (EntityAuthority.FAO, true, true, true),
 	FLOD (EntityAuthority.FLOD, true, true, true),
-	CWP (EntityAuthority.CWP, true, true, false);
+	CWP (EntityAuthority.CWP, true, true, false),
+	
+	ABSTRACT(EntityAddin.ABSTRACT, false, false, false);
 	
 	private final Object object;
 	private final boolean isAuthority;
