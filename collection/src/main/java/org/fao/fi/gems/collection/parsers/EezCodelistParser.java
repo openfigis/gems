@@ -88,7 +88,7 @@ public class EezCodelistParser implements CodelistParser{
 								properties.put(EezProperty.FLOD, Arrays.asList(flodEntity.authorityUri()));
 							}
 							
-							entity = new GeographicEntityImpl(owner, collection, eezCodeStack, label, properties);
+							entity = new GeographicEntityImpl(owner, collection, eezCodeStack, label, properties, null);
 							eezCodelist.add(entity);
 						} catch (URISyntaxException e) {
 							e.printStackTrace();

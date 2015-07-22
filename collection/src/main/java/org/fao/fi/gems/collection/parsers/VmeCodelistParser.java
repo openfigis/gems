@@ -139,7 +139,7 @@ public class VmeCodelistParser implements CodelistParser{
 								properties.put(VmeProperty.STYLE, Arrays.asList(style));
 								
 								String collection = config.getSettings().getPublicationSettings().getCollectionType();
-								entity = new FigisGeographicEntityImpl(owner, collection, vmeCodeStack, title, properties);
+								entity = new FigisGeographicEntityImpl(owner, collection, vmeCodeStack, title, properties, null);
 								if(figisId != null) entity.setFigisId(figisId);
 								entity.setFigisDomain("vme");
 								

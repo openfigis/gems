@@ -29,5 +29,7 @@ public interface GeographicEntity {
 	String metaIdentifier();
 
 	Map<GeographicMetaObjectProperty, List<String>> properties();
+	
+	GeographicEntity parent();
 
 }

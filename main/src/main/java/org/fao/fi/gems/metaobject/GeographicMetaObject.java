@@ -37,6 +37,8 @@ public interface GeographicMetaObject {
 	
 	String metaIdentifier();
 	
+	String metaParentIdentifier();
+	
 	String metaTitle();
 	
 	MetadataContent template();

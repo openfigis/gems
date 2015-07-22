@@ -138,7 +138,7 @@ public class SpeciesCodelistParser implements CodelistParser{
 						properties.put(SpeciesProperty.STYLE, Arrays.asList(randomStyle));
 						
 						//create Geographic entity
-						FigisGeographicEntityImpl entity = new FigisGeographicEntityImpl(owner, collection, speciesCodeStack, scName, properties);
+						FigisGeographicEntityImpl entity = new FigisGeographicEntityImpl(owner, collection, speciesCodeStack, scName, properties, null);
 						
 						//specific Figis stuff required
 						entity.setFigisDomain("species");

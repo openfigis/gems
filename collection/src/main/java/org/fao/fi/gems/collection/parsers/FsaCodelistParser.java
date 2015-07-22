@@ -24,6 +24,7 @@ import org.fao.fi.gems.entity.EntityCode;
 import org.fao.fi.gems.entity.GeographicEntity;
 import org.fao.fi.gems.entity.GeographicEntityImpl;
 import org.fao.fi.gems.lod.entity.common.FLODFsaEntity;
+import org.fao.fi.gems.metaobject.GeographicMetaObject;
 import org.fao.fi.gems.metaobject.GeographicMetaObjectProperty;
 import org.fao.fi.gems.model.GemsConfig;
 import org.fao.fi.gems.model.settings.data.filter.DataObjectFilter;
@@ -46,10 +47,14 @@ import com.google.gson.stream.JsonReader;
  */
 public class FsaCodelistParser implements CodelistParser {
 	
+	static final String FIELD_CODE = "F_CODE";
+	static final String FIELD_LEVEL = "F_LEVEL";
+	
 	@Override
 	public Set<GeographicEntity> getCodelist(GemsConfig config) {
 		
 		String owner = Utils.whoIsOwner(config);
+		String collection = config.getSettings().getPublicationSettings().getCollectionType();
 		
 		Set<GeographicEntity> fsaCodelist = new HashSet<GeographicEntity>();
 		
@@ -76,13 +81,19 @@ public class FsaCodelistParser implements CodelistParser {
 			if (bindings.size() > 0) {
 				for(int i = 0;i<bindings.size();i++){
 					JsonObject obj = bindings.get(i).getAsJsonObject().get("properties").getAsJsonObject();
-					String codeName = "F_CODE";
-					JsonElement fsaElem = obj.get(codeName);
+					JsonElement fsaElem = obj.get(FIELD_CODE);
 					if(fsaElem == null){
-						fsaElem = obj.get(codeName.toLowerCase());
+						fsaElem = obj.get(FIELD_CODE.toLowerCase());
 					}
 					String fsa = fsaElem.getAsString();
-					String parentFsa = fsa.substring(0,2);
+					String majorFsa = fsa.substring(0,2);
+					
+					JsonElement levelElem = obj.get(FIELD_LEVEL);
+					if(levelElem == null){
+						levelElem = obj.get(FIELD_LEVEL.toLowerCase());
+					}
+					String fsaLevel = levelElem.getAsString();
+					
 					DataObjectFilter fsaFilter = config.getSettings().getGeographicServerSettings().getFilters().getData().get(0);
 					EntityCode fsaCode = new EntityCode(fsaFilter, fsa);
 					List<EntityCode> fsaCodeStack = Arrays.asList(fsaCode);
@@ -102,7 +113,6 @@ public class FsaCodelistParser implements CodelistParser {
 					boolean wrapEntity = Utils.wrapEntity(config, fsa) && !yetIncluded;
 					if(wrapEntity){
 						try {
-							String collection = config.getSettings().getPublicationSettings().getCollectionType();
 							
 							Map<GeographicMetaObjectProperty, List<String>> properties = new HashMap<GeographicMetaObjectProperty, List<String>>();
 							properties.put(FsaProperty.FAO, Arrays.asList(Utils.buildMetadataIdentifier(owner, collection, fsa)));
@@ -115,7 +125,7 @@ public class FsaCodelistParser implements CodelistParser {
 							
 							//Fsa name & abstract
 							String fsaName = null;
-							URL fsURL = new URL("http://www.fao.org/fishery/xml/area/Area" + parentFsa);
+							URL fsURL = new URL("http://www.fao.org/fishery/xml/area/Area" + majorFsa);
 							Document doc = dBuilder.parse(fsURL.openStream());	
 
 							NodeList waterAreaRefs = doc.getDocumentElement().getElementsByTagName("fi:WaterAreaRef");
@@ -126,14 +136,46 @@ public class FsaCodelistParser implements CodelistParser {
 									//get name
 									Element areaIdent = (Element) waterAreaRef.getParentNode();
 									Element nameEl = (Element) areaIdent.getElementsByTagName("fi:Name").item(0);
-									fsaName = nameEl.getTextContent().replace(")", " ");
-									fsaName += "of FAO Major Area " + parentFsa + ")";
+									fsaName = nameEl.getTextContent();
+									if(fsaLevel != "MAJOR"){
+										fsaName = fsaName.replace(")", " ");
+										fsaName += "of FAO Major Area " + majorFsa + ")";
+									}
 									
 									break;
 								}
 							}
 							
-							entity = new GeographicEntityImpl(owner, collection, fsaCodeStack, fsaName, properties);
+							//parent
+							GeographicEntity parentEntity = null;
+							
+							String parentFsaLevel = null;
+							switch(fsaLevel){
+								case "SUBAREA":
+									parentFsaLevel = "F_AREA";
+									break;
+								case "DIVISION":
+									parentFsaLevel = "F_SUBAREA";
+									break;
+								case "SUBDIVISION":
+									parentFsaLevel = "F_DIVISION";
+									break;
+								case "SUBUNIT":
+									parentFsaLevel = "F_SUBDIVIS";
+									break;
+							}
+							if(parentFsaLevel != null){
+								JsonElement parentElem = obj.get(parentFsaLevel);
+								if(parentElem == null){
+									parentElem = obj.get(parentFsaLevel.toLowerCase());
+								}
+								String parentFsa = parentElem.getAsString();
+								EntityCode parentCode = new EntityCode(fsaFilter, parentFsa);
+								List<EntityCode> parentCodeStack = Arrays.asList(parentCode);
+								parentEntity = new GeographicEntityImpl(owner, collection, parentCodeStack, null, null, null);
+							}
+							
+							entity = new GeographicEntityImpl(owner, collection, fsaCodeStack, fsaName, properties, parentEntity);
 							fsaCodelist.add(entity);
 						} catch (URISyntaxException e) {
 							e.printStackTrace();

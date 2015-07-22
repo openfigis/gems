@@ -26,16 +26,20 @@ public class GeographicEntityImpl implements GeographicEntity {
 	private String refName;	
 	private Map<GeographicMetaObjectProperty, List<String>> specificProperties;
 	private String metaIdentifier;
+	private GeographicEntity parentEntity;
  
 	public GeographicEntityImpl(String owner, String collection,
 								List<EntityCode> codeStack, String refName,
-								Map<GeographicMetaObjectProperty, List<String>> properties) throws URISyntaxException {
+								Map<GeographicMetaObjectProperty, List<String>> properties,
+								GeographicEntity parentEntity) throws URISyntaxException {
 		this.owner = owner;
 		this.collection = collection;
 		this.codeStack = codeStack;
 		this.code = Utils.buildCode(this.codeStack);
 		this.refName = refName;
 		this.specificProperties = properties;
+		this.parentEntity = parentEntity;
+		
 		this.setMetaIdentifier(Utils.buildMetadataIdentifier(this.owner, this.collection, this.code));
 	}
 	
@@ -129,6 +133,22 @@ public class GeographicEntityImpl implements GeographicEntity {
 	 */
 	public void setMetaIdentifier(String metaIdentifier){
 		this.metaIdentifier = metaIdentifier;
+	}
+	
+	/**
+	 * Get the parent entity
+	 * 
+	 */
+	public GeographicEntity parent(){
+		return this.parentEntity;
+	}
+	
+	/**
+	 * Set a parent entity
+	 * 
+	 */
+	public void setParent(GeographicEntity parent){
+		this.parentEntity = parent;
 	}
 
 }

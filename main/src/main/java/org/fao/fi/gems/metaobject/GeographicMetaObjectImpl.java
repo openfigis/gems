@@ -5,6 +5,7 @@ package org.fao.fi.gems.metaobject;
 
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -46,9 +47,11 @@ public class GeographicMetaObjectImpl implements GeographicMetaObject {
 	private String code;
 	
 	private String refName;
-	private String metaId;
-	private String metaTitle;
 	private String targetLayername;
+	
+	private String metaIdentifier;
+	private String metaParentIdentifier;
+	private String metaTitle;
 	
 	private Map<EntityAddin,String> addins;
 	protected Map<GeographicMetaObjectProperty,List<String>> specificProperties;
@@ -88,6 +91,7 @@ public class GeographicMetaObjectImpl implements GeographicMetaObject {
 		this.setCode(entities);
 		this.setRefname(entities);
 		this.setMetaIdentifier();
+		this.setMetaParentIdentifier();
 		this.setMetaTitle();
 		
 		this.setSpecificProperties(entities, objectProperties);
@@ -255,13 +259,12 @@ public class GeographicMetaObjectImpl implements GeographicMetaObject {
 	 * 
 	 */
 	public String metaIdentifier(){
-		return this.metaId;
+		return this.metaIdentifier;
 	}
 	
 	/**
 	 * Set Meta Identifier
 	 * 
-	 * @param entities
 	 */
 	public void setMetaIdentifier() {
 		MetadataContact owner = null;
@@ -271,7 +274,37 @@ public class GeographicMetaObjectImpl implements GeographicMetaObject {
 				break;
 			}
 		}
-		this.metaId = Utils.buildMetadataIdentifier(owner.getAcronym(), this.collection, entities);
+		this.metaIdentifier = Utils.buildMetadataIdentifier(owner.getAcronym(), this.collection, entities);
+	}
+	
+	/**
+	 * Get meta parent identifier
+	 * 
+	 */
+	public String metaParentIdentifier(){
+		return this.metaParentIdentifier;
+	}
+	
+	/**
+	 * Set meta parent identifier
+	 * 
+	 */
+	public void setMetaParentIdentifier() {
+		MetadataContact owner = null;
+		for(MetadataContact contact : this.template().getOrganizationContacts()){
+			if(contact.getRole().matches("OWNER")){
+				owner = contact;
+				break;
+			}
+		}
+		
+		this.metaParentIdentifier = null;
+		if(entities.size() == 1){
+			GeographicEntity parent = entities.get(0).parent();
+			if(parent != null){
+				this.metaParentIdentifier = Utils.buildMetadataIdentifier(owner.getAcronym(), this.collection, Arrays.asList(parent));
+			}
+		}
 	}
 	
 	/**

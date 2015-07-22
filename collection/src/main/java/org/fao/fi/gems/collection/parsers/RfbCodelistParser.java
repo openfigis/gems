@@ -108,7 +108,7 @@ public class RfbCodelistParser implements CodelistParser{
 							properties.put(RfbProperty.ABSTRACT, Arrays.asList(abstractText));
 						}
 						
-						FigisGeographicEntityImpl entity = new FigisGeographicEntityImpl(owner, collection, rfbCodeStack, label, properties);
+						FigisGeographicEntityImpl entity = new FigisGeographicEntityImpl(owner, collection, rfbCodeStack, label, properties, null);
 						
 						//Figis stuff
 						entity.setFigisDomain("rfbs");

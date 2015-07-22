@@ -128,7 +128,13 @@ public class GeographicEntityMetadata extends DefaultMetadata {
 		// build the metadata
 		//-------------------
 		// identifier
-		this.setIdentifier(object.metaIdentifier()); 
+		this.setIdentifier(object.metaIdentifier());
+		
+		// parent identifier
+		String parentIdentifier = object.metaParentIdentifier();
+		if(parentIdentifier != null){
+			this.setParentIdentifier(parentIdentifier);
+		}
 		
 		//citation date
 		DefaultCitationDate citationDate = new DefaultCitationDate();
