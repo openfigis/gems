@@ -24,7 +24,6 @@ import org.fao.fi.gems.entity.EntityCode;
 import org.fao.fi.gems.entity.GeographicEntity;
 import org.fao.fi.gems.entity.GeographicEntityImpl;
 import org.fao.fi.gems.lod.entity.common.FLODFsaEntity;
-import org.fao.fi.gems.metaobject.GeographicMetaObject;
 import org.fao.fi.gems.metaobject.GeographicMetaObjectProperty;
 import org.fao.fi.gems.model.GemsConfig;
 import org.fao.fi.gems.model.settings.data.filter.DataObjectFilter;
@@ -40,15 +39,21 @@ import com.google.gson.JsonParser;
 import com.google.gson.stream.JsonReader;
 
 /**
- * A codelist parser for FAO Areas
+ * A generic abstract codelist parser for FAO Areas
  * 
  * @author Emmanuel Blondel <emmanuel.blondel@fao.org>
  *
  */
-public class FsaCodelistParser implements CodelistParser {
+public abstract class FsaGenericCodelistParser implements CodelistParser {
+	
+	boolean nested;
 	
 	static final String FIELD_CODE = "F_CODE";
 	static final String FIELD_LEVEL = "F_LEVEL";
+	
+	public FsaGenericCodelistParser(boolean nested){
+		this.nested = nested;
+	}
 	
 	@Override
 	public Set<GeographicEntity> getCodelist(GemsConfig config) {
@@ -94,10 +99,37 @@ public class FsaCodelistParser implements CodelistParser {
 					}
 					String fsaLevel = levelElem.getAsString();
 					
-					DataObjectFilter fsaFilter = config.getSettings().getGeographicServerSettings().getFilters().getData().get(0);
-					EntityCode fsaCode = new EntityCode(fsaFilter, fsa);
+					DataObjectFilter fsaFilter = null;
+					EntityCode fsaCode = null;
+					if (nested) {
+						String nestingFieldName = null;
+						switch(fsaLevel){
+						case "MAJOR":
+							nestingFieldName = "F_AREA";
+							break;
+						case "SUBAREA":
+							nestingFieldName = "F_SUBAREA";
+							break;
+						case "DIVISION":
+							nestingFieldName = "F_DIVISION";
+							break;
+						case "SUBDIVISION":
+							nestingFieldName = "F_SUBDIVIS";
+							break;
+						case "SUBUNIT":
+							nestingFieldName = "F_SUBUNIT";
+							break;	
+						}
+						fsaFilter = new DataObjectFilter();
+						fsaFilter.setIsString(true);
+						fsaFilter.setProperty(nestingFieldName);
+						
+					} else {
+						fsaFilter = config.getSettings().getGeographicServerSettings().getFilters().getData().get(0);
+					}
+					
+					fsaCode = new EntityCode(fsaFilter, fsa);
 					List<EntityCode> fsaCodeStack = Arrays.asList(fsaCode);
-
 					GeographicEntity entity = null;
 					
 					//wrapEntity by default is true
@@ -137,9 +169,14 @@ public class FsaCodelistParser implements CodelistParser {
 									Element areaIdent = (Element) waterAreaRef.getParentNode();
 									Element nameEl = (Element) areaIdent.getElementsByTagName("fi:Name").item(0);
 									fsaName = nameEl.getTextContent();
-									if(fsaLevel != "MAJOR"){
+									
+									if(!fsaLevel.equalsIgnoreCase("MAJOR")){
 										fsaName = fsaName.replace(")", " ");
 										fsaName += "of FAO Major Area " + majorFsa + ")";
+									}
+									
+									if(!fsaFilter.getProperty().equalsIgnoreCase("F_SUBUNIT")){
+										fsaName += " and nested areas";
 									}
 									
 									break;
@@ -170,7 +207,7 @@ public class FsaCodelistParser implements CodelistParser {
 									parentElem = obj.get(parentFsaLevel.toLowerCase());
 								}
 								String parentFsa = parentElem.getAsString();
-								EntityCode parentCode = new EntityCode(fsaFilter, parentFsa);
+								EntityCode parentCode = new EntityCode(null, parentFsa);
 								List<EntityCode> parentCodeStack = Arrays.asList(parentCode);
 								parentEntity = new GeographicEntityImpl(owner, collection, parentCodeStack, null, null, null);
 							}

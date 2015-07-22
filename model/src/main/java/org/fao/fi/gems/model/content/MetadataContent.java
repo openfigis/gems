@@ -21,8 +21,8 @@ public class MetadataContent {
 
 	private String collection;
 	private String collectionURL;
-	private boolean hasBaseTitle;
-	private String baseTitle;
+	private String titlePrefix;
+	private String titleSuffix;
 	private String abstractText;
 	private String purpose;
 	private String methodology;
@@ -54,20 +54,20 @@ public class MetadataContent {
 		return this.collectionURL;
 	}
 	
-	public void setHasBaseTitle(boolean hasbasetitle){
-		this.hasBaseTitle = hasbasetitle;
+	public void setTitlePrefix(String prefix){
+		this.titlePrefix = prefix;
 	}
 	
-	public boolean getHasBaseTitle(){
-		return this.hasBaseTitle;
+	public String getTitlePrefix(){
+		return this.titlePrefix;
+	}	
+	
+	public void setTitleSuffix(String suffix){
+		this.titleSuffix = suffix;
 	}
 	
-	public void setBaseTitle(String basetitle){
-		this.baseTitle = basetitle;
-	}
-	
-	public String getBaseTitle(){
-		return this.baseTitle;
+	public String getTitleSuffix(){
+		return this.titleSuffix;
 	}	
 	
 	public void setAbstract(String abstractText){

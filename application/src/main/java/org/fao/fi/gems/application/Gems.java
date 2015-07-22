@@ -67,7 +67,7 @@ public class Gems {
 		LOGGER.info("Owner = "+owner);
 		String collectionType = config.getSettings().getPublicationSettings().getCollectionType();
 		LOGGER.info("Collection type = "+collectionType);
-		String codelistUrl = config.getSettings().getPublicationSettings().getCodelistURL().replaceAll("&amp;","&");
+		String codelistUrl = config.getSettings().getPublicationSettings().getCodelistURL();
 		LOGGER.info("Codelist URL = "+codelistUrl);
 		
 		EntityList entities = config.getSettings().getPublicationSettings().getEntities();
@@ -180,7 +180,7 @@ public class Gems {
 					
 					} else if(obj == EntityAddin.BASETITLE) {
 						String basetitleText = entity.properties().get(property).get(0);
-						config.getContent().setBaseTitle(basetitleText);
+						config.getContent().setTitlePrefix(basetitleText);
 					}
 					
 				}

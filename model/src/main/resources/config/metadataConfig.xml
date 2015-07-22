@@ -171,8 +171,10 @@
 		<!-- Textual description Content -->
 		<collection>collection1</collection>
 		<collectionURL>url1</collectionURL>
-		<hasBaseTitle>true</hasBaseTitle>
-		<baseTitle>basetitle</baseTitle>
+		
+		<titlePrefix>prefix | </titlePrefix>
+		<titleSuffix> | suffix</titleSuffix>
+		
 		<abstractText>abstract</abstractText>
 		<purpose>purpose</purpose>
 		<methodology>methodology</methodology>

@@ -38,8 +38,8 @@ public class MetadataContentTest {
 		Assert.assertNotNull(content);
 		Assert.assertEquals("collection1", content.getCollection());
 		Assert.assertEquals("url1", content.getCollectionURL());
-		Assert.assertTrue(content.getHasBaseTitle());
-		Assert.assertEquals("basetitle", content.getBaseTitle());
+		Assert.assertEquals("prefix | ", content.getTitlePrefix());
+		Assert.assertEquals(" | suffix", content.getTitleSuffix());
 		Assert.assertEquals("abstract", content.getAbstract());
 		Assert.assertEquals("purpose", content.getPurpose());
 		Assert.assertEquals("methodology", content.getMethodology());

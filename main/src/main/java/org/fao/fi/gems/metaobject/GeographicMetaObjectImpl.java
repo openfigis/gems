@@ -322,11 +322,9 @@ public class GeographicMetaObjectImpl implements GeographicMetaObject {
 	 */
 	public void setMetaTitle(){
 		
-		this.metaTitle = "";
-		if(this.template().getHasBaseTitle()){
-			this.metaTitle += this.template().getBaseTitle();
-		}
+		this.metaTitle = this.template().getTitlePrefix();
 		this.metaTitle += this.refName;
+		this.metaTitle += this.template().getTitleSuffix();
 		
 	}
 	

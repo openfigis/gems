@@ -141,7 +141,7 @@ public class PublicationSettings{
 	 * @param codelistURL the codelistURL to set
 	 */
 	public void setCodelistURL(String codelistURL) {
-		this.codelistURL = codelistURL;
+		this.codelistURL = codelistURL.replaceAll("&amp;","&");
 	}
 
 
