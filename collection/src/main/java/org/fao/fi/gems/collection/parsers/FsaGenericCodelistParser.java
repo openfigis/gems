@@ -175,7 +175,7 @@ public abstract class FsaGenericCodelistParser implements CodelistParser {
 										fsaName += "of FAO Major Area " + majorFsa + ")";
 									}
 									
-									if(!fsaFilter.getProperty().equalsIgnoreCase("F_SUBUNIT")){
+									if(nested && !fsaFilter.getProperty().equalsIgnoreCase("F_SUBUNIT")){
 										fsaName += " and nested areas";
 									}
 									
@@ -217,7 +217,6 @@ public abstract class FsaGenericCodelistParser implements CodelistParser {
 						} catch (URISyntaxException e) {
 							e.printStackTrace();
 						} catch (Exception e) {
-							// TODO Auto-generated catch block
 							e.printStackTrace();
 						}
 					}
