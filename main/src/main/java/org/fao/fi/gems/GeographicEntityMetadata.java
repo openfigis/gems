@@ -618,7 +618,7 @@ public class GeographicEntityMetadata extends DefaultMetadata {
 		
 		// abstract
 		// -------
-		identification.setAbstract(new SimpleInternationalString(object.metaTitle()+ ". "+ object.template().getAbstract()));
+		identification.setAbstract(new SimpleInternationalString(object.template().getAbstract()));
 
 		// purpose
 		// -------
