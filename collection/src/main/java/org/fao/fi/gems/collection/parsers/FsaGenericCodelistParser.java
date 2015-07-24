@@ -148,7 +148,6 @@ public abstract class FsaGenericCodelistParser implements CodelistParser {
 							
 							Map<GeographicMetaObjectProperty, List<String>> properties = new HashMap<GeographicMetaObjectProperty, List<String>>();
 							properties.put(FsaProperty.FAO, Arrays.asList(Utils.buildMetadataIdentifier(owner, collection, fsa)));
-							properties.put(FsaProperty.CWP, Arrays.asList(fsa));
 							
 							FLODFsaEntity flodEntity = new FLODFsaEntity(fsa);
 							if(flodEntity.content() != null){
@@ -176,12 +175,14 @@ public abstract class FsaGenericCodelistParser implements CodelistParser {
 									}
 									
 									if(nested && !fsaFilter.getProperty().equalsIgnoreCase("F_SUBUNIT")){
-										fsaName += " and nested areas";
+										fsaName += " and its breakdown";
 									}
 									
 									break;
 								}
 							}
+							properties.put(FsaProperty.CWP, Arrays.asList(fsa, fsaName, fsaLevel));
+							
 							
 							//parent
 							GeographicEntity parentEntity = null;

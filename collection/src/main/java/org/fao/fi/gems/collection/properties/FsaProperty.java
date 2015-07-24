@@ -18,9 +18,7 @@ public enum FsaProperty implements GeographicMetaObjectProperty{
 		
 	FAO (EntityAuthority.FAO, true, true, true),
 	FLOD (EntityAuthority.FLOD, true, true, true),
-	CWP (EntityAuthority.CWP, true, true, false),
-	
-	ABSTRACT(EntityAddin.ABSTRACT, false, false, false);
+	CWP (EntityAuthority.CWP, true, true, false);
 	
 	private final Object object;
 	private final boolean isAuthority;
