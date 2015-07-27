@@ -492,7 +492,6 @@ public class GeographicMetadata extends DefaultMetadata {
 			wmsResource.setName(new SimpleInternationalString(object.targetLayerName()));
 			wmsResource.setDescription(new SimpleInternationalString(object.metaTitle()));
 			resources.add(wmsResource);
-			System.out.println(wmsResource);
 
 			// WFS resource (both GML and SHP)
 			// -------------------------------
