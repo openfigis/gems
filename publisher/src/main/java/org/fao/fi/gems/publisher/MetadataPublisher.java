@@ -9,14 +9,11 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Locale;
 import java.util.Map;
-import java.util.TimeZone;
-
 import javax.xml.transform.Result;
 import javax.xml.transform.stream.StreamResult;
 
-import org.apache.sis.util.Version;
 import org.apache.sis.xml.XML;
-import org.fao.fi.gems.GeographicEntityMetadata;
+import org.fao.fi.gems.metaobject.GeographicMetadata;
 import org.fao.fi.gems.metaobject.GeographicMetaObject;
 import org.fao.fi.gems.model.settings.metadata.MetadataCatalogueSettings;
 import org.fao.fi.gems.model.settings.publication.PublicationSettings;
@@ -42,8 +39,6 @@ public class MetadataPublisher {
 	
 	private static Logger LOGGER = LoggerFactory.getLogger(MetadataPublisher.class);
 
-	private String version;
-
 	private String gnBaseURL;
 	GNClient client;
 
@@ -51,11 +46,9 @@ public class MetadataPublisher {
 	 * Metadata publisher
 	 * 
 	 * @param catalogueSettings
-	 * @param publicationSettings
+	 *
 	 */
-	public MetadataPublisher(MetadataCatalogueSettings catalogueSettings,
-							 PublicationSettings publicationSettings) {
-		this.version = publicationSettings.getVersion();
+	public MetadataPublisher(MetadataCatalogueSettings catalogueSettings) {
 
 		// geonetwork connection
 		this.gnBaseURL = catalogueSettings.getUrl();
@@ -112,7 +105,7 @@ public class MetadataPublisher {
 		String metadataID = null;
 		try {
 
-			final GeographicEntityMetadata metadata = new GeographicEntityMetadata(object, this.version);	
+			final GeographicMetadata metadata = object.metadata();	
 
 			// metadata insert configuration
 			GNInsertConfiguration icfg = new GNInsertConfiguration();

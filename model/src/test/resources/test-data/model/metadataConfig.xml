@@ -180,6 +180,18 @@
 			<string>BIOTA</string>
 		</topicCategories>
 
+		<!-- Common online resources -->
+		<onlineResources>
+			<onlineResource>
+				<url>http://www.organization.org/link1</url>
+				<name>link1</name>
+			</onlineResource>
+			<onlineResource>
+				<url>http://www.organization.org/link2</url>
+				<name>link2</name>
+			</onlineResource>
+		</onlineResources>
+
 		<!-- Contacts -->
 		<organizationContacts>
 			<contact>

@@ -9,6 +9,7 @@ import java.io.IOException;
 import org.fao.fi.gems.model.content.MetadataBiblioRef;
 import org.fao.fi.gems.model.content.MetadataContact;
 import org.fao.fi.gems.model.content.MetadataContent;
+import org.fao.fi.gems.model.content.MetadataResource;
 import org.fao.fi.gems.model.content.MetadataThesaurus;
 import org.fao.fi.gems.model.settings.Settings;
 import org.fao.fi.gems.model.settings.data.BaseLayer;
@@ -97,6 +98,7 @@ public class GemsConfig {
 		//content
 		xstream.alias("contact", MetadataContact.class);
 		xstream.alias("thesaurus", MetadataThesaurus.class);
+		xstream.alias("onlineResource", MetadataResource.class);
 		xstream.alias("biblioRef", MetadataBiblioRef.class);
 
 		GemsConfig config = (GemsConfig) xstream

@@ -41,8 +41,7 @@ public class Publisher {
 		dataPublisher = new DataPublisher(config.getSettings().getGeographicServerSettings(),
 										  config.getSettings().getMetadataCatalogueSettings());
 		
-		metadataPublisher = new MetadataPublisher(config.getSettings().getMetadataCatalogueSettings(),
-												  config.getSettings().getPublicationSettings());
+		metadataPublisher = new MetadataPublisher(config.getSettings().getMetadataCatalogueSettings());
 		
 	}
 	

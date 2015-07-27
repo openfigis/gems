@@ -69,6 +69,24 @@ public class MetadataContentTest {
 		Assert.assertEquals("theme2", keywords2.get(1));
 		
 	}
+	
+	@Test
+	public void testOnlineResources(){
+		List<MetadataResource> onlineResources = content.getOnlineResources();
+		Assert.assertNotNull(onlineResources);
+		Assert.assertEquals(2, onlineResources.size());
+		
+		MetadataResource res1 = onlineResources.get(0);
+		Assert.assertNotNull(res1);
+		Assert.assertEquals("link1", res1.getName());
+		Assert.assertEquals("http://www.organization.org/link1", res1.getUrl());
+		
+		MetadataResource res2 = onlineResources.get(1);
+		Assert.assertNotNull(res2);
+		Assert.assertEquals("link2", res2.getName());
+		Assert.assertEquals("http://www.organization.org/link2", res2.getUrl());
+		
+	}
 
 	@Test
 	public void testOrganizationContacts(){

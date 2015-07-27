@@ -1,7 +1,7 @@
 /**
  * (c) 2015 FAO / UN (project: gems-main)
  */
-package org.fao.fi.gems;
+package org.fao.fi.gems.metaobject;
 
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -48,11 +48,9 @@ import org.apache.sis.metadata.iso.spatial.DefaultGeometricObjects;
 import org.apache.sis.metadata.iso.spatial.DefaultVectorSpatialRepresentation;
 import org.apache.sis.util.iso.SimpleInternationalString;
 import org.fao.fi.gems.entity.EntityAuthority;
-import org.fao.fi.gems.metaobject.FigisGeographicMetaObjectImpl;
-import org.fao.fi.gems.metaobject.GeographicMetaObject;
-import org.fao.fi.gems.metaobject.GeographicMetaObjectProperty;
 import org.fao.fi.gems.model.content.MetadataBiblioRef;
 import org.fao.fi.gems.model.content.MetadataContact;
+import org.fao.fi.gems.model.content.MetadataResource;
 import org.fao.fi.gems.model.content.MetadataThesaurus;
 import org.fao.fi.gems.util.Utils;
 import org.opengis.metadata.citation.DateType;
@@ -88,7 +86,7 @@ import com.vividsolutions.jts.geom.Envelope;
  * 
  */
 @SuppressWarnings("deprecation")
-public class GeographicEntityMetadata extends DefaultMetadata {
+public class GeographicMetadata extends DefaultMetadata {
 	
 	private static final String INSPIRE_THESAURUS_CITATION = "GEMET - INSPIRE themes, version 1.0";
 
@@ -117,8 +115,8 @@ public class GeographicEntityMetadata extends DefaultMetadata {
 	 * @throws ParseException
 	 * 
 	 */
-	public GeographicEntityMetadata(GeographicMetaObject object, String version) throws URISyntaxException, ParseException {
-
+	public GeographicMetadata(GeographicMetaObject object, String version) throws URISyntaxException, ParseException {
+ 
 		super();
 		this.object = object;
 		
@@ -436,13 +434,24 @@ public class GeographicEntityMetadata extends DefaultMetadata {
 
 			// website main resource
 			// ---------------------------
-			DefaultOnlineResource fiweb = new DefaultOnlineResource();
-			fiweb.setLinkage(new URI(object.template().getCollectionURL()));
-			fiweb.setProtocol("WWW:LINK-1.0-http--link");
-			fiweb.setDescription(new SimpleInternationalString(object
+			DefaultOnlineResource collection = new DefaultOnlineResource();
+			collection.setLinkage(new URI(object.template().getCollectionURL()));
+			collection.setProtocol(GemsResourceProtocol.W3C_HTTP_1_0_LINK.name());
+			collection.setDescription(new SimpleInternationalString(object
 					.template().getCollection()));
-			fiweb.setFunction(OnLineFunction.INFORMATION);
-			resources.add(fiweb);
+			collection.setFunction(OnLineFunction.INFORMATION);
+			resources.add(collection);
+			
+			// common online resources
+			// --------------------------
+			for(MetadataResource res : object.template().getOnlineResources()){
+				DefaultOnlineResource common = new DefaultOnlineResource();
+				common.setLinkage(new URI(res.getUrl()));
+				common.setProtocol(GemsResourceProtocol.W3C_HTTP_1_0_LINK.name());
+				common.setDescription(new SimpleInternationalString(res.getName()));
+				collection.setFunction(OnLineFunction.INFORMATION);
+				resources.add(common);
+			}
 
 			// factsheet (if it exists)
 			// ---------------------------
@@ -450,7 +459,7 @@ public class GeographicEntityMetadata extends DefaultMetadata {
 					&& ((FigisGeographicMetaObjectImpl) object).getFigisFactsheet() != null) {
 				DefaultOnlineResource factsheet = new DefaultOnlineResource();
 				factsheet.setLinkage(new URI( ((FigisGeographicMetaObjectImpl) object).getFigisFactsheet()));
-				factsheet.setProtocol("WWW:LINK-1.0-http--link");
+				factsheet.setProtocol(GemsResourceProtocol.W3C_HTTP_1_0_LINK.name());
 				factsheet.setDescription(new SimpleInternationalString(
 						"Factsheet - Summary description"));
 				factsheet.setFunction(OnLineFunction.INFORMATION);
@@ -463,7 +472,7 @@ public class GeographicEntityMetadata extends DefaultMetadata {
 					&& ((FigisGeographicMetaObjectImpl) object).getFigisViewerResource() != null){
 				DefaultOnlineResource viewerResource = new DefaultOnlineResource();
 				viewerResource.setLinkage(((FigisGeographicMetaObjectImpl) object).getFigisViewerResource());
-				viewerResource.setProtocol("WWW:LINK-1.0-http--link");
+				viewerResource.setProtocol(GemsResourceProtocol.W3C_HTTP_1_0_LINK.name());
 				viewerResource.setDescription(new SimpleInternationalString(object
 						.template().getCollection() + " (GIS Viewer)"));
 				viewerResource.setFunction(OnLineFunction.INFORMATION);
@@ -479,7 +488,7 @@ public class GeographicEntityMetadata extends DefaultMetadata {
 					+ object.config().getSettings().getGeographicServerSettings().getTargetWorkspace() + "/ows?SERVICE=WMS"));
 			// "&srs="+object.getGisProperties().get(GisProperty.PROJECTION)+
 			// "&styles="+object.getGisProperties().get(GisProperty.STYLE)));
-			wmsResource.setProtocol("OGC:WMS-1.3.0-http-get-map");
+			wmsResource.setProtocol(GemsResourceProtocol.OGC_WMS_1_3_0_GETMAP.name());
 			wmsResource.setName(new SimpleInternationalString(object.targetLayerName()));
 			wmsResource.setDescription(new SimpleInternationalString(object.metaTitle()));
 			resources.add(wmsResource);
@@ -492,7 +501,7 @@ public class GeographicEntityMetadata extends DefaultMetadata {
 					+ object.config().getSettings().getGeographicServerSettings().getTargetWorkspace()
 					+ "/ows?service=WFS&request=GetFeature&version=1.0.0"
 					+ "&typeName=" + object.targetLayerName()));
-			wfsResource1.setProtocol("OGC:WFS-1.0.0-http-get-feature");
+			wfsResource1.setProtocol(GemsResourceProtocol.OGC_WFS_1_0_0_GETFEATURE.name());
 			wfsResource1.setName(new SimpleInternationalString(object.targetLayerName()));
 			wfsResource1.setDescription(new SimpleInternationalString(
 					"GIS data (WFS - GML)"));
@@ -512,7 +521,7 @@ public class GeographicEntityMetadata extends DefaultMetadata {
 					+ "&outputFormat=SHAPE-ZIP" + "&format_options=filename:"
 					+ shpFileName + ".zip"));
 
-			wfsResource2.setProtocol("OGC:WFS-1.0.0-http-get-feature");
+			wfsResource2.setProtocol(GemsResourceProtocol.OGC_WFS_1_0_0_GETFEATURE.name());
 			wfsResource2.setName(new SimpleInternationalString(object.targetLayerName()));
 			wfsResource2.setDescription(new SimpleInternationalString(
 					"GIS data (WFS - Shapefile)"));
@@ -527,7 +536,7 @@ public class GeographicEntityMetadata extends DefaultMetadata {
 			DefaultOnlineResource xmlResource = new DefaultOnlineResource();
 			xmlResource.setLinkage(new URI(Utils.getXMLMetadataURL(
 					object.config().getSettings().getMetadataCatalogueSettings().getUrl(), this.getFileIdentifier())));
-			xmlResource.setProtocol("WWW:LINK-1.0-http--link");
+			xmlResource.setProtocol(GemsResourceProtocol.W3C_HTTP_1_0_LINK.name());
 			xmlResource.setName(new SimpleInternationalString("XML"));
 			xmlResource.setDescription(new SimpleInternationalString(
 					"metadata (XML)"));

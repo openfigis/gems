@@ -63,10 +63,11 @@ public class Gems {
 		//read the codelists
 		LOGGER.info("(2) Loading the reference list");
 		String owner = Utils.whoIsOwner(config);
-		
 		LOGGER.info("Owner = "+owner);
+		
 		String collectionType = config.getSettings().getPublicationSettings().getCollectionType();
 		LOGGER.info("Collection type = "+collectionType);
+		
 		String codelistUrl = config.getSettings().getPublicationSettings().getCodelistURL();
 		LOGGER.info("Codelist URL = "+codelistUrl);
 		

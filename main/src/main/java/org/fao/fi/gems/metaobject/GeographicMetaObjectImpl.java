@@ -5,6 +5,7 @@ package org.fao.fi.gems.metaobject;
 
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.text.ParseException;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -58,6 +59,8 @@ public class GeographicMetaObjectImpl implements GeographicMetaObject {
 	
 	private Map<FeatureTypeProperty, Object> geoproperties;
 	private URI graphicOverview;
+	
+	private GeographicMetadata metadata;
 	
  
 	/**
@@ -504,5 +507,25 @@ public class GeographicMetaObjectImpl implements GeographicMetaObject {
 
 		this.graphicOverview = new URI(graphicLink);
 	}
+	
+	
+	/**
+	 * Gets the corresponding GeographicMetadata object
+	 * 
+	 * @return an instance of GeographicMetadata
+	 */
+	public GeographicMetadata metadata() {
 
+		if (this.metadata == null) {
+			try {
+				this.metadata = new GeographicMetadata(this, config
+						.getSettings().getPublicationSettings().getVersion());
+			} catch (URISyntaxException | ParseException e) {
+				e.printStackTrace();
+			}
+		}
+
+		return this.metadata;
+
+	}
 }

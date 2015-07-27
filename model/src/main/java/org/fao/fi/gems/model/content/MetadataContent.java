@@ -31,6 +31,7 @@ public class MetadataContent {
 	private String disclaimer;
 	private List<MetadataThesaurus> thesaurusList;
 	private List<String> topicCategories;
+	private List<MetadataResource> onlineResources;
 	private List<MetadataContact> organizationContacts;
 	private List<MetadataContact> individualContacts;
 	private MetadataBiblioRef biblioRef;
@@ -134,6 +135,16 @@ public class MetadataContent {
 		return this.topicCategories;
 	}
 	
+	public void addOnlineResource (String onlineResource){
+		if(this.onlineResources == null){
+			this.onlineResources = new ArrayList<MetadataResource>();
+		}
+	}
+	
+	public List<MetadataResource> getOnlineResources(){
+		return this.onlineResources;
+	}
+	
 	public void setSupplementaryInformation(String info){
 		this.supplementaryInfo = info;
 	}
@@ -190,6 +201,7 @@ public class MetadataContent {
 		XStream xstream = new XStream(new StaxDriver());
 		xstream.alias("content", MetadataContent.class);
 		xstream.alias("thesaurus", MetadataThesaurus.class);
+		xstream.alias("onlineResource", MetadataResource.class);
 		xstream.alias("contact", MetadataContact.class);
 		xstream.alias("biblioRef", MetadataBiblioRef.class);
 		

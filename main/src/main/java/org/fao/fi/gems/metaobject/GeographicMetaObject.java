@@ -53,7 +53,7 @@ public interface GeographicMetaObject {
 
 	
 	/*
-	 * GIS methods
+	 * GIS data methods
 	 */
 
 	int featuresCount();
@@ -67,5 +67,11 @@ public interface GeographicMetaObject {
 	TemporalPrimitive temporalExtent();
 
 	URI graphicOverview();
+	
+	/*
+	 * GIS metadata methods 
+	 */
+	GeographicMetadata metadata();
+	
 
 }
