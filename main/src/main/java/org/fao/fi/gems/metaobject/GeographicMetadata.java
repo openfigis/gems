@@ -47,6 +47,7 @@ import org.apache.sis.metadata.iso.maintenance.DefaultScope;
 import org.apache.sis.metadata.iso.quality.DefaultDataQuality;
 import org.apache.sis.metadata.iso.spatial.DefaultGeometricObjects;
 import org.apache.sis.metadata.iso.spatial.DefaultVectorSpatialRepresentation;
+import org.apache.sis.referencing.NamedIdentifier;
 import org.apache.sis.util.iso.SimpleInternationalString;
 import org.fao.fi.gems.entity.EntityAuthority;
 import org.fao.fi.gems.model.content.MetadataBiblioRef;
@@ -54,6 +55,8 @@ import org.fao.fi.gems.model.content.MetadataContact;
 import org.fao.fi.gems.model.content.MetadataResource;
 import org.fao.fi.gems.model.content.MetadataThesaurus;
 import org.fao.fi.gems.util.Utils;
+import org.opengis.metadata.Identifier;
+import org.opengis.metadata.citation.Citation;
 import org.opengis.metadata.citation.DateType;
 import org.opengis.metadata.citation.OnLineFunction;
 import org.opengis.metadata.citation.OnlineResource;
@@ -72,6 +75,7 @@ import org.opengis.metadata.maintenance.ScopeCode;
 import org.opengis.metadata.spatial.GeometricObjectType;
 import org.opengis.metadata.spatial.TopologyLevel;
 import org.opengis.temporal.TemporalPrimitive;
+import org.opengis.util.InternationalString;
 
 import com.vividsolutions.jts.geom.Envelope;
 
@@ -156,7 +160,21 @@ public class GeographicMetadata extends DefaultMetadata {
 		this.setIndividualContacts(); // individual contacts
 		this.setDataQuality(); // methodology if existing
 		this.setSpatialRepresentation(); // spatial representation
-		this.setReferenceSystemInfo(Arrays.asList(new ReferenceSystemMetadata(object.crs().getIdentifiers().iterator().next()))); // ReferenceSystem
+
+		// ReferenceSystem
+		Identifier srsIdentifier = object.crs().getIdentifiers().iterator().next();
+		Citation srsCitation = srsIdentifier.getAuthority();
+		DefaultCitation srsNewCitation = new DefaultCitation(srsCitation);
+		srsNewCitation.setAlternateTitles(Arrays.asList(new SimpleInternationalString("")));
+		String srsCode = srsIdentifier.getCode();
+		String srsCodespace = srsIdentifier.getCodeSpace();
+		InternationalString srsDescription = srsIdentifier.getDescription();
+		String srsVersion = srsIdentifier.getVersion();
+		if(srsVersion == null) srsVersion = "";
+		NamedIdentifier srsNamedIdentifier = new NamedIdentifier(srsNewCitation, srsCodespace, srsCode, srsVersion, srsDescription);
+		ReferenceSystemMetadata rsm = new ReferenceSystemMetadata(srsNamedIdentifier);
+		this.setReferenceSystemInfo(Arrays.asList(rsm));
+		
 		this.setMetadataConstraints(); // constraints
 		this.setDistributionInfo();
 		this.setIdentificationInfo();
