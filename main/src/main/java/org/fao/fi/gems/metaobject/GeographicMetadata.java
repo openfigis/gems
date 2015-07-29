@@ -21,6 +21,7 @@ import java.util.Set;
 import java.util.UUID;
 
 import org.apache.sis.internal.jaxb.gmx.Anchor;
+import org.apache.sis.internal.jaxb.metadata.replace.ReferenceSystemMetadata;
 import org.apache.sis.metadata.iso.DefaultIdentifier;
 import org.apache.sis.metadata.iso.DefaultMetadata;
 import org.apache.sis.metadata.iso.DefaultMetadataScope;
@@ -142,7 +143,7 @@ public class GeographicMetadata extends DefaultMetadata {
 
 		this.setLanguages(Arrays.asList(Locale.ENGLISH));
 		this.setCharacterSets(Arrays.asList(Charset.forName("UTF-8")));
-
+		
 		//metadata standard
 		DefaultCitation mdCitation = new DefaultCitation();
 		mdCitation.setTitle(new SimpleInternationalString("ISO 19115:2003/19139"));
@@ -158,7 +159,7 @@ public class GeographicMetadata extends DefaultMetadata {
 		this.setIndividualContacts(); // individual contacts
 		this.setDataQuality(); // methodology if existing
 		this.setSpatialRepresentation(); // spatial representation
-		this.setReferenceSystemInfo(Arrays.asList(object.crs())); // ReferenceSystem
+		this.setReferenceSystemInfo(Arrays.asList(new ReferenceSystemMetadata(object.crs().getIdentifiers().iterator().next()))); // ReferenceSystem
 		this.setMetadataConstraints(); // constraints
 		this.setDistributionInfo();
 		this.setIdentificationInfo();
