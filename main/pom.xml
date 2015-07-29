@@ -30,6 +30,10 @@
 	
 		<!-- GEMS modules -->
 		<dependency>
+			<groupId>org.apache.sis.core</groupId>
+			<artifactId>sis-referencing</artifactId>
+		</dependency>
+		<dependency>
 			<groupId>org.fao.fi</groupId>
 			<artifactId>gems-model</artifactId>
 		</dependency>

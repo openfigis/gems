@@ -91,6 +91,11 @@
 			<!-- Apache SIS -->
 			<dependency>
 				<groupId>org.apache.sis.core</groupId>
+				<artifactId>sis-referencing</artifactId>
+				<version>${version.sis}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.sis.core</groupId>
 				<artifactId>sis-metadata</artifactId>
 				<version>${version.sis}</version>
 			</dependency>
