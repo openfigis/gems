@@ -135,11 +135,8 @@ public class GeographicMetadata extends DefaultMetadata {
 			this.setParentIdentifier(parentIdentifier);
 		}
 		
-		//citation date
-		DefaultCitationDate citationDate = new DefaultCitationDate();
-		citationDate.setDateType(DateType.REVISION);
-		citationDate.setDate(this.lastRevisionDate);
-		this.setDateInfo(Arrays.asList(citationDate));
+		//creation date
+		this.setDateStamp(this.lastRevisionDate);
 
 		this.setLanguages(Arrays.asList(Locale.ENGLISH));
 		this.setCharacterSets(Arrays.asList(Charset.forName("UTF-8")));
