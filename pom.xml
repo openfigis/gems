@@ -9,7 +9,7 @@
 	
 	<!-- Project description -->
 	<name>gems-parent</name>
-	<description>GEMS - GIS Enforcing Metadata and Semantic</description>
+	<description>GEMS - GIS Enforcing Metadata and Semantics</description>
 	<inceptionYear>2014</inceptionYear>
 		
 	<url>https://github.com/openfigis/gems</url>
