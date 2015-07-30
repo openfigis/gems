@@ -162,9 +162,7 @@ public class GeographicMetadata extends DefaultMetadata {
 		Identifier srsIdentifier = object.crs().getIdentifiers().iterator().next();
 		String srsCode = srsIdentifier.getCode();
 		String srsCodespace = srsIdentifier.getCodeSpace();
-		if(srsCodespace.equals("EPSG")){
-			srsCode = "http://www.opengis.net/def/crs/EPSG/0/" + srsCode;
-		}
+		
 		NamedIdentifier srsNamedIdentifier = new NamedIdentifier(null, srsCodespace, srsCode, null, null);
 		ReferenceSystemMetadata rsm = new ReferenceSystemMetadata(srsNamedIdentifier);
 		this.setReferenceSystemInfo(Arrays.asList(rsm));
@@ -341,12 +339,16 @@ public class GeographicMetadata extends DefaultMetadata {
 		scope.setLevel(ScopeCode.DATASET);
 		quality.setScope(scope);
 
+		//lineage
 		DefaultLineage lineage = new DefaultLineage();
 		String methodology = object.template().getMethodology()
 							 + " The data and metadata have been published with the FAO FI GEMS tool "
 							 + "(GIS Enforcing Metadata and Semantics) available at https://github.com/openfigis/gems ";
 		lineage.setStatement(new SimpleInternationalString(methodology));
 		quality.setLineage(lineage);
+		
+		
+		
 		this.setDataQualityInfo(Arrays.asList(quality));
 	}
 
@@ -528,7 +530,7 @@ public class GeographicMetadata extends DefaultMetadata {
 					+ object.config().getSettings().getGeographicServerSettings().getTargetWorkspace()
 					+ "/ows?service=WFS&request=GetFeature&version=1.0.0"
 					+ "&typeName=" + object.targetLayerName()
-					+ "&outputFormat=SHAPE-ZIP" + "&format_options=filename:"
+					+ "&outputFormat=SHAPE-ZIP" + "&format_options=filename%3A"
 					+ shpFileName + ".zip"));
 
 			wfsResource2.setProtocol(GemsResourceProtocol.OGC_WFS_1_0_0_GETFEATURE.protocol());

@@ -102,7 +102,7 @@ public final class Utils {
 
 		String metadataURL = gnBaseURL + "/srv/en/" + "csw?service=CSW"
 				+ "&request=GetRecordById" + "&Version=2.0.2"
-				+ "&elementSetName=full" + "&outputSchema=" + Namespaces.GMD
+				+ "&elementSetName=full" + "&outputSchema=" + Namespaces.GMD.replaceAll(":", "%3A")
 				+ "&id=" + mdIdentifier;
 
 		return metadataURL;
