@@ -56,7 +56,6 @@ import org.fao.fi.gems.model.content.MetadataResource;
 import org.fao.fi.gems.model.content.MetadataThesaurus;
 import org.fao.fi.gems.util.Utils;
 import org.opengis.metadata.Identifier;
-import org.opengis.metadata.citation.Citation;
 import org.opengis.metadata.citation.DateType;
 import org.opengis.metadata.citation.OnLineFunction;
 import org.opengis.metadata.citation.OnlineResource;
@@ -75,8 +74,6 @@ import org.opengis.metadata.maintenance.ScopeCode;
 import org.opengis.metadata.spatial.GeometricObjectType;
 import org.opengis.metadata.spatial.TopologyLevel;
 import org.opengis.temporal.TemporalPrimitive;
-import org.opengis.util.InternationalString;
-
 import com.vividsolutions.jts.geom.Envelope;
 
 /**
@@ -165,6 +162,9 @@ public class GeographicMetadata extends DefaultMetadata {
 		Identifier srsIdentifier = object.crs().getIdentifiers().iterator().next();
 		String srsCode = srsIdentifier.getCode();
 		String srsCodespace = srsIdentifier.getCodeSpace();
+		if(srsCodespace.equals("EPSG")){
+			srsCode = "http://www.opengis.net/def/crs/EPSG/0/" + srsCode;
+		}
 		NamedIdentifier srsNamedIdentifier = new NamedIdentifier(null, srsCodespace, srsCode, null, null);
 		ReferenceSystemMetadata rsm = new ReferenceSystemMetadata(srsNamedIdentifier);
 		this.setReferenceSystemInfo(Arrays.asList(rsm));
