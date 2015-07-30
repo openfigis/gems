@@ -163,15 +163,9 @@ public class GeographicMetadata extends DefaultMetadata {
 
 		// ReferenceSystem
 		Identifier srsIdentifier = object.crs().getIdentifiers().iterator().next();
-		Citation srsCitation = srsIdentifier.getAuthority();
-		DefaultCitation srsNewCitation = new DefaultCitation(srsCitation);
-		srsNewCitation.setAlternateTitles(Arrays.asList(new SimpleInternationalString("")));
 		String srsCode = srsIdentifier.getCode();
 		String srsCodespace = srsIdentifier.getCodeSpace();
-		InternationalString srsDescription = srsIdentifier.getDescription();
-		String srsVersion = srsIdentifier.getVersion();
-		if(srsVersion == null) srsVersion = "";
-		NamedIdentifier srsNamedIdentifier = new NamedIdentifier(srsNewCitation, srsCodespace, srsCode, srsVersion, srsDescription);
+		NamedIdentifier srsNamedIdentifier = new NamedIdentifier(null, srsCodespace, srsCode, null, null);
 		ReferenceSystemMetadata rsm = new ReferenceSystemMetadata(srsNamedIdentifier);
 		this.setReferenceSystemInfo(Arrays.asList(rsm));
 		
