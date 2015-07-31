@@ -165,11 +165,11 @@ public class GeographicMetadata extends DefaultMetadata {
 		Identifier srsIdentifier = object.crs().getIdentifiers().iterator().next();
 		String srsCode = srsIdentifier.getCode();
 		String srsCodespace = srsIdentifier.getCodeSpace();
-		
-		NamedIdentifier srsNamedIdentifier = new NamedIdentifier(null, srsCodespace, srsCode, null, null);
+		String srsUri = "http://www.opengis.net/def/crs/" + srsCodespace + "/0/" + srsCode;
+		NamedIdentifier srsNamedIdentifier = new NamedIdentifier(null, srsCodespace, srsUri, null, null);
 		ReferenceSystemMetadata rsm = new ReferenceSystemMetadata(srsNamedIdentifier);
 		this.setReferenceSystemInfo(Arrays.asList(rsm));
-		
+
 		this.setMetadataConstraints(); // constraints
 		this.setDistributionInfo();
 		this.setIdentificationInfo();
