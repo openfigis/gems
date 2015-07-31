@@ -44,7 +44,9 @@ import org.apache.sis.metadata.iso.identification.DefaultKeywords;
 import org.apache.sis.metadata.iso.lineage.DefaultLineage;
 import org.apache.sis.metadata.iso.maintenance.DefaultMaintenanceInformation;
 import org.apache.sis.metadata.iso.maintenance.DefaultScope;
+import org.apache.sis.metadata.iso.quality.DefaultConformanceResult;
 import org.apache.sis.metadata.iso.quality.DefaultDataQuality;
+import org.apache.sis.metadata.iso.quality.DefaultDomainConsistency;
 import org.apache.sis.metadata.iso.spatial.DefaultGeometricObjects;
 import org.apache.sis.metadata.iso.spatial.DefaultVectorSpatialRepresentation;
 import org.apache.sis.referencing.NamedIdentifier;
@@ -74,6 +76,7 @@ import org.opengis.metadata.maintenance.ScopeCode;
 import org.opengis.metadata.spatial.GeometricObjectType;
 import org.opengis.metadata.spatial.TopologyLevel;
 import org.opengis.temporal.TemporalPrimitive;
+
 import com.vividsolutions.jts.geom.Envelope;
 
 /**
@@ -330,10 +333,11 @@ public class GeographicMetadata extends DefaultMetadata {
 
 	/**
 	 * Data Quality / Lineage
+	 * @throws ParseException 
 	 * 
 	 * 
 	 */
-	protected void setDataQuality() {
+	protected void setDataQuality() throws ParseException {
 		DefaultDataQuality quality = new DefaultDataQuality();
 		DefaultScope scope = new DefaultScope();
 		scope.setLevel(ScopeCode.DATASET);
@@ -347,7 +351,45 @@ public class GeographicMetadata extends DefaultMetadata {
 		lineage.setStatement(new SimpleInternationalString(methodology));
 		quality.setLineage(lineage);
 		
+		//inspire conformity
+		DefaultDomainConsistency consistancy = new DefaultDomainConsistency();
+		DefaultConformanceResult conformance = new DefaultConformanceResult();
 		
+		String inspireTheme = null;
+		for(MetadataThesaurus thesaurus : object.template().getThesaurusList()){
+			if(thesaurus.getName().contains("INSPIRE")){
+				inspireTheme = thesaurus.getKeywords().get(0);
+				break;
+			}
+		}
+		DefaultCitation confCitation = new DefaultCitation();
+		confCitation.setTitle(
+				new SimpleInternationalString("Commission Regulation (EU) No 1089/2010 of 23 November 2010 implementing Directive 2007/2/EC "
+											+ "of the European Parliament and of the Council as regards interoperability of spatial data sets and services"));
+		confCitation.setAlternateTitles(Arrays.asList(new SimpleInternationalString("INSPIRE Data Specifications on "+inspireTheme+" – Guidelines")));
+		DefaultCitationDate citationDate1 = new DefaultCitationDate();
+		Date publicationDate = sdf.parse("2010-12-08");
+		citationDate1.setDate(publicationDate);
+		citationDate1.setDateType(DateType.PUBLICATION);
+		
+		DefaultCitationDate citationDate2 = new DefaultCitationDate();
+		Date revisionDate = sdf.parse("2013-12-10");
+		citationDate2.setDate(revisionDate);
+		citationDate2.setDateType(DateType.LAST_REVISION);
+
+		confCitation.setDates(Arrays.asList(citationDate1, citationDate2));
+
+		conformance.setSpecification(confCitation);
+		conformance.setExplanation(
+				new SimpleInternationalString("The conformity to the above INSPIRE data specification has not been fully evaluated. In "
+											+ "the absence of an explicit way to specify in ISO 19115 such absence of full evaluation, "
+											+ "or eventual intermediate degree of conformity, and in order to fulfill the INSPIRE "
+											+ "metadata validation, a conformity metadata element has been added "
+											+ "(with the degree arbitrarily set to 'false')"));
+		conformance.setPass(false);
+	
+		consistancy.setResults(Arrays.asList(conformance));
+		quality.setReports(Arrays.asList(consistancy));
 		
 		this.setDataQualityInfo(Arrays.asList(quality));
 	}
