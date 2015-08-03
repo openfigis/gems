@@ -160,6 +160,13 @@
 			<figisFactsheetUrl>http://www.fao.org/fishery</figisFactsheetUrl> 		<!-- FIGIS Factsheet base URL -->
 
 		</publicationSettings>
+		
+		<!-- Validation settings -->
+		<!-- ___________________ -->
+		<validationSettings>
+			<inspire>true</inspire>
+			<strict>false</strict>
+		</validationSettings>
 
 	</settings>
 	

@@ -7,9 +7,11 @@ import static org.junit.Assert.*;
 
 import java.io.File;
 import java.net.URISyntaxException;
+
 import org.fao.fi.gems.model.settings.data.GeographicServerSettings;
 import org.fao.fi.gems.model.settings.metadata.MetadataCatalogueSettings;
 import org.fao.fi.gems.model.settings.publication.PublicationSettings;
+import org.fao.fi.gems.model.settings.validation.ValidationSettings;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -46,13 +48,17 @@ public class SettingsTest {
 		assertNotNull(catalog);
 	}
 	
-	
 	@Test
 	public void testPublicationSettings(){
-		PublicationSettings publication = 	settings.getPublicationSettings();
+		PublicationSettings publication = settings.getPublicationSettings();
 		assertNotNull(publication);
 	}
 	
+	@Test
+	public void testValidationSettings(){
+		ValidationSettings validation = settings.getValidationSettings();
+		assertNotNull(validation);
+	}
 	
 	private File getResourceFile(String resource) throws URISyntaxException {
 		return new File(this.getClass().getResource("/test-data/model/"+resource).toURI());

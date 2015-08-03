@@ -27,7 +27,8 @@
 		<module>publisher</module>
 		<module>collection</module>
 		<module>application</module>
-  </modules>
+		<module>validation</module>
+	</modules>
 	
 	<developers>
 		<developer>
@@ -87,6 +88,13 @@
 				<artifactId>geonetwork-manager</artifactId>
 				<version>${version.gnman}</version>
 			</dependency>
+			
+			<!-- Apache Http -->
+			<dependency>
+				<groupId>org.apache.httpcomponents</groupId>
+				<artifactId>httpclient</artifactId>
+				<version>4.5</version>
+			</dependency>			
 
 			<!-- Apache SIS -->
 			<dependency>
@@ -185,11 +193,15 @@
 				<groupId>org.fao.fi</groupId>
 				<artifactId>gems-lod</artifactId>
 				<version>${gems.version}</version>
-			</dependency>
-			
+			</dependency>			
 			<dependency>
 				<groupId>org.fao.fi</groupId>
 				<artifactId>gems-publisher</artifactId>
+				<version>${gems.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.fao.fi</groupId>
+				<artifactId>gems-validation</artifactId>
 				<version>${gems.version}</version>
 			</dependency>
 			<dependency>

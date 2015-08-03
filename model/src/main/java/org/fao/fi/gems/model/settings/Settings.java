@@ -13,6 +13,7 @@ import org.fao.fi.gems.model.settings.data.filter.DataObjectFilter;
 import org.fao.fi.gems.model.settings.data.filter.ExtraDataFilter;
 import org.fao.fi.gems.model.settings.metadata.MetadataCatalogueSettings;
 import org.fao.fi.gems.model.settings.publication.PublicationSettings;
+import org.fao.fi.gems.model.settings.validation.ValidationSettings;
 
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.io.xml.StaxDriver;
@@ -28,6 +29,7 @@ public class Settings{
 	private GeographicServerSettings geographicServerSettings;
 	private MetadataCatalogueSettings metadataCatalogueSettings;
 	private PublicationSettings publicationSettings;
+	private ValidationSettings validationSettings;
 	
 	/**
 	 * Constructor
@@ -77,6 +79,20 @@ public class Settings{
 	 */
 	public void setPublicationSettings(PublicationSettings publicationSettings) {
 		this.publicationSettings = publicationSettings;
+	}
+	
+	/**
+	 * @return the validationSettings
+	 */
+	public ValidationSettings getValidationSettings() {
+		return validationSettings;
+	}
+
+	/**
+	 * @param validationSettings the validationSettings to set
+	 */
+	public void setValidationSettings(ValidationSettings validationSettings) {
+		this.validationSettings = validationSettings;
 	}
 	
 	

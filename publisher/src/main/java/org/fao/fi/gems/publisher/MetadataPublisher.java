@@ -4,11 +4,14 @@
 package org.fao.fi.gems.publisher;
 
 import java.io.File;
+import java.net.MalformedURLException;
 import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Locale;
 import java.util.Map;
+
+import javax.ws.rs.core.Response;
 import javax.xml.transform.Result;
 import javax.xml.transform.stream.StreamResult;
 
@@ -16,7 +19,10 @@ import org.apache.sis.xml.XML;
 import org.fao.fi.gems.metaobject.GeographicMetadata;
 import org.fao.fi.gems.metaobject.GeographicMetaObject;
 import org.fao.fi.gems.model.settings.metadata.MetadataCatalogueSettings;
-import org.fao.fi.gems.model.settings.publication.PublicationSettings;
+import org.fao.fi.gems.model.settings.validation.ValidationSettings;
+import org.fao.fi.gems.validation.InspireValidationError;
+import org.fao.fi.gems.validation.InspireValidationReport;
+import org.fao.fi.gems.validation.InspireValidator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -41,14 +47,20 @@ public class MetadataPublisher {
 
 	private String gnBaseURL;
 	GNClient client;
+	
+	InspireValidator inspireValidator;
+	boolean inspire;
+	boolean strict;
 
 	/**
 	 * Metadata publisher
 	 * 
-	 * @param catalogueSettings
+	 * @param GemsConfig
+	 * @throws MalformedURLException 
 	 *
 	 */
-	public MetadataPublisher(MetadataCatalogueSettings catalogueSettings) {
+	public MetadataPublisher(MetadataCatalogueSettings catalogueSettings,
+							 ValidationSettings validationSettings) throws MalformedURLException {
 
 		// geonetwork connection
 		this.gnBaseURL = catalogueSettings.getUrl();
@@ -57,6 +69,11 @@ public class MetadataPublisher {
 		if (!logged) {
 			throw new RuntimeException("Could not log in");
 		}
+		
+		//inspire validation
+		inspireValidator = new InspireValidator();
+		inspire = validationSettings.isInspire();
+		strict = validationSettings.isStrict();
 	}
 	
 	
@@ -105,27 +122,46 @@ public class MetadataPublisher {
 		String metadataID = null;
 		try {
 
+			//marshalling metadata
 			final GeographicMetadata metadata = object.metadata();	
+			File tmp = File.createTempFile(metadata.getMetadataIdentifier().getCode(), ".xml");
+			Result out = new StreamResult(tmp);
+			
+			Map<String,Object> properties = new HashMap<>();
+			properties.put(XML.STRING_SUBSTITUTES, new String[] {"filename","mimetype"});
+			properties.put(XML.LOCALE, Locale.ENGLISH);
 
+			XML.marshal(metadata, out, properties);
+			
+			//inspire validation
+			if(inspire){
+				Response resp = inspireValidator.validate(tmp);
+				boolean isValid = inspireValidator.isValid(resp);
+				if(isValid){
+					LOGGER.info("[INSPIRE] - Metadata is valid");
+				}else{
+					InspireValidationReport inspireReport = inspireValidator.getReport(resp);
+					LOGGER.info("[INSPIRE] Invalid metadata (completeness = "+inspireReport.getCompleteness()+"%)");
+					for(InspireValidationError error : inspireReport.getValidationErrors()){
+						LOGGER.info("[INSPIRE Issue] "+error.getElement()+": "+error.getMessage());
+					}
+					
+					if(strict){
+						LOGGER.info("[INSPIRE] Aborting metadata publication (Strict = true)");
+						throw new Exception("Metadata is not INSPIRE compliant");
+					}
+					
+				}
+			}
+			
 			// metadata insert configuration
 			GNInsertConfiguration icfg = new GNInsertConfiguration();
 			icfg.setCategory("datasets");
 			icfg.setGroup("1"); // group 1 is usually "all"
 			icfg.setStyleSheet("_none_");
 			icfg.setValidate(Boolean.FALSE);
-
-			File tmp = File.createTempFile(metadata.getMetadataIdentifier().getCode(), ".xml");
-			Result out = new StreamResult(tmp);
-			
-			Map<String,Object> properties = new HashMap<>();
-			//properties.put(XML.GML_VERSION, new Version("3.2"));
-			properties.put(XML.STRING_SUBSTITUTES, new String[] {"filename","mimetype"});
-			properties.put(XML.LOCALE, Locale.ENGLISH);
-			
-			XML.marshal(metadata, out, properties);
-			
-		
 			long id = client.insertMetadata(icfg, tmp); // insert metadata
+			
 			tmp.delete(); // delete metadata file
 
 			// public privileges configuration

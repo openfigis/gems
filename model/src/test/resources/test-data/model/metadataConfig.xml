@@ -8,6 +8,7 @@
 	<!-- ============= -->
 	<settings>
 		<!-- Geographic Server settings -->
+		<!-- __________________________ -->
 		<geographicServerSettings>
 			
 			<!-- services -->
@@ -89,6 +90,7 @@
 		</geographicServerSettings>
 
 		<!-- Metadata catalogue settings -->
+		<!-- ___________________________ -->
 		<metadataCatalogueSettings>
 			<url>http://www.organization.org/catalogue</url>
 			<user>user</user>
@@ -96,6 +98,7 @@
 		</metadataCatalogueSettings>
 
 		<!-- Publication settings -->
+		<!-- ____________________ -->
 		<publicationSettings>
 
 			<!-- actions -->
@@ -132,6 +135,13 @@
 			<figisFactsheetUrl>http://www.fao.org/fishery</figisFactsheetUrl>
 			
 		</publicationSettings>
+		
+		<!-- Validation settings -->
+		<!-- ___________________ -->
+		<validationSettings>
+			<inspire>true</inspire>
+			<strict>false</strict>
+		</validationSettings>
 
 	</settings>
 	

@@ -41,7 +41,8 @@ public class Publisher {
 		dataPublisher = new DataPublisher(config.getSettings().getGeographicServerSettings(),
 										  config.getSettings().getMetadataCatalogueSettings());
 		
-		metadataPublisher = new MetadataPublisher(config.getSettings().getMetadataCatalogueSettings());
+		metadataPublisher = new MetadataPublisher(config.getSettings().getMetadataCatalogueSettings(),
+												  config.getSettings().getValidationSettings());
 		
 	}
 	
@@ -78,74 +79,74 @@ public class Publisher {
 
 		boolean published = false;		
 		
+		//metadata publication
+		boolean metadataExists = (this.getMetadataPublisher().checkMetadataExistence(object) != null);
+		boolean metadataPublished = false;
+		try{
+			if (this.settings.getPublicationSettings().isActionMetadata()) {
+				if (metadataExists) {
+					if (this.settings.getPublicationSettings().isForceMetadata()) {
+						// force metadata publication
+						LOGGER.info("Updating existing metadata");
+						this.getMetadataPublisher().deleteMetadata(object);
+						this.getMetadataPublisher().publishMetadata(object);
+						LOGGER.info("Successfull metadata update");
+					}		
+				} else {
+					LOGGER.info("Publishing new metadata");
+					this.getMetadataPublisher().publishMetadata(object);
+					LOGGER.info("Successfull metadata publication");
+				}
+			}
+			metadataPublished = true;
+			
+		} catch(Exception e) {
+			throw new Exception("Fail to publish metadata", e);
+		} finally {
+			Thread.sleep(sleep*1000);
+			LOGGER.info("Sleeping "+sleep+" seconds");
+		}
+		
 		//data publication
 		boolean layerExists = this.getDataPublisher().checkLayerExistence(object);
 		boolean layerPublished = false;
-		try{
-			if (this.settings.getPublicationSettings().isActionData()) {
-				if (layerExists) {
-					if (this.settings.getPublicationSettings().isForceData()) {
-						// force data publication
-						LOGGER.info("Updating existing layer");
-						this.getDataPublisher().deleteLayer(object);
+		if(metadataPublished){
+			try{
+				if (this.settings.getPublicationSettings().isActionData()) {
+					if (layerExists) {
+						if (this.settings.getPublicationSettings().isForceData()) {
+							// force data publication
+							LOGGER.info("Updating existing layer");
+							this.getDataPublisher().deleteLayer(object);
+							this.getDataPublisher().publishLayer(
+									object,
+									style,
+									GemsMethod.valueOf(this.settings.getGeographicServerSettings().getMethod()),
+									this.settings.getGeographicServerSettings().getShapefileURL()
+									);
+							LOGGER.info("Successfull layer update");
+						}
+			
+					} else {
+						LOGGER.info("Publishing new layer");
 						this.getDataPublisher().publishLayer(
 								object,
 								style,
 								GemsMethod.valueOf(this.settings.getGeographicServerSettings().getMethod()),
-								this.settings.getGeographicServerSettings().getShapefileURL()
-								);
-						LOGGER.info("Successfull layer update");
-					}
-		
-				} else {
-					LOGGER.info("Publishing new layer");
-					this.getDataPublisher().publishLayer(
-							object,
-							style,
-							GemsMethod.valueOf(this.settings.getGeographicServerSettings().getMethod()),
-							this.settings.getGeographicServerSettings().getShapefileURL());
-					LOGGER.info("Successfull layer publication");
-		
-				}
-			}
-			layerPublished = true;
+								this.settings.getGeographicServerSettings().getShapefileURL());
+						LOGGER.info("Successfull layer publication");
 			
-		} catch(Exception e){
-			throw new Exception("Fail to publish layer", e);
-			
-		} finally {
-			Thread.sleep(sleep*1000);
-			LOGGER.info("Sleeping "+sleep+" seconds");
-		}	
-		
-		//metadata publication
-		boolean metadataExists = (this.getMetadataPublisher().checkMetadataExistence(object) != null);
-		boolean metadataPublished = false;
-		if(layerPublished){
-			try{
-				if (this.settings.getPublicationSettings().isActionMetadata()) {
-					if (metadataExists) {
-						if (this.settings.getPublicationSettings().isForceMetadata()) {
-							// force metadata publication
-							LOGGER.info("Updating existing metadata");
-							this.getMetadataPublisher().deleteMetadata(object);
-							this.getMetadataPublisher().publishMetadata(object);
-							LOGGER.info("Successfull metadata update");
-						}		
-					} else {
-						LOGGER.info("Publishing new metadata");
-						this.getMetadataPublisher().publishMetadata(object);
-						LOGGER.info("Successfull metadata publication");
 					}
 				}
-				metadataPublished = true;
+				layerPublished = true;
 				
-			} catch(Exception e) {
-				throw new Exception("Fail to publish metadata", e);
+			} catch(Exception e){
+				throw new Exception("Fail to publish layer", e);
+				
 			} finally {
 				Thread.sleep(sleep*1000);
 				LOGGER.info("Sleeping "+sleep+" seconds");
-			}
+			}	
 		}
 		
 		//check data and metadata publication & eventually roll-back

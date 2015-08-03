@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<ns2:Resource xmlns="http://inspire.ec.europa.eu/schemas/common/1.0"
+	xmlns:ns2="http://inspire.ec.europa.eu/schemas/geoportal/1.0">
+	<ns2:ResourceReportResource>
+		<ns2:InspireValidationErrors>
+			<ns2:ValidationError>
+				<ns2:SourceOfRequirement>
+					<ns2:Specification xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+						xsi:type="citationDS_AD_TG3.1_eng">
+						<Title>D2.8.I.5 Data Specification on Addresses – Technical
+							Guidelines (Version 3.1)</Title>
+						<DateOfPublication>2014-04-17</DateOfPublication>
+						<URI>D2.8.I.5_v3.1</URI>
+						<ResourceLocator xsi:type="resLocDS_AD_TG3.1_eng">
+							<URL>http://inspire.jrc.ec.europa.eu/documents/Data_Specifications/INSPIRE_DataSpecification_AD_v3.1.pdf
+							</URL>
+							<MediaType>application/xml</MediaType>
+						</ResourceLocator>
+					</ns2:Specification>
+					<ns2:IntraDocumentLocator>
+						<ns2:Description>Metadata required for Interoperability
+						</ns2:Description>
+					</ns2:IntraDocumentLocator>
+				</ns2:SourceOfRequirement>
+				<ns2:SourceOfRequirement>
+					<ns2:Specification xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+						xsi:type="citationInspireInteroperabilityRegulation_eng">
+						<Title>COMMISSION REGULATION (EU) No 1089/2010 of 23 November 2010
+							implementing Directive 2007/2/EC of the European Parliament and
+							of the Council as regards interoperability of spatial data sets
+							and services</Title>
+						<DateOfPublication>2010-12-08</DateOfPublication>
+						<URI>OJ:L:2010:323:0011:0102:EN:PDF</URI>
+						<ResourceLocator xsi:type="resLocInspireInteroperabilityRegulation_eng">
+							<URL>http://eur-lex.europa.eu/LexUriServ/LexUriServ.do?uri=OJ:L:2010:323:0011:0102:EN:PDF
+							</URL>
+							<MediaType>application/pdf</MediaType>
+						</ResourceLocator>
+					</ns2:Specification>
+					<ns2:IntraDocumentLocator>
+						<ns2:Description>Article 13</ns2:Description>
+					</ns2:IntraDocumentLocator>
+				</ns2:SourceOfRequirement>
+				<ns2:GeoportalExceptionMessage>
+					<ns2:Message>The metadata element &quot;Coordinate Reference
+						System&quot; is missing, empty or incomplete but it is required.
+						Hint: &quot;Coordinate Reference System code is missing or
+						empty&quot;</ns2:Message>
+					<ns2:ExceptionCode>error.geoportal.proxy.metadata.element.missing
+					</ns2:ExceptionCode>
+					<ns2:GeoportalErrorCode>error.geoportal.proxy.metadata.element.missing
+					</ns2:GeoportalErrorCode>
+					<ns2:Argument>
+						<ns2:ArgumentName>metadataElementName</ns2:ArgumentName>
+						<ns2:ArgumentValue>Coordinate Reference System</ns2:ArgumentValue>
+					</ns2:Argument>
+					<ns2:Argument>
+						<ns2:ArgumentName>hint</ns2:ArgumentName>
+						<ns2:ArgumentValue>Coordinate Reference System code is missing or empty</ns2:ArgumentValue>
+					</ns2:Argument>
+					<ns2:EA_GUID>B599A1D4-7A9C-43ec-A6D9-E08A63F7C477</ns2:EA_GUID>
+				</ns2:GeoportalExceptionMessage>
+				<ns2:EntryIntoForce>
+					<ns2:Date>2012-11-23T00:00:00.000+01:00</ns2:Date>
+					<ns2:Note>This requirement has to be met starting from 23 November
+						2012 for data sets that were created or extensively restructured
+						after 15 May 2007 and starting from 23 November 2017 for all other
+						data sets.</ns2:Note>
+				</ns2:EntryIntoForce>
+			</ns2:ValidationError>
+		</ns2:InspireValidationErrors>
+	</ns2:ResourceReportResource>
+	<ns2:AuditRecord>
+		<ns2:CreationDate>2015-08-03T17:02:17.840Z</ns2:CreationDate>
+		<ns2:LastUpdateDate>2015-08-03T17:02:18.380Z</ns2:LastUpdateDate>
+	</ns2:AuditRecord>
+	<ns2:SourceMetadataLocator>
+		<URL>../../../downloaded.xml</URL>
+		<MediaType>application/vnd.iso.19139+xml</MediaType>
+	</ns2:SourceMetadataLocator>
+	<ns2:GeoportalMetadataLocator>
+		<URL>/sandbox/INSPIRE-uuid/datasets/1/resourceReport</URL>
+		<MediaType>application/vnd.eu.europa.ec.inspire.resource+xml</MediaType>
+		<FileName>inspire.geoportal.resource.xml</FileName>
+	</ns2:GeoportalMetadataLocator>
+	<ns2:ParentResourceMetadataLocator>
+		<URL>../../..</URL>
+		<MediaType>application/vnd.eu.europa.ec.inspire.resource+xml</MediaType>
+	</ns2:ParentResourceMetadataLocator>
+	<ns2:RelatedResourceLocator>
+		<URL>..</URL>
+		<MediaType>application/vnd.eu.europa.ec.inspire.geoportal.resource+xml</MediaType>
+	</ns2:RelatedResourceLocator>
+	<ns2:CompletenessIndicator>94.44444444444444</ns2:CompletenessIndicator>
+	<ns2:ValidationEngineVersion>hudson-INSPIREWebServices-1190</ns2:ValidationEngineVersion>
+</ns2:Resource>
