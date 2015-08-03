@@ -32,6 +32,7 @@ import com.vividsolutions.jts.geom.Geometry;
  * @author Emmanuel Blondel <emmanuel.blondel@fao.org>
  *
  */
+@SuppressWarnings("deprecation")
 public final class FeatureUtils {
 
 	private static Logger LOGGER = LoggerFactory.getLogger(FeatureUtils.class);
@@ -44,7 +45,6 @@ public final class FeatureUtils {
 	 * @param features a list of {@link org.opengis.feature.Feature}
 	 * @return an object of class {@link com.vividsolutions.jts.geom.Envelope}
 	 */
-	@SuppressWarnings("deprecation")
 	public static Envelope envelopeActual(List<Feature> features){
 		
 		// bbox coordinates

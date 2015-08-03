@@ -3,7 +3,6 @@
  */
 package org.fao.fi.gems.collection.properties;
 
-import org.fao.fi.gems.entity.EntityAddin;
 import org.fao.fi.gems.entity.EntityAuthority;
 import org.fao.fi.gems.metaobject.GeographicMetaObjectProperty;
 
