@@ -1,5 +1,5 @@
 /**
- * (c) 2015 FAO / UN (project: gems-application)
+ * (c) 2015 FAO / UN (project: gems-validation)
  */
 package org.fao.fi.gems.validation;
 
