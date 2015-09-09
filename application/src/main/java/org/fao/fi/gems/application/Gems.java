@@ -88,28 +88,36 @@ public class Gems {
 		if(entities != null){
 			List<String> include = entities.getInclude();
 			List<String> exclude = entities.getExclude();
-			
+			List<String> todo = null;
 			if(include != null){
 				if(include.size() > 0){
-					LOGGER.info("Publication Scope = SUBSET");
-					LOGGER.info("List of entities = "+include.toString());
+					if(exclude != null){
+						if(exclude.size() == 0){
+							LOGGER.info("Publication Scope = SUBSET");
+							LOGGER.info("List of included entities = "+include.toString());
+						}else{
+							todo = new ArrayList<String>();
+							todo.addAll(include);
+							for(String entity : exclude){
+								todo.remove(entity);
+							}
+							if(todo.size() > 0){
+								LOGGER.info("Publication Scope = SUBSET");
+								LOGGER.info("List of included entities = "+todo.toString());
+							}else{
+								LOGGER.info("Empty entity list");
+							}
+							
+						}
+					}
+					
 				}else{
 					if(exclude != null){
 						if(exclude.size() == 0){
 							LOGGER.info("Publication Scope = COMPLETE");
-						}
-					}
-				}
-			}
-				
-			if(exclude != null){
-				if(exclude.size() > 0){
-					LOGGER.info("Publication Scope = SUBSET");
-					LOGGER.info("List of entities = "+exclude.toString());
-				}else{
-					if(include != null){
-						if(include.size() == 0){
-							LOGGER.info("Publication Scope = COMPLETE");
+						}else{
+							LOGGER.info("Publication Scope = SUBSET");
+							LOGGER.info("List of excluded entities = "+exclude.toString());
 						}
 					}
 				}

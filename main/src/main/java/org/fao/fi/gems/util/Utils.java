@@ -76,17 +76,22 @@ public final class Utils {
 			List<String> included = entities.getInclude();
 			if(included != null){
 				if(included.size() > 0){
-					if(!included.contains(code)) wrapEntity = false;
+					if(!included.contains(code)){
+						wrapEntity = false;
+					}
 				}
 			}
 			
 			List<String> excluded = entities.getExclude();
 			if(excluded != null){
 				if(excluded.size() > 0){
-					if(excluded.contains(code)) wrapEntity = false;
+					if(excluded.contains(code)){
+						wrapEntity = false;
+					}
 				}
 			}
 		}
+	
 		return wrapEntity;
 	}
 	
