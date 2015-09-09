@@ -174,7 +174,6 @@ public class MetadataPublisher {
 			metadataID = metadata.getMetadataIdentifier().getCode();
 
 		} catch (Exception e) {
-			e.printStackTrace();
 			throw new Exception("Failed to publish metadata", e);
 		}
 
@@ -196,7 +195,7 @@ public class MetadataPublisher {
 			try {
 				client.deleteMetadata(metadata.getId());
 			} catch (Exception e) {
-				throw new Exception("Fail to delete metadata in Geonetwork", e);
+				throw new Exception("Fail to delete metadata", e);
 			}
 		}else{
 			LOGGER.warn("No metadata for id = "+object.metaIdentifier());

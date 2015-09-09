@@ -81,7 +81,9 @@ public class Publisher {
 		
 		//metadata publication
 		boolean metadataExists = (this.getMetadataPublisher().checkMetadataExistence(object) != null);
+		System.out.println(metadataExists);
 		boolean metadataPublished = false;
+		String errorMessage = null;
 		try{
 			if (this.settings.getPublicationSettings().isActionMetadata()) {
 				if (metadataExists) {
@@ -101,7 +103,8 @@ public class Publisher {
 			metadataPublished = true;
 			
 		} catch(Exception e) {
-			throw new Exception("Fail to publish metadata", e);
+			LOGGER.info(e.getMessage());
+			throw e;
 		} finally {
 			Thread.sleep(sleep*1000);
 			LOGGER.info("Sleeping "+sleep+" seconds");
@@ -141,7 +144,8 @@ public class Publisher {
 				layerPublished = true;
 				
 			} catch(Exception e){
-				throw new Exception("Fail to publish layer", e);
+				LOGGER.info(e.getMessage());
+				throw e;
 				
 			} finally {
 				Thread.sleep(sleep*1000);
@@ -222,7 +226,8 @@ public class Publisher {
 			}
 			metadataUnpublished = true;
 		} catch (Exception e) {
-			throw new Exception("Failed to delete metadata" , e);
+			LOGGER.info(e.getMessage());
+			throw e;
 		} finally {
 			Thread.sleep(sleep*1000);
 			LOGGER.info("Sleeping "+sleep+" seconds");
