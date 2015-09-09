@@ -54,14 +54,27 @@ public class Gems {
 	 */
 	public static void main(String[] args) throws Exception {
 
-		long start = System.currentTimeMillis();
-		
 		//Read the configuration
-		LOGGER.info("(1) Loading the configuration file");
+		LOGGER.info("=> Loading the configuration file");
 		GemsConfig config = GemsConfig.fromXML(new File(args[0]));
 	
+		execute(config);
+		
+	}
+		
+	/**
+	 * A method to execute GEMS program based on {@link org.Fao.fi.gems.model.GemsConfig}
+	 * object that represents a GEMS configuration
+	 * 
+	 * @param a object of class {@link org.fao.fi.gems.model.GemsConfig}
+	 * @throws Exception
+	 */
+	public static void execute(GemsConfig config) throws Exception {
+	
+		long start = System.currentTimeMillis();
+		
 		//read the codelists
-		LOGGER.info("(2) Loading the reference list");
+		LOGGER.info("=> Loading the reference list");
 		String owner = Utils.whoIsOwner(config);
 		LOGGER.info("Owner = "+owner);
 		
@@ -124,8 +137,8 @@ public class Gems {
 		LOGGER.info("== ACTION: "+action+" == ");
 		
 		// iteration on the entities
-		LOGGER.info("(3) Start metadata creation & publication");
-		LOGGER.info("Nb of expected publications = " + set.size());
+		LOGGER.info("=> Start metadata creation & publication");
+		LOGGER.info("Expected nb of publications = " + set.size());
 		Iterator<GeographicEntity> entityIterator = set.iterator();
 		try{
 			while (entityIterator.hasNext()) {
