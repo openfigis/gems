@@ -56,7 +56,7 @@ public class Gems {
 
 		//Read the configuration
 		LOGGER.info("=> Loading the configuration file");
-		GemsConfig config = GemsConfig.fromXML(new File("D:/Mes documents/Documents/CLIENTS/FAO/Infrastructure/GEMS/collection/rfb/rfb_new.xml"));
+		GemsConfig config = GemsConfig.fromXML(new File(args[0]));
 	
 		execute(config);
 		
