@@ -81,9 +81,7 @@ public class Publisher {
 		
 		//metadata publication
 		boolean metadataExists = (this.getMetadataPublisher().checkMetadataExistence(object) != null);
-		System.out.println(metadataExists);
 		boolean metadataPublished = false;
-		String errorMessage = null;
 		try{
 			if (this.settings.getPublicationSettings().isActionMetadata()) {
 				if (metadataExists) {
