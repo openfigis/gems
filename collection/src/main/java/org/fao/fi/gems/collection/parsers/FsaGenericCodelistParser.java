@@ -21,6 +21,7 @@ import javax.xml.parsers.ParserConfigurationException;
 import org.fao.fi.gems.codelist.CodelistParser;
 import org.fao.fi.gems.collection.properties.FsaProperty;
 import org.fao.fi.gems.entity.EntityCode;
+import org.fao.fi.gems.entity.FigisGeographicEntityImpl;
 import org.fao.fi.gems.entity.GeographicEntity;
 import org.fao.fi.gems.entity.GeographicEntityImpl;
 import org.fao.fi.gems.lod.entity.common.FLODFsaEntity;
@@ -210,10 +211,10 @@ public abstract class FsaGenericCodelistParser implements CodelistParser {
 								String parentFsa = parentElem.getAsString();
 								EntityCode parentCode = new EntityCode(null, parentFsa);
 								List<EntityCode> parentCodeStack = Arrays.asList(parentCode);
-								parentEntity = new GeographicEntityImpl(owner, collection, parentCodeStack, null, null, null);
+								parentEntity = new FigisGeographicEntityImpl(owner, collection, parentCodeStack, null, null, null);
 							}
 							
-							entity = new GeographicEntityImpl(owner, collection, fsaCodeStack, fsaName, properties, parentEntity);
+							entity = new FigisGeographicEntityImpl(owner, collection, fsaCodeStack, fsaName, properties, parentEntity);
 							fsaCodelist.add(entity);
 						} catch (URISyntaxException e) {
 							e.printStackTrace();

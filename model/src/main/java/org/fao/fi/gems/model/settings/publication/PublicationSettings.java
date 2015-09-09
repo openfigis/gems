@@ -34,8 +34,10 @@ public class PublicationSettings{
 	
 	private EntityList entities;
 	
-	private String figisViewerUrl;
-	private String figisFactsheetUrl;
+	private String figisViewerResourceBaseUrl;
+	private String figisWebResourceBaseUrl;
+	private String figisWebResourceTitle;
+	private boolean figisHasFactsheet;
 
 	/**
 	 * Constructor
@@ -239,34 +241,66 @@ public class PublicationSettings{
 
 
 	/**
-	 * @return the figisViewerUrl
+	 * @return the figisViewerResourceBaseUrl
 	 */
-	public String getFigisViewerUrl() {
-		return figisViewerUrl;
+	public String getFigisViewerResourceBaseUrl() {
+		return figisViewerResourceBaseUrl;
 	}
 
 
 	/**
-	 * @param figisViewerUrl the figisViewerUrl to set
+	 * @param figisViewerResourceBaseUrl the figisViewerResourceBaseUrl to set
 	 */
-	public void setFigisViewerUrl(String figisViewerUrl) {
-		this.figisViewerUrl = figisViewerUrl;
+	public void setFigisViewerResourceBaseUrl(String figisViewerUrl) {
+		this.figisViewerResourceBaseUrl = figisViewerUrl;
 	}
 
 
 	/**
-	 * @return the figisFactsheetUrl
+	 * @return the figisWebResourceBaseUrl
 	 */
-	public String getFigisFactsheetUrl() {
-		return figisFactsheetUrl;
+	public String getFigisWebResourceBaseUrl() {
+		return figisWebResourceBaseUrl;
 	}
 
 
 	/**
-	 * @param figisFactsheetUrl the figisFactsheetUrl to set
+	 * @param figisWebResourceBaseUrl the figisWebResourceBaseUrl to set
 	 */
-	public void setFigisFactsheetUrl(String figisFactsheetUrl) {
-		this.figisFactsheetUrl = figisFactsheetUrl;
+	public void setFigisWebResourceBaseUrl(String figisFactsheetUrl) {
+		this.figisWebResourceBaseUrl = figisFactsheetUrl;
+	}
+
+
+	/**
+	 * @return the figisWebResourceTitle
+	 */
+	public String getFigisWebResourceTitle() {
+		return figisWebResourceTitle;
+	}
+
+
+	/**
+	 * @param figisWebResourceTitle the figisWebResourceTitle to set
+	 */
+	public void setFigisWebResourceTitle(String figisWebResourceTitle) {
+		this.figisWebResourceTitle = figisWebResourceTitle;
+	}
+
+
+	/**
+	 * @return the figisHasFactsheet
+	 */
+	public boolean figisHasFactsheet() {
+		return figisHasFactsheet;
+	}
+
+
+	/**
+	 * @param figisHasFactsheet the figisHasFactsheet to set
+	 */
+	public void figisHasFactsheet(boolean figisHasFactsheet) {
+		this.figisHasFactsheet = figisHasFactsheet;
 	}
 
 

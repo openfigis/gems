@@ -62,8 +62,10 @@ public class PublicationSettingsTest {
 		Assert.assertEquals("thecode3", exclude.get(0));
 		
 		//FIGIS specific
-		Assert.assertEquals("http://www.fao.org/figis/geoserver/factsheets", settings.getFigisViewerUrl());
-		Assert.assertEquals("http://www.fao.org/fishery", settings.getFigisFactsheetUrl());
+		Assert.assertEquals("http://www.fao.org/figis/geoserver/factsheets", settings.getFigisViewerResourceBaseUrl());
+		Assert.assertEquals("http://www.fao.org/fishery", settings.getFigisWebResourceBaseUrl());
+		Assert.assertEquals("Factsheet - Summary description", settings.getFigisWebResourceTitle());
+		Assert.assertEquals(true, settings.figisHasFactsheet());
 
 	}
 	

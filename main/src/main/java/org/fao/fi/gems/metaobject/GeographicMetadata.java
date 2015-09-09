@@ -510,12 +510,11 @@ public class GeographicMetadata extends DefaultMetadata {
 			// factsheet (if it exists)
 			// ---------------------------
 			if (object instanceof FigisGeographicMetaObjectImpl
-					&& ((FigisGeographicMetaObjectImpl) object).getFigisFactsheet() != null) {
+					&& ((FigisGeographicMetaObjectImpl) object).getFigisWebResourceUrl() != null) {
 				DefaultOnlineResource factsheet = new DefaultOnlineResource();
-				factsheet.setLinkage(new URI( ((FigisGeographicMetaObjectImpl) object).getFigisFactsheet()));
+				factsheet.setLinkage(new URI( ((FigisGeographicMetaObjectImpl) object).getFigisWebResourceUrl()));
 				factsheet.setProtocol(GemsResourceProtocol.W3C_HTTP_1_0_LINK.protocol());
-				factsheet.setDescription(new SimpleInternationalString(
-						"Factsheet - Summary description"));
+				factsheet.setDescription(new SimpleInternationalString(((FigisGeographicMetaObjectImpl) object).getFigisWebResourceTitle()));
 				factsheet.setFunction(OnLineFunction.INFORMATION);
 				resources.add(factsheet);
 			}
@@ -523,9 +522,9 @@ public class GeographicMetadata extends DefaultMetadata {
 			// viewer Resource (if it exists)
 			// -------------------------------
 			if(object instanceof FigisGeographicMetaObjectImpl
-					&& ((FigisGeographicMetaObjectImpl) object).getFigisViewerResource() != null){
+					&& ((FigisGeographicMetaObjectImpl) object).getFigisViewerResourceUrl() != null){
 				DefaultOnlineResource viewerResource = new DefaultOnlineResource();
-				viewerResource.setLinkage(((FigisGeographicMetaObjectImpl) object).getFigisViewerResource());
+				viewerResource.setLinkage(((FigisGeographicMetaObjectImpl) object).getFigisViewerResourceUrl());
 				viewerResource.setProtocol(GemsResourceProtocol.W3C_HTTP_1_0_LINK.protocol());
 				viewerResource.setDescription(new SimpleInternationalString(object
 						.template().getCollection() + " (GIS Viewer)"));

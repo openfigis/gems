@@ -30,7 +30,9 @@
 	</entities>
 	
 	<!-- FIGIS specific -->	
-	<figisViewerUrl>http://www.fao.org/figis/geoserver/factsheets</figisViewerUrl>
-	<figisFactsheetUrl>http://www.fao.org/fishery</figisFactsheetUrl>
+	<figisViewerResourceBaseUrl>http://www.fao.org/figis/geoserver/factsheets</figisViewerResourceBaseUrl>
+	<figisWebResourceBaseUrl>http://www.fao.org/fishery</figisWebResourceBaseUrl>
+	<figisWebResourceTitle>Factsheet - Summary description</figisWebResourceTitle>
+	<figisHasFactsheet>true</figisHasFactsheet>
 	
 </Publication>

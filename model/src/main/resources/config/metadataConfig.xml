@@ -155,9 +155,11 @@
 				</exclude>
 			</entities>
 			
-			<!--  FIGIS specific configuration -->
-			<figisViewerUrl>http://www.fao.org/figis/geoserver/factsheets</figisViewerUrl> 	<!-- FIGIS Viewer base URL -->
-			<figisFactsheetUrl>http://www.fao.org/fishery</figisFactsheetUrl> 		<!-- FIGIS Factsheet base URL -->
+		<!-- FIGIS specific -->	
+		<figisViewerResourceBaseUrl>http://www.fao.org/figis/geoserver/factsheets</figisViewerResourceBaseUrl> <!-- FIGIS GIS viewer resource base URL -->
+		<figisWebResourceBaseUrl>http://www.fao.org/fishery</figisWebResourceBaseUrl> <!-- FIGIS Web Resource base URL -->
+		<figisWebResourceTitle>Factsheet - Summary description</figisWebResourceTitle> <!-- FIGIS Web Resource Title -->
+		<figisHasFactsheet>true</figisHasFactsheet> <!-- If the FIGIS web resource is a factsheet -->
 
 		</publicationSettings>
 		

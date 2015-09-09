@@ -13,8 +13,9 @@ import java.net.URI;
  */
 public interface FigisGeographicMetaObject extends GeographicMetaObject{
 	
-	URI getFigisViewerResource();
+	URI getFigisViewerResourceUrl();
 	
-	String getFigisFactsheet();
+	String getFigisWebResourceUrl();
 
+	String getFigisWebResourceTitle();
 }
