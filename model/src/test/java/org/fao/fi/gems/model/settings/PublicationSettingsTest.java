@@ -35,8 +35,6 @@ public class PublicationSettingsTest {
 		Assert.assertEquals("PUBLISH", settings.getAction());
 		Assert.assertTrue(settings.isActionData());
 		Assert.assertTrue(settings.isActionMetadata());
-		Assert.assertTrue(settings.isForceData());
-		Assert.assertTrue(settings.isForceMetadata());
 		
 		Assert.assertEquals("http://www.organization.org/codelist", settings.getCodelistURL());
 		Assert.assertEquals("org.fao.fi.gems.collection.anobject.parser", settings.getCodelistParser());

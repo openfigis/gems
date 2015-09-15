@@ -99,18 +99,16 @@ public class Publisher {
 			if (this.settings.getPublicationSettings().isActionData()) {
 				try{
 					if (layerExists) {
-						if (this.settings.getPublicationSettings().isForceData()) {
-							// force data publication
-							LOGGER.info("Updating existing layer");
-							this.getDataPublisher().deleteLayer(object);
-							this.getDataPublisher().publishLayer(
-									object,
-									style,
-									GemsMethod.valueOf(this.settings.getGeographicServerSettings().getMethod()),
-									this.settings.getGeographicServerSettings().getShapefileURL()
-									);
-							LOGGER.info("Successfull layer update");
-						}
+						// force data publication
+						LOGGER.info("Updating existing layer");
+						this.getDataPublisher().deleteLayer(object);
+						this.getDataPublisher().publishLayer(
+								object,
+								style,
+								GemsMethod.valueOf(this.settings.getGeographicServerSettings().getMethod()),
+								this.settings.getGeographicServerSettings().getShapefileURL()
+								);
+						LOGGER.info("Successfull layer update");				
 			
 					} else {
 						LOGGER.info("Publishing new layer");

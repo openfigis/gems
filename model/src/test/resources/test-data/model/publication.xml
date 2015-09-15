@@ -4,8 +4,6 @@
 	<action>PUBLISH</action>
 	<actionData>true</actionData>					
 	<actionMetadata>true</actionMetadata>			
-	<forceData>true</forceData>						
-	<forceMetadata>true</forceMetadata>	
 	
 	<!-- reference list for batch process -->
 	<codelistURL>http://www.organization.org/codelist</codelistURL>

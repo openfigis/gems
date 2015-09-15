@@ -20,9 +20,6 @@ public class PublicationSettings{
 	private String action;
 	private boolean actionData;
 	private boolean actionMetadata;
-	private boolean forceData;
-	private boolean forceMetadata;
-
 	
 	private String codelistURL;
 	private String codelistParser;
@@ -61,38 +58,6 @@ public class PublicationSettings{
 	 */
 	public void setAction(String action) {
 		this.action = action;
-	}
-
-
-	/**
-	 * @return the forceData
-	 */
-	public boolean isForceData() {
-		return forceData;
-	}
-
-
-	/**
-	 * @param forceData the forceData to set
-	 */
-	public void setForceData(boolean forceData) {
-		this.forceData = forceData;
-	}
-
-
-	/**
-	 * @return the forceMetadata
-	 */
-	public boolean isForceMetadata() {
-		return forceMetadata;
-	}
-
-
-	/**
-	 * @param forceMetadata the forceMetadata to set
-	 */
-	public void setForceMetadata(boolean forceMetadata) {
-		this.forceMetadata = forceMetadata;
 	}
 
 

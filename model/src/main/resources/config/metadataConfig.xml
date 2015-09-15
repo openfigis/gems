@@ -130,8 +130,6 @@
 			<action>PUBLISH</action>
 			<actionData>true</actionData>		<!-- action to perform on data -->
 			<actionMetadata>true</actionMetadata>	<!-- action to perform on metadata -->
-			<forceData>true</forceData>		<!-- force the data publication -->
-			<forceMetadata>true</forceMetadata>	<!-- force the metadata publication -->
 
 			<!-- reference list for batch process -->
 			<codelistURL>http://www.organization.org/codelist</codelistURL>
