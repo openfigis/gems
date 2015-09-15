@@ -80,40 +80,24 @@ public class Publisher {
 		boolean published = false;		
 		
 		//metadata publication
-		boolean metadataExists = (this.getMetadataPublisher().checkMetadataExistence(object) != null);
 		boolean metadataPublished = false;
-		try{
-			if (this.settings.getPublicationSettings().isActionMetadata()) {
-				if (metadataExists) {
-					if (this.settings.getPublicationSettings().isForceMetadata()) {
-						// force metadata publication
-						LOGGER.info("Updating existing metadata");
-						this.getMetadataPublisher().deleteMetadata(object);
-						this.getMetadataPublisher().publishMetadata(object);
-						LOGGER.info("Successfull metadata update");
-					}		
-				} else {
-					LOGGER.info("Publishing new metadata");
-					this.getMetadataPublisher().publishMetadata(object);
-					LOGGER.info("Successfull metadata publication");
-				}
-			}
-			metadataPublished = true;
+		if (this.settings.getPublicationSettings().isActionMetadata()) {
+			try{
+				this.getMetadataPublisher().insertOrUpdateMetadata(object);
+				metadataPublished = true;
 			
-		} catch(Exception e) {
-			LOGGER.info(e.getMessage());
-			throw e;
-		} finally {
-			Thread.sleep(sleep*1000);
-			LOGGER.info("Sleeping "+sleep+" seconds");
+			} catch(Exception e) {
+				LOGGER.info(e.getMessage());
+				throw e;
+			}
 		}
 		
 		//data publication
 		boolean layerExists = this.getDataPublisher().checkLayerExistence(object);
 		boolean layerPublished = false;
 		if(metadataPublished){
-			try{
-				if (this.settings.getPublicationSettings().isActionData()) {
+			if (this.settings.getPublicationSettings().isActionData()) {
+				try{
 					if (layerExists) {
 						if (this.settings.getPublicationSettings().isForceData()) {
 							// force data publication
@@ -138,24 +122,30 @@ public class Publisher {
 						LOGGER.info("Successfull layer publication");
 			
 					}
+				
+					layerPublished = true;
+				
+				} catch(Exception e){
+					LOGGER.info(e.getMessage());
+					throw e;	
 				}
-				layerPublished = true;
-				
-			} catch(Exception e){
-				LOGGER.info(e.getMessage());
-				throw e;
-				
-			} finally {
-				Thread.sleep(sleep*1000);
-				LOGGER.info("Sleeping "+sleep+" seconds");
-			}	
+			}
 		}
 		
 		//check data and metadata publication & eventually roll-back
-		if(layerPublished && metadataPublished){
-			published = true;
+		if(this.settings.getPublicationSettings().isActionData()){
+			if(this.settings.getPublicationSettings().isActionMetadata()){
+				if(layerPublished && metadataPublished) published = true;
+			}else{
+				if(layerPublished) published = true;
+			}
+		}else{
+			if(this.settings.getPublicationSettings().isActionMetadata()){
+				if(metadataPublished) published = true;
+			}
+		}
 			
-		} else {
+		if(!published){
 			//rolling-back publication
 			if(layerPublished){
 				try {
@@ -164,10 +154,7 @@ public class Publisher {
 					LOGGER.info("Successfull roll-back");
 				} catch(Exception e){
 					throw new Exception("Fail to roll-back layer publication", e);
-				} finally {
-					Thread.sleep(sleep*1000);
-					LOGGER.info("Sleeping "+sleep+" seconds");
-				}	
+				}
 			}else if(metadataPublished){
 				try {
 					LOGGER.info("Rolling-back metadata publication");
@@ -175,9 +162,6 @@ public class Publisher {
 					LOGGER.info("Successfull roll-back");
 				} catch(Exception e){
 					throw new Exception("Fail to roll-back metadata publication", e);
-				} finally {
-					Thread.sleep(sleep*1000);
-					LOGGER.info("Sleeping "+sleep+" seconds");
 				}	
 			}
 		}
@@ -231,10 +215,21 @@ public class Publisher {
 			LOGGER.info("Sleeping "+sleep+" seconds");
 		}
 		
+		//check data and metadata publication & eventually roll-back
+		if(this.settings.getPublicationSettings().isActionData()){
+			if(this.settings.getPublicationSettings().isActionMetadata()){
+				if(layerUnpublished && metadataUnpublished) unpublished = true;
+			}else{
+				if(layerUnpublished) unpublished = true;
+			}
+		}else{
+			if(this.settings.getPublicationSettings().isActionMetadata()){
+				if(metadataUnpublished) unpublished = true;
+			}
+		}	
+		
 		//in case try to roll-back
-		if(layerUnpublished && metadataUnpublished){
-			unpublished = true;
-		} else{
+		if(!unpublished){
 			//rolling-back publication
 			if(layerUnpublished){
 				try {
@@ -248,22 +243,16 @@ public class Publisher {
 					
 				} catch(Exception e){
 					throw new Exception("Fail to roll-back layer unpublication", e);
-				} finally {
-					Thread.sleep(sleep*1000);
-					LOGGER.info("Sleeping "+sleep+" seconds");
-				}	
+				}
 			}else if(metadataUnpublished){
 				try {
 					LOGGER.info("Rolling-back metadata unpublication");
-					this.getMetadataPublisher().publishMetadata(object);
+					this.getMetadataPublisher().insertOrUpdateMetadata(object);
 					LOGGER.info("Successfull metadata unpublication roll-back");
 					
 				} catch(Exception e){
 					throw new Exception("Fail to roll-back metadata unpublication", e);
-				} finally {
-					Thread.sleep(sleep*1000);
-					LOGGER.info("Sleeping "+sleep+" seconds");
-				}	
+				}
 			}
 		}
 	

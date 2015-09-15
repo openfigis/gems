@@ -153,13 +153,13 @@ public class DataPublisher {
 			try{
 				deleted = GSPublisher.unpublishFeatureType(trgWorkspace, trgDatastore, layername);
 			}catch(Exception e){
-				throw new Exception("Fail to delete unpublish Feature Type / Layer resources", e);
+				throw new PublicationException("Fail to delete unpublish Feature Type / Layer resources", e);
 			}
 		}else{
 			try{
 				deleted = this.deleteOnlyFeatureType(object);
 			} catch (Exception e){
-				throw new Exception("Fail to delete only feature type",e);
+				throw new PublicationException("Fail to delete only feature type",e);
 			}
 		}
 		
@@ -188,10 +188,10 @@ public class DataPublisher {
 	/**
 	 * Publish a layer (as GeoServer SQL View layer)
 	 * 
-	 * @param object
-	 * @throws IOException 
+	 * @param object 
+	 * @throws PublicationException 
 	 */
-	public boolean publishLayer(GeographicMetaObject object, String style, GemsMethod method, String shapefile) throws IOException {
+	public boolean publishLayer(GeographicMetaObject object, String style, GemsMethod method, String shapefile) throws Exception {
 
 		
 		// Using geoserver-manager
@@ -346,8 +346,11 @@ public class DataPublisher {
 		// publication
 		boolean publish = false;
 		if(method == GemsMethod.SQLVIEW){
-			publish = GSPublisher.publishDBLayer(trgWorkspace, trgDatastore, fte, layerEncoder);
-			
+			try {
+				publish = GSPublisher.publishDBLayer(trgWorkspace, trgDatastore, fte, layerEncoder);			
+			}catch(Exception e){
+				throw new PublicationException("Fail to publish layer", e);
+			}
 		}
 		
 		/*else if(method == PublicationMethod.SHAPEFILE){

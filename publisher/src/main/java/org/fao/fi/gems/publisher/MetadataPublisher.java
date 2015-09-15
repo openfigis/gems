@@ -111,74 +111,92 @@ public class MetadataPublisher {
 	
 
 	/**
-	 * Method to publish a metadata
+	 * Method to publish a metadata. If existing, metadata will be inserted, otherwise
+	 * it will be updated using the GeoNetwork manager.
 	 * 
-	 * @param eobject
+	 * @param object
 	 * @return the metadata identifier
 	 * @throws Exception 
 	 */
-	public String publishMetadata(GeographicMetaObject object) throws Exception {
+	public String insertOrUpdateMetadata(GeographicMetaObject object) throws Exception {
 
 		String metadataID = null;
-		try {
 
-			//marshalling metadata
-			final GeographicMetadata metadata = object.metadata();	
-			File tmp = File.createTempFile(metadata.getMetadataIdentifier().getCode(), ".xml");
-			Result out = new StreamResult(tmp);
-			
-			Map<String,Object> properties = new HashMap<>();
-			properties.put(XML.STRING_SUBSTITUTES, new String[] {"filename","mimetype"});
-			properties.put(XML.LOCALE, Locale.ENGLISH);
+		//marshalling metadata
+		final GeographicMetadata metadata = object.metadata();	
+		File tmp = File.createTempFile(metadata.getMetadataIdentifier().getCode(), ".xml");
+		Result out = new StreamResult(tmp);
+		
+		Map<String,Object> properties = new HashMap<>();
+		properties.put(XML.STRING_SUBSTITUTES, new String[] {"filename","mimetype"});
+		properties.put(XML.LOCALE, Locale.ENGLISH);
 
-			XML.marshal(metadata, out, properties);
-			
-			//inspire validation
-			if(inspire){
-				Response resp = inspireValidator.validate(tmp);
-				boolean isValid = inspireValidator.isValid(resp);
-				if(isValid){
-					LOGGER.info("[INSPIRE] - Metadata is valid");
-				}else{
-					InspireValidationReport inspireReport = inspireValidator.getReport(resp);
-					LOGGER.info("[INSPIRE] Invalid metadata (completeness = "+inspireReport.getCompleteness()+"%)");
-					for(InspireValidationError error : inspireReport.getValidationErrors()){
-						LOGGER.info("[INSPIRE Issue] "+error.getElement()+": "+error.getMessage());
-					}
-					
-					if(strict){
-						LOGGER.info("[INSPIRE] Aborting metadata publication (Strict = true)");
-						throw new Exception("Metadata is not INSPIRE compliant");
-					}
-					
+		XML.marshal(metadata, out, properties);
+		
+		//inspire validation
+		if(inspire){
+			Response resp = inspireValidator.validate(tmp);
+			boolean isValid = inspireValidator.isValid(resp);
+			if(isValid){
+				LOGGER.info("[INSPIRE] - Metadata is valid");
+			}else{
+				InspireValidationReport inspireReport = inspireValidator.getReport(resp);
+				LOGGER.info("[INSPIRE] Invalid metadata (completeness = "+inspireReport.getCompleteness()+"%)");
+				for(InspireValidationError error : inspireReport.getValidationErrors()){
+					LOGGER.info("[INSPIRE Issue] "+error.getElement()+": "+error.getMessage());
 				}
+				
+				if(strict){
+					LOGGER.info("[INSPIRE] Aborting metadata publication (Strict = true)");
+					throw new Exception("Metadata is not INSPIRE compliant");
+				}
+				
 			}
-			
-			// metadata insert configuration
-			GNInsertConfiguration icfg = new GNInsertConfiguration();
-			icfg.setCategory("datasets");
-			icfg.setGroup("1"); // group 1 is usually "all"
-			icfg.setStyleSheet("_none_");
-			icfg.setValidate(Boolean.FALSE);
-			long id = client.insertMetadata(icfg, tmp); // insert metadata
-			
-			tmp.delete(); // delete metadata file
-
-			// public privileges configuration
-			GNPrivConfiguration pcfg = new GNPrivConfiguration();
-			pcfg.addPrivileges(1,
-					EnumSet.of(GNPriv.VIEW, GNPriv.DYNAMIC, GNPriv.FEATURED));
-			client.setPrivileges(id, pcfg); // set public view privilege
-
-			// metadataURL
-			metadataID = metadata.getMetadataIdentifier().getCode();
-
-		} catch (Exception e) {
-			throw new Exception("Failed to publish metadata", e);
+		}
+		
+		long id = 0;
+		GNMetadata gnMetadata = this.checkMetadataExistence(object);
+		if(gnMetadata == null){
+			LOGGER.warn("No record for id = "+object.metaIdentifier());
+			try {
+				// metadata insert configuration
+				LOGGER.info("Publishing new metadata");
+				GNInsertConfiguration icfg = new GNInsertConfiguration();
+				icfg.setCategory("datasets");
+				icfg.setGroup("1"); // group 1 is usually "all"
+				icfg.setStyleSheet("_none_");
+				icfg.setValidate(Boolean.FALSE);
+				id = client.insertMetadata(icfg, tmp);
+				LOGGER.info("Successfull metadata insertion");
+				
+			} catch (Exception e) {
+				throw new PublicationException("Fail to insert new metadata", e);
+			}
+		}else{
+			id = gnMetadata.getId();
+			LOGGER.warn("Existing record for id = "+object.metaIdentifier()+" ("+id+")");
+			try {
+				// metadata update configuration
+				LOGGER.info("Updating existing metadata");
+				client.updateMetadata(id, tmp);
+				LOGGER.info("Successfull metadata update");
+				
+			} catch (Exception e) {
+				throw new PublicationException("Fail to update metadata", e);
+			}
 		}
 
-		return metadataID;
+		// public privileges configuration
+		GNPrivConfiguration pcfg = new GNPrivConfiguration();
+		pcfg.addPrivileges(1, EnumSet.of(GNPriv.VIEW, GNPriv.DYNAMIC, GNPriv.FEATURED));
+		client.setPrivileges(id, pcfg); // set public view privilege
 
+		// delete metadata file
+		tmp.delete();
+		
+		// metadataURL
+		metadataID = metadata.getMetadataIdentifier().getCode();
+		return metadataID;
 	}
 	
 	
@@ -195,7 +213,7 @@ public class MetadataPublisher {
 			try {
 				client.deleteMetadata(metadata.getId());
 			} catch (Exception e) {
-				throw new Exception("Fail to delete metadata", e);
+				throw new PublicationException("Fail to delete metadata", e);
 			}
 		}else{
 			LOGGER.warn("No metadata for id = "+object.metaIdentifier());
