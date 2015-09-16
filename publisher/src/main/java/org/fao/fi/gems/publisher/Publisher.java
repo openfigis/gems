@@ -95,38 +95,36 @@ public class Publisher {
 		//data publication
 		boolean layerExists = this.getDataPublisher().checkLayerExistence(object);
 		boolean layerPublished = false;
-		if(metadataPublished){
-			if (this.settings.getPublicationSettings().isActionData()) {
-				try{
-					if (layerExists) {
-						// force data publication
-						LOGGER.info("Updating existing layer");
-						this.getDataPublisher().deleteLayer(object);
-						this.getDataPublisher().publishLayer(
-								object,
-								style,
-								GemsMethod.valueOf(this.settings.getGeographicServerSettings().getMethod()),
-								this.settings.getGeographicServerSettings().getShapefileURL()
-								);
-						LOGGER.info("Successfull layer update");				
-			
-					} else {
-						LOGGER.info("Publishing new layer");
-						this.getDataPublisher().publishLayer(
-								object,
-								style,
-								GemsMethod.valueOf(this.settings.getGeographicServerSettings().getMethod()),
-								this.settings.getGeographicServerSettings().getShapefileURL());
-						LOGGER.info("Successfull layer publication");
-			
-					}
-				
-					layerPublished = true;
-				
-				} catch(Exception e){
-					LOGGER.info(e.getMessage());
-					throw e;	
+		if (this.settings.getPublicationSettings().isActionData()) {
+			try{
+				if (layerExists) {
+					// force data publication
+					LOGGER.info("Updating existing layer");
+					this.getDataPublisher().deleteLayer(object);
+					this.getDataPublisher().publishLayer(
+							object,
+							style,
+							GemsMethod.valueOf(this.settings.getGeographicServerSettings().getMethod()),
+							this.settings.getGeographicServerSettings().getShapefileURL()
+							);
+					LOGGER.info("Successfull layer update");				
+		
+				} else {
+					LOGGER.info("Publishing new layer");
+					this.getDataPublisher().publishLayer(
+							object,
+							style,
+							GemsMethod.valueOf(this.settings.getGeographicServerSettings().getMethod()),
+							this.settings.getGeographicServerSettings().getShapefileURL());
+					LOGGER.info("Successfull layer publication");
+		
 				}
+			
+				layerPublished = true;
+			
+			} catch(Exception e){
+				LOGGER.info(e.getMessage());
+				throw e;	
 			}
 		}
 		
@@ -160,9 +158,11 @@ public class Publisher {
 					LOGGER.info("Successfull roll-back");
 				} catch(Exception e){
 					throw new Exception("Fail to roll-back metadata publication", e);
-				}	
+				}
 			}
 		}
+		
+		
 		
 		return published;
 	}
