@@ -188,7 +188,7 @@ public class MetadataPublisher {
 			} catch (Exception e) {
 				throw new PublicationException("Fail to update metadata", e);
 			}finally{
-				long sleep = 2;
+				long sleep = 5;
 				Thread.sleep(sleep*1000);
 				LOGGER.info("Sleeping "+sleep+" seconds.");
 			}
