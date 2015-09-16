@@ -89,6 +89,13 @@ public class Publisher {
 			} catch(Exception e) {
 				LOGGER.info(e.getMessage());
 				throw e;
+			}finally{
+				long sleep = 1;
+				if(!this.settings.getPublicationSettings().isActionData()){
+					sleep = 5;
+				}
+				LOGGER.info("Sleeping "+sleep+" seconds.");
+				Thread.sleep(sleep*1000);
 			}
 		}
 		
@@ -191,9 +198,6 @@ public class Publisher {
 			layerUnpublished = true;
 		} catch (Exception e){
 			throw new Exception("Fail to unpublish layer", e);
-		} finally {
-			Thread.sleep(sleep*1000);
-			LOGGER.info("Sleeping "+sleep+" seconds");
 		}
 	
 		//unpublish metadata
@@ -208,9 +212,13 @@ public class Publisher {
 		} catch (Exception e) {
 			LOGGER.info(e.getMessage());
 			throw e;
-		} finally {
+		} finally{
+			long sleep = 1;
+			if(!this.settings.getPublicationSettings().isActionData()){
+				sleep = 5;
+			}
+			LOGGER.info("Sleeping "+sleep+" seconds.");
 			Thread.sleep(sleep*1000);
-			LOGGER.info("Sleeping "+sleep+" seconds");
 		}
 		
 		//check data and metadata publication & eventually roll-back

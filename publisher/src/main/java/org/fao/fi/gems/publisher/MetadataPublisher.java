@@ -171,10 +171,6 @@ public class MetadataPublisher {
 				
 			} catch (Exception e) {
 				throw new PublicationException("Fail to insert new metadata", e);
-			}finally{
-				long sleep = 5;
-				Thread.sleep(sleep*1000);
-				LOGGER.info("Sleeping "+sleep+" seconds.");
 			}
 		}else{
 			id = gnMetadata.getId();
@@ -187,10 +183,6 @@ public class MetadataPublisher {
 				
 			} catch (Exception e) {
 				throw new PublicationException("Fail to update metadata", e);
-			}finally{
-				long sleep = 5;
-				Thread.sleep(sleep*1000);
-				LOGGER.info("Sleeping "+sleep+" seconds.");
 			}
 		}
 
