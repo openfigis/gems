@@ -3,7 +3,6 @@
  */
 package org.fao.fi.gems.feature;
 
-import java.sql.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -11,11 +10,16 @@ import java.util.Map;
 
 import org.apache.sis.internal.util.TemporalUtilities;
 import org.apache.sis.referencing.CommonCRS;
+import org.apache.sis.xml.IdentifiedObject;
+import org.apache.sis.xml.IdentifierSpace;
 import org.fao.fi.gems.feature.FeatureTypeProperty;
 import org.fao.fi.gems.model.settings.data.dimension.TimeDimension;
 import org.geotoolkit.feature.DefaultFeature;
 import org.geotoolkit.feature.type.GeometryType;
 import org.geotoolkit.feature.type.PropertyDescriptor;
+import org.joda.time.DateTime;
+import org.joda.time.DateTimeZone;
+import org.joda.time.Interval;
 import org.opengis.feature.Feature;
 import org.opengis.temporal.Instant;
 import org.opengis.temporal.Period;
@@ -194,6 +198,7 @@ public final class FeatureUtils {
 	public static TemporalPrimitive time(List<Feature> features, TimeDimension time) throws Exception{
 		
 		TemporalPrimitive temporalPrimitive = null;
+		String periodId = null;
 		java.util.Date startTime = null;
 		java.util.Date endTime = null;
 		
@@ -207,20 +212,18 @@ public final class FeatureUtils {
 				Feature feature = it.next();
 				
 				//Start time
-				java.util.Date utilTime1 = (java.util.Date) feature.getPropertyValue(timeStartAttr);
-				Date time1 = new Date(utilTime1.getTime());
-				if(startTime == null) startTime = time1;
-				if(time1.before(startTime)) startTime = time1;
+				DateTime jtime1 = new DateTime((java.util.Date) feature.getPropertyValue(timeStartAttr), DateTimeZone.UTC);
+				if(startTime == null) startTime = jtime1.toDate();
+				if(jtime1.isBefore(startTime.getTime())) startTime = jtime1.toDate();
 				
 				//end time
 				if(timeEndAttr != null){
-					java.util.Date utilTime2 = (java.util.Date) feature.getPropertyValue(timeEndAttr);
-					Date time2 = new Date(utilTime2.getTime());
-					if(endTime == null) endTime = time2;
-					if(time2.after(endTime)) endTime = time2;
+					DateTime jtime2 = new DateTime((java.util.Date) feature.getPropertyValue(timeEndAttr), DateTimeZone.UTC);
+					if(endTime == null) endTime = jtime2.toDate();
+					if(jtime2.isAfter(endTime.getTime())) endTime = jtime2.toDate();
 				}else{
-					if(endTime == null) endTime = time1;
-					if(time1.after(endTime)) endTime = time1;
+					if(endTime == null) endTime = jtime1.toDate();
+					if(jtime1.isAfter(endTime.getTime())) endTime = jtime1.toDate();
 				}
 				
 			}
@@ -229,9 +232,21 @@ public final class FeatureUtils {
 		
 			if(endTime == null || startTime.equals(endTime)){
 				temporalPrimitive = TemporalUtilities.createInstant(startTime);
+				DateTime instant = new DateTime(startTime.getTime(), DateTimeZone.UTC);
+				Interval interval = new Interval(instant.getMillis(), instant.getMillis(), DateTimeZone.UTC);
+				periodId = interval.toPeriod().toString();
 			}else{
 				temporalPrimitive = TemporalUtilities.createPeriod(startTime, endTime);
+				DateTime start = new DateTime(startTime.getTime(), DateTimeZone.UTC);
+				DateTime end = new DateTime(endTime.getTime(), DateTimeZone.UTC);
+				Interval interval = new Interval(start.getMillis(), end.getMillis(), DateTimeZone.UTC);
+				periodId = interval.toPeriod().toString();
 			}
+			
+			//assign an ISO-8601 compliant string id
+			((IdentifiedObject) temporalPrimitive).getIdentifierMap()
+												  .putSpecialized(IdentifierSpace.ID, periodId);
+			
 		}catch(Exception e){
 			LOGGER.info(e.getMessage());
 			throw new Exception("Impossible to created temporal primitive ",e);

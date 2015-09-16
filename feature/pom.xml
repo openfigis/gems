@@ -15,6 +15,12 @@
 	<description>GEMS Feature module</description>
 
 	<dependencies>
+	
+		<!-- Joda Time -->
+		<dependency>
+			<groupId>joda-time</groupId>
+			<artifactId>joda-time</artifactId>
+		</dependency>
 
 		<!-- RS-API -->
 		<dependency>

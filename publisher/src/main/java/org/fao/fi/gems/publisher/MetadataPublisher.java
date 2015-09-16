@@ -15,6 +15,7 @@ import javax.ws.rs.core.Response;
 import javax.xml.transform.Result;
 import javax.xml.transform.stream.StreamResult;
 
+import org.apache.sis.internal.jaxb.LegacyNamespaces;
 import org.apache.sis.xml.XML;
 import org.fao.fi.gems.metaobject.GeographicMetadata;
 import org.fao.fi.gems.metaobject.GeographicMetaObject;
@@ -130,6 +131,7 @@ public class MetadataPublisher {
 		Map<String,Object> properties = new HashMap<>();
 		properties.put(XML.STRING_SUBSTITUTES, new String[] {"filename","mimetype"});
 		properties.put(XML.LOCALE, Locale.ENGLISH);
+		properties.put(XML.GML_VERSION, LegacyNamespaces.VERSION_3_2);
 
 		XML.marshal(metadata, out, properties);
 		
