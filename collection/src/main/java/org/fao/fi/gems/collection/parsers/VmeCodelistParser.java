@@ -95,6 +95,7 @@ public class VmeCodelistParser implements CodelistParser{
 						
 						//style
 						String style = "MEASURES_" + globalType + "_for_" + owner;
+						if(owner.equals("NAFO") && globalType.equals("OTHER")) style += "_datetype"; //specific rule											
 						
 						//retrieving FIGIS stuff
 						String figisId = null;

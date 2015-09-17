@@ -70,6 +70,7 @@ public class VmeGlobalCodelistParser implements CodelistParser{
 				
 				//style
 				String style = "MEASURES_" + globalType + "_for_" + owner;
+				if(owner.equals("NAFO") && globalType.equals("OTHER")) style += "_datetype"; //specific rule					
 				
 				//configure geographic entity	
 				FigisGeographicEntityImpl entity = null;
