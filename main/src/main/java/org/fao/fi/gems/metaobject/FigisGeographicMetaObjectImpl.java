@@ -146,13 +146,13 @@ public class FigisGeographicMetaObjectImpl extends GeographicMetaObjectImpl impl
 				
 				String figisViewerDomain = this.collection;
 				
-				if(this.hasFactsheet){
+				if(this.hasFactsheet && entity.getFigisId() != null){
 					
 					if(this.webResourceTitle == null) this.webResourceTitle = DEFAULT_FACTSHEET_TITLE;
 				
 					this.webResourceUrl = this.figisWebResourceBaseUrl
 							+ "/" + figisViewerDomain
-							+ "/" + ((FigisGeographicEntityImpl) this.entities.get(0)).getFigisId();
+							+ "/" + entity.getFigisId();
 					
 				}else{
 					if(figisViewerDomain.equalsIgnoreCase("fsa") || figisViewerDomain.equalsIgnoreCase("fsa-nested")){
