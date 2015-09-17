@@ -14,6 +14,8 @@ import org.fao.fi.gems.entity.GeographicEntity;
 import org.fao.fi.gems.entity.FigisGeographicEntityImpl;
 import org.fao.fi.gems.feature.FeatureTypeProperty;
 import org.fao.fi.gems.model.GemsConfig;
+import org.joda.time.DateTime;
+import org.joda.time.DateTimeZone;
 
 import com.vividsolutions.jts.geom.Envelope;
 
@@ -82,7 +84,9 @@ public class FigisGeographicMetaObjectImpl extends GeographicMetaObjectImpl impl
 					//get last year
 					DefaultTemporalExtent temporalExtent = new DefaultTemporalExtent();
 					temporalExtent.setExtent(this.temporalExtent());
-					String lastYear = temporalExtent.getEndTime().toString().substring(0, 4);
+					
+					DateTime jtime = new DateTime(temporalExtent.getEndTime().getTime(), DateTimeZone.UTC);
+					String lastYear = jtime.year().getAsString();
 					
 					//build xy center
 					double centerX = (bbox.getMaxX() + bbox.getMinX()) / 2;
@@ -109,7 +113,7 @@ public class FigisGeographicMetaObjectImpl extends GeographicMetaObjectImpl impl
 							+ "&prj=4326"
 							+ "&year=" + lastYear
 							+ "&rfb=" + this.owner
-							+ "&layers=Oceans imagery;"+layerOfInterest+";Gebco Undersea Features;";
+							+ "&layers=Oceans imagery;"+layerOfInterest+";UN_CONTINENT2;Gebco Undersea Features";
 					resource = resource.replaceAll(" ", "%20");
 				} else {
 					if(((FigisGeographicEntityImpl) this.entities.get(0)).getFigisViewerId() != null){
