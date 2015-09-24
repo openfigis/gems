@@ -23,7 +23,6 @@ import org.fao.fi.gems.collection.properties.FsaProperty;
 import org.fao.fi.gems.entity.EntityCode;
 import org.fao.fi.gems.entity.FigisGeographicEntityImpl;
 import org.fao.fi.gems.entity.GeographicEntity;
-import org.fao.fi.gems.entity.GeographicEntityImpl;
 import org.fao.fi.gems.lod.entity.common.FLODFsaEntity;
 import org.fao.fi.gems.metaobject.GeographicMetaObjectProperty;
 import org.fao.fi.gems.model.GemsConfig;
