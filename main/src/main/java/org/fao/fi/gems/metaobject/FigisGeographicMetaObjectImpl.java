@@ -163,7 +163,7 @@ public class FigisGeographicMetaObjectImpl extends GeographicMetaObjectImpl impl
 						
 						this.webResourceUrl = this.figisWebResourceBaseUrl + "/Area" + entity.code().substring(0,2);
 						if(entity.code().length() > 2){					
-							this.webResourceUrl += "#codearea-" + entity.code();
+							this.webResourceUrl += "#FAO-fishing-area-" + entity.code();
 						}
 					}
 				}
