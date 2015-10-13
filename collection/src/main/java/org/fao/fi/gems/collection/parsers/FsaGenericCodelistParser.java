@@ -171,11 +171,10 @@ public abstract class FsaGenericCodelistParser implements CodelistParser {
 									
 									if(!fsaLevel.equalsIgnoreCase("MAJOR")){
 										if(fsaName.endsWith(")")){
-											fsaName = fsaName.replace(")", " ");
+											fsaName = fsaName.replace(")", " of FAO Major Area " + majorFsa + ")");
 										}else{
-											fsaName += " ";
+											fsaName += " of FAO Major Area " + majorFsa;
 										}
-										fsaName += "of FAO Major Area " + majorFsa + ")";
 									}
 									
 									if(nested && !fsaFilter.getProperty().equalsIgnoreCase("F_SUBUNIT")){
