@@ -162,7 +162,7 @@ public abstract class FsaGenericCodelistParser implements CodelistParser {
 							NodeList waterAreaRefs = doc.getDocumentElement().getElementsByTagName("fi:WaterAreaRef");
 							for(int j=0;j<waterAreaRefs.getLength();j++){
 								Element waterAreaRef = (Element) waterAreaRefs.item(j);
-								if(waterAreaRef.getAttribute("Code").equalsIgnoreCase(fsa)){
+								if(waterAreaRef.getAttribute("Code").equalsIgnoreCase(fsa.replaceAll(" ", ""))){
 								
 									//get name
 									Element areaIdent = (Element) waterAreaRef.getParentNode();
@@ -180,9 +180,25 @@ public abstract class FsaGenericCodelistParser implements CodelistParser {
 									
 									break;
 								}
+								
+								if(fsaName == null){
+									switch(fsaLevel){
+									case "SUBAREA":
+										fsaName = "Subarea " + fsa;
+										break;
+									case "DIVISION":
+										fsaName = "Division " + fsa;
+										break;
+									case "SUBDIVISION":
+										fsaName = "Subdivision " + fsa;
+										break;
+									case "SUBUNIT":
+										fsaName = "Subunit " + fsa;
+										break;
+									}
+								}
 							}
 							properties.put(FsaProperty.CWP, Arrays.asList(fsa, fsaName, fsaLevel));
-							
 							
 							//parent
 							GeographicEntity parentEntity = null;
@@ -208,13 +224,17 @@ public abstract class FsaGenericCodelistParser implements CodelistParser {
 									parentElem = obj.get(parentFsaLevel.toLowerCase());
 								}
 								String parentFsa = parentElem.getAsString();
+								parentFsa = parentFsa.replaceAll(" ", "");
 								EntityCode parentCode = new EntityCode(null, parentFsa);
 								List<EntityCode> parentCodeStack = Arrays.asList(parentCode);
 								parentEntity = new FigisGeographicEntityImpl(owner, collection, parentCodeStack, null, null, null);
 							}
 							
 							entity = new FigisGeographicEntityImpl(owner, collection, fsaCodeStack, fsaName, properties, parentEntity);
-							fsaCodelist.add(entity);
+							
+							if(!nested || (nested && fsaLevel != "SUBUNIT")){
+								fsaCodelist.add(entity);
+							}
 						} catch (URISyntaxException e) {
 							e.printStackTrace();
 						} catch (Exception e) {

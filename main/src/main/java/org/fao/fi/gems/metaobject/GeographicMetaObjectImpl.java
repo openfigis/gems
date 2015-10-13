@@ -37,6 +37,8 @@ public class GeographicMetaObjectImpl implements GeographicMetaObject {
 	final static String SEPARATOR_INTERSECT_CODE = "_x_";
 	final static String SEPARATOR_INTERSECT_NAME = " | ";
 	final static String SEPARATOR_DOT_REPLACEMENT = "-";
+	final static String SEPARATOR_COMMA_REPLACEMENT = "";
+	final static String SEPARATOR_SPACE_REPLACEMENT = "";
 	
 	protected GemsConfig config;
 
@@ -148,7 +150,6 @@ public class GeographicMetaObjectImpl implements GeographicMetaObject {
 			}
 		}
 		this.code = codes;
-		
 	}
 	
 	/**
@@ -236,10 +237,11 @@ public class GeographicMetaObjectImpl implements GeographicMetaObject {
 		
 		String code = this.code();
 		
-		//control and prevent the presence of "." in targetLayerName
-		if(code.contains(".")){
-			code = code.replaceAll("[.]", SEPARATOR_DOT_REPLACEMENT);
-		}
+
+		//control and prevent the presence of certain special characters in targetLayerName		
+		code = code.replaceAll("[.]", SEPARATOR_DOT_REPLACEMENT);
+		code = code.replaceAll(",", SEPARATOR_COMMA_REPLACEMENT);
+		code = code.replaceAll(" ", SEPARATOR_COMMA_REPLACEMENT);
 		
 		if (trgLayerPrefix == null | trgLayerPrefix == "") {
 			this.targetLayername = code;

@@ -156,6 +156,8 @@ public final class Utils {
 	 */
 	public static String buildMetadataIdentifier(String owner, String collection, String code){
 		String metaId = owner.toLowerCase() + "-" + collection.toLowerCase() + "-map-" + code.toLowerCase();
+		metaId = metaId.replaceAll(",", "");
+		metaId = metaId.replaceAll(" ", "");
 		return metaId;
 	}
 	
@@ -178,6 +180,8 @@ public final class Utils {
 				metaId += "_x_"+ref;
 			}
 		}
+		metaId = metaId.replaceAll(",", "");
+		metaId = metaId.replaceAll(" ", "");
 		return metaId;
 	}
 
