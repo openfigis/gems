@@ -101,8 +101,8 @@ public abstract class FsaGenericCodelistParser implements CodelistParser {
 					
 					DataObjectFilter fsaFilter = null;
 					EntityCode fsaCode = null;
+					String nestingFieldName = null;
 					if (nested) {
-						String nestingFieldName = null;
 						switch(fsaLevel){
 						case "MAJOR":
 							nestingFieldName = "F_AREA";
@@ -170,7 +170,11 @@ public abstract class FsaGenericCodelistParser implements CodelistParser {
 									fsaName = nameEl.getTextContent();
 									
 									if(!fsaLevel.equalsIgnoreCase("MAJOR")){
-										fsaName = fsaName.replace(")", " ");
+										if(fsaName.endsWith(")")){
+											fsaName = fsaName.replace(")", " ");
+										}else{
+											fsaName += " ";
+										}
 										fsaName += "of FAO Major Area " + majorFsa + ")";
 									}
 									
@@ -201,8 +205,7 @@ public abstract class FsaGenericCodelistParser implements CodelistParser {
 							properties.put(FsaProperty.CWP, Arrays.asList(fsa, fsaName, fsaLevel));
 							
 							//parent
-							GeographicEntity parentEntity = null;
-							
+							GeographicEntity parentEntity = null;						
 							String parentFsaLevel = null;
 							switch(fsaLevel){
 								case "SUBAREA":
@@ -230,9 +233,42 @@ public abstract class FsaGenericCodelistParser implements CodelistParser {
 								parentEntity = new FigisGeographicEntityImpl(owner, collection, parentCodeStack, null, null, null);
 							}
 							
+							//check existence of children (for levels > subunit)
+							boolean hasFsaChild = false;
+							if(nested){
+								String childFsaLevel = null;
+								switch(fsaLevel){
+									case "MAJOR":
+										childFsaLevel = "F_SUBAREA";
+										break;
+									case "SUBAREA":
+										childFsaLevel = "F_DIVISION";
+										break;
+									case "DIVISION":
+										childFsaLevel = "F_SUBDIVIS";
+										break;
+									case "SUBDIVISION":
+										childFsaLevel = "F_SUBUNIT";
+										break;
+								}
+								if(childFsaLevel != null){
+									for(int k = 0;k<bindings.size();k++){
+										JsonObject cobj = bindings.get(k).getAsJsonObject().get("properties").getAsJsonObject();
+										JsonElement current = cobj.get(nestingFieldName);
+										if(!current.isJsonNull()){
+											JsonElement child = cobj.get(childFsaLevel);
+											if(current.getAsString().equalsIgnoreCase(fsa) && !child.isJsonNull()){
+												hasFsaChild = true;
+												break;
+											}
+										}
+									}
+								}
+							}
+							
 							entity = new FigisGeographicEntityImpl(owner, collection, fsaCodeStack, fsaName, properties, parentEntity);
 							
-							if(!nested || (nested && fsaLevel != "SUBUNIT")){
+							if(!nested || (nested && hasFsaChild)){
 								fsaCodelist.add(entity);
 							}
 						} catch (URISyntaxException e) {
