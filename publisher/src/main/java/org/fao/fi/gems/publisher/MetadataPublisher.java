@@ -4,6 +4,8 @@
 package org.fao.fi.gems.publisher;
 
 import java.io.File;
+import java.io.FileOutputStream;
+import java.io.OutputStream;
 import java.net.MalformedURLException;
 import java.util.EnumSet;
 import java.util.HashMap;
@@ -28,6 +30,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import it.geosolutions.geonetwork.GNClient;
+import it.geosolutions.geonetwork.GN2Client;
+import it.geosolutions.geonetwork.GN3Client;
 import it.geosolutions.geonetwork.util.GNInsertConfiguration;
 import it.geosolutions.geonetwork.util.GNPriv;
 import it.geosolutions.geonetwork.util.GNPrivConfiguration;
@@ -47,6 +51,7 @@ public class MetadataPublisher {
 	private static Logger LOGGER = LoggerFactory.getLogger(MetadataPublisher.class);
 
 	private String gnBaseURL;
+	private String gnVersion;
 	GNClient client;
 	
 	InspireValidator inspireValidator;
@@ -65,10 +70,13 @@ public class MetadataPublisher {
 
 		// geonetwork connection
 		this.gnBaseURL = catalogueSettings.getUrl();
-		client = new GNClient(this.gnBaseURL);
-		boolean logged = client.login(catalogueSettings.getUser(), catalogueSettings.getPassword());
-		if (!logged) {
-			throw new RuntimeException("Could not log in");
+		this.gnVersion = catalogueSettings.getVersion();
+		if(this.gnVersion.startsWith("2")){
+			client = new GN2Client(this.gnBaseURL, catalogueSettings.getUser(), catalogueSettings.getPassword());
+		}else if(this.gnVersion.startsWith("3")){
+			client = new GN3Client(this.gnBaseURL, catalogueSettings.getUser(), catalogueSettings.getPassword());
+		}else{
+			throw new RuntimeException(String.format("Version '%s' unsupported with Geonetwork client", catalogueSettings.getVersion()));
 		}
 		
 		//inspire validation
@@ -77,18 +85,16 @@ public class MetadataPublisher {
 		strict = validationSettings.isStrict();
 	}
 	
-	
 	/**
 	 * check metadata existence
 	 * 
-	 * @param object
+	 * @param metadata id
 	 * @return a GNMetadata object, null otherwise
 	 * @throws Exception 
 	 */
-	public GNMetadata checkMetadataExistence(GeographicMetaObject object) throws Exception{
-		
+	public static GNMetadata checkMetadataExistence(GNClient client, String metaId) throws Exception{
 		GNSearchRequest request = new GNSearchRequest();
-		request.addParam("uuid", object.metaIdentifier());
+		request.addParam("uuid", metaId);
 		GNSearchResponse response;
 		try {
 			response = client.search(request);
@@ -101,13 +107,23 @@ public class MetadataPublisher {
 		GNMetadata metadata = null;
 		while(it.hasNext()){
 			GNMetadata md = it.next();
-			if(md.getUUID().matches(object.metaIdentifier())){
+			if(md.getUUID().matches(metaId)){
 				metadata = md;
 				break;
 			}
-			
 		}
 		return metadata;
+	}
+	
+	/**
+	 * check metadata existence
+	 * 
+	 * @param object
+	 * @return a GNMetadata object, null otherwise
+	 * @throws Exception 
+	 */
+	public GNMetadata checkMetadataExistence(GeographicMetaObject object) throws Exception{	
+		return MetadataPublisher.checkMetadataExistence(client, object.metaIdentifier());
 	}
 	
 
@@ -134,6 +150,8 @@ public class MetadataPublisher {
 		properties.put(XML.GML_VERSION, LegacyNamespaces.VERSION_3_2);
 
 		XML.marshal(metadata, out, properties);
+		
+		System.out.println(tmp.getAbsolutePath());
 		
 		//inspire validation
 		if(inspire){
@@ -194,7 +212,7 @@ public class MetadataPublisher {
 		client.setPrivileges(id, pcfg); // set public view privilege
 
 		// delete metadata file
-		tmp.delete();
+		//tmp.delete();
 		
 		// metadataURL
 		metadataID = metadata.getMetadataIdentifier().getCode();

@@ -1,5 +1,6 @@
 <MetadataCatalogue>
 	<url>http://www.organization.org/catalogue</url>
+	<version>2</version>
 	<user>user</user>
 	<password>pwd</password>
 </MetadataCatalogue>

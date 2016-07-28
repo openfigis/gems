@@ -31,6 +31,7 @@ public class MetadataCatalogueSettingsTest {
 	public void testSettings(){
 		Assert.assertNotNull(catalog);
 		Assert.assertEquals("http://www.organization.org/catalogue", catalog.getUrl());
+		Assert.assertEquals("2", catalog.getVersion());
 		Assert.assertEquals("user", catalog.getUser());
 		Assert.assertEquals("pwd", catalog.getPassword());
 	}

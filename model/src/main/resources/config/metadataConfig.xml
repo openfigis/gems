@@ -118,8 +118,9 @@
 		<!-- ___________________________ -->
 		<metadataCatalogueSettings>								
 			<url>http://www.organization.org/catalogue</url>	<!-- Metadata catalogue base url-->
-			<user>user</user>					<!-- Metadata catalogue user-->
-			<password>pwd</password>				<!-- Metadata catalogue password-->
+			<version>2</version>								<!-- Geonetwork version -->
+			<user>user</user>									<!-- Metadata catalogue user-->
+			<password>pwd</password>							<!-- Metadata catalogue password-->
 		</metadataCatalogueSettings>
 
 		<!-- Publication settings -->

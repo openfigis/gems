@@ -18,6 +18,7 @@ import com.thoughtworks.xstream.io.xml.StaxDriver;
 public class MetadataCatalogueSettings{
 	
 	private String url;
+	private String version;
 	private String user;
 	private String password;
 	
@@ -38,6 +39,20 @@ public class MetadataCatalogueSettings{
 		this.url = url;
 	}
 
+
+	/**
+	 * @return the version
+	 */
+	public String getVersion() {
+		return version;
+	}
+
+	/**
+	 * @param version the version to set
+	 */
+	public void setVersion(String version) {
+		this.version = version;
+	}
 
 	/**
 	 * @return the user
