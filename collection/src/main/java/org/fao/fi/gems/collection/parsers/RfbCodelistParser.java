@@ -8,7 +8,7 @@ import java.io.InputStream;
 import java.net.URL;
 import java.util.Arrays;
 import java.util.HashMap;
-import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -43,7 +43,7 @@ public class RfbCodelistParser implements CodelistParser{
 		
 		String owner = Utils.whoIsOwner(config);
 		
-		Set<GeographicEntity> rfbCodelist = new HashSet<GeographicEntity>();
+		Set<GeographicEntity> rfbCodelist = new LinkedHashSet<GeographicEntity>();
 		
 		InputStream is = null;
 		try {
