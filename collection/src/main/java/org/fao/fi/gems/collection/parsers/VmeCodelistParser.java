@@ -12,7 +12,6 @@ import java.util.HashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import org.fao.fi.gems.codelist.CodelistParser;
 import org.fao.fi.gems.collection.properties.VmeProperty;
@@ -40,9 +39,9 @@ public class VmeCodelistParser implements CodelistParser{
 
 	private static final String VME_WS_SERVICE = "http://www.fao.org/figis/ws/vme/webservice/get?inventoryIdentifier=";
 	
-	public Set<GeographicEntity> getCodelist(GemsConfig config) {
+	public LinkedHashSet<GeographicEntity> getCodelist(GemsConfig config) {
 		
-		Set<GeographicEntity> vmeCodelist = new LinkedHashSet<GeographicEntity>();
+		LinkedHashSet<GeographicEntity> vmeCodelist = new LinkedHashSet<GeographicEntity>();
 		
 		String owner = Utils.whoIsOwner(config);
 		

@@ -10,7 +10,6 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
-import java.util.Set;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -38,7 +37,7 @@ import org.w3c.dom.NodeList;
  */
 public class SpeciesCodelistParser implements CodelistParser{
 	
-	public Set<GeographicEntity> getCodelist(GemsConfig config) {
+	public LinkedHashSet<GeographicEntity> getCodelist(GemsConfig config) {
 		
 		String owner = Utils.whoIsOwner(config);
 		
@@ -49,7 +48,7 @@ public class SpeciesCodelistParser implements CodelistParser{
 		List<String> styleColorList = Arrays.asList(styleColors);
 		
 		//parse codelist
-		Set<GeographicEntity> codelist = new LinkedHashSet<GeographicEntity>();
+		LinkedHashSet<GeographicEntity> codelist = new LinkedHashSet<GeographicEntity>();
 		try {
 
 			String specieslist = config.getSettings().getPublicationSettings().getCodelistURL();
