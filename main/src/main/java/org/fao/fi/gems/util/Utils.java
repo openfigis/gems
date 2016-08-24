@@ -4,6 +4,7 @@
 package org.fao.fi.gems.util;
 
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
 
 import org.apache.sis.xml.Namespaces;
@@ -73,7 +74,7 @@ public final class Utils {
 		boolean wrapEntity = true;
 		EntityList entities = config.getSettings().getPublicationSettings().getEntities();
 		if(entities != null){
-			List<String> included = entities.getInclude();
+			LinkedList<String> included = entities.getInclude();
 			if(included != null){
 				if(included.size() > 0){
 					if(!included.contains(code)){
@@ -82,7 +83,7 @@ public final class Utils {
 				}
 			}
 			
-			List<String> excluded = entities.getExclude();
+			LinkedList<String> excluded = entities.getExclude();
 			if(excluded != null){
 				if(excluded.size() > 0){
 					if(excluded.contains(code)){

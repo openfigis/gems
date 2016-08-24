@@ -5,8 +5,11 @@ package org.fao.fi.gems.collection.parsers;
 
 import java.net.URL;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.LinkedHashSet;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
@@ -59,12 +62,25 @@ public class SpeciesCodelistParser implements CodelistParser{
 			Document doc = dBuilder.parse(url.openStream());
 			doc.getDocumentElement().normalize();
 
+			LinkedList<Node> nodes = new LinkedList<Node>();
 			NodeList nList = doc.getElementsByTagName("item");
-
 			for (int temp = 0; temp < nList.getLength(); temp++) {
+				Node nNode = nList.item(temp);
+				nodes.add(nNode);
+			}
+			
+			Collections.sort(nodes, new Comparator<Node>(){
+			     public int compare(Node o1, Node o2){
+			    	 Element e1 = (Element) o1;
+			    	 Element e2 = (Element) o2;
+			         return e1.getAttribute("a3c").compareTo(e2.getAttribute("a3c"));
+			     }
+			});
+			
+			for (int temp = 0; temp < nodes.size(); temp++) {
 				// for (int temp = 0; temp < 20; temp++) { //test with the first
 				// 10 species
-				Node nNode = nList.item(temp);
+				Node nNode = nodes.get(temp);
 				if (nNode.getNodeType() == Node.ELEMENT_NODE) {
 					
 					Map<GeographicMetaObjectProperty, List<String>> properties = new HashMap<GeographicMetaObjectProperty, List<String>>();
