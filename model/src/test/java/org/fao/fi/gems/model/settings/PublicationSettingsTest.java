@@ -5,7 +5,7 @@ package org.fao.fi.gems.model.settings;
 
 import java.io.File;
 import java.net.URISyntaxException;
-import java.util.List;
+import java.util.LinkedList;
 
 import org.fao.fi.gems.model.settings.publication.EntityList;
 import org.fao.fi.gems.model.settings.publication.PublicationSettings;
@@ -47,14 +47,14 @@ public class PublicationSettingsTest {
 		EntityList entities = settings.getEntities();
 		Assert.assertNotNull(entities);
 		
-		List<String> include = entities.getInclude();
+		LinkedList<String> include = entities.getInclude();
 		Assert.assertNotNull(include);
 		Assert.assertEquals(3, include.size());
 		Assert.assertEquals("thecode1", include.get(0));
 		Assert.assertEquals("thecode2", include.get(1));
 		Assert.assertEquals("thecode3", include.get(2));
 		
-		List<String> exclude = entities.getExclude();
+		LinkedList<String> exclude = entities.getExclude();
 		Assert.assertNotNull(exclude);
 		Assert.assertEquals(1, exclude.size());
 		Assert.assertEquals("thecode3", exclude.get(0));
