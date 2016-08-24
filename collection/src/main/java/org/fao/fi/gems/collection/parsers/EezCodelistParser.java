@@ -9,7 +9,7 @@ import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.Arrays;
 import java.util.HashMap;
-import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -42,7 +42,7 @@ public class EezCodelistParser implements CodelistParser{
 		
 		String owner = Utils.whoIsOwner(config);
 		
-		Set<GeographicEntity> eezCodelist = new HashSet<GeographicEntity>();
+		Set<GeographicEntity> eezCodelist = new LinkedHashSet<GeographicEntity>();
 		
 		JsonReader reader = null;
 		try {
