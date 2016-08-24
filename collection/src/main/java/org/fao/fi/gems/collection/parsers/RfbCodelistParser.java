@@ -7,8 +7,11 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.LinkedHashSet;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
@@ -55,12 +58,25 @@ public class RfbCodelistParser implements CodelistParser{
 			is = dataURL.openStream();
 			Document doc = dBuilder.parse(is);
 			doc.getDocumentElement().normalize();
-
+			
+			LinkedList<Node> nodes = new LinkedList<Node>();
 			NodeList nList = doc.getElementsByTagName("rfb");
-
 			for (int temp = 0; temp < nList.getLength(); temp++) {
-				
 				Node nNode = nList.item(temp);
+				nodes.add(nNode);
+			}
+			
+			Collections.sort(nodes, new Comparator<Node>(){
+			     public int compare(Node o1, Node o2){
+			    	 Element e1 = (Element) o1;
+			    	 Element e2 = (Element) o2;
+			         return e1.getAttribute("name").compareTo(e2.getAttribute("name"));
+			     }
+			});
+			
+			for (int temp = 0; temp < nodes.size(); temp++) {
+
+				Node nNode = nodes.get(temp);
 				if (nNode.getNodeType() == Node.ELEMENT_NODE) {
 
 					Element eElement = (Element) nNode;

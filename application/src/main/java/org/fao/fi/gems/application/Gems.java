@@ -87,9 +87,9 @@ public class Gems {
 		
 		EntityList entities = config.getSettings().getPublicationSettings().getEntities();
 		if(entities != null){
-			List<String> include = entities.getInclude();
-			List<String> exclude = entities.getExclude();
-			List<String> todo = null;
+			LinkedList<String> include = entities.getInclude();
+			LinkedList<String> exclude = entities.getExclude();
+			LinkedList<String> todo = null;
 			if(include != null){
 				if(include.size() > 0){
 					if(exclude != null){
