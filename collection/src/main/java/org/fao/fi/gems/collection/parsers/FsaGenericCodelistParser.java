@@ -12,7 +12,6 @@ import java.util.HashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -56,12 +55,12 @@ public abstract class FsaGenericCodelistParser implements CodelistParser {
 	}
 	
 	@Override
-	public Set<GeographicEntity> getCodelist(GemsConfig config) {
+	public LinkedHashSet<GeographicEntity> getCodelist(GemsConfig config) {
 		
 		String owner = Utils.whoIsOwner(config);
 		String collection = config.getSettings().getPublicationSettings().getCollectionType();
 		
-		Set<GeographicEntity> fsaCodelist = new LinkedHashSet<GeographicEntity>();
+		LinkedHashSet<GeographicEntity> fsaCodelist = new LinkedHashSet<GeographicEntity>();
 		
 		DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
 		DocumentBuilder dBuilder = null;

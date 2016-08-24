@@ -3,7 +3,7 @@
  */
 package org.fao.fi.gems.codelist;
 
-import java.util.Set;
+import java.util.LinkedHashSet;
 
 import org.fao.fi.gems.entity.GeographicEntity;
 import org.fao.fi.gems.model.GemsConfig;
@@ -16,6 +16,6 @@ import org.fao.fi.gems.model.GemsConfig;
  */
 public interface CodelistParser {
 	
-	public Set<GeographicEntity> getCodelist(GemsConfig config);
+	public LinkedHashSet<GeographicEntity> getCodelist(GemsConfig config);
 
 }

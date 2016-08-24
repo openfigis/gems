@@ -11,7 +11,6 @@ import java.util.HashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -39,11 +38,11 @@ import org.w3c.dom.NodeList;
  */
 public class RfbCodelistParser implements CodelistParser{
 	
-	public Set<GeographicEntity> getCodelist(GemsConfig config) {
+	public LinkedHashSet<GeographicEntity> getCodelist(GemsConfig config) {
 		
 		String owner = Utils.whoIsOwner(config);
 		
-		Set<GeographicEntity> rfbCodelist = new LinkedHashSet<GeographicEntity>();
+		LinkedHashSet<GeographicEntity> rfbCodelist = new LinkedHashSet<GeographicEntity>();
 		
 		InputStream is = null;
 		try {

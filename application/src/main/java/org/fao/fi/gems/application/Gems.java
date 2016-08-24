@@ -7,10 +7,10 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
+import java.util.LinkedHashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import org.fao.fi.gems.codelist.CodelistParser;
 import org.fao.fi.gems.feature.FeatureTypeProperty;
@@ -44,7 +44,7 @@ public class Gems {
 
 	private static Logger LOGGER = LoggerFactory.getLogger(Gems.class);
 
-	static Set<GeographicEntity> set = null;
+	static LinkedHashSet<GeographicEntity> set = null;
 	
 	
 	/**
