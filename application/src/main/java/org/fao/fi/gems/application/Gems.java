@@ -7,6 +7,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -96,7 +97,7 @@ public class Gems {
 							LOGGER.info("Publication Scope = SUBSET");
 							LOGGER.info("List of included entities = "+include.toString());
 						}else{
-							todo = new ArrayList<String>();
+							todo = new LinkedList<String>();
 							todo.addAll(include);
 							for(String entity : exclude){
 								todo.remove(entity);
