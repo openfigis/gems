@@ -78,6 +78,10 @@ public class FigisGeographicMetaObjectImpl extends GeographicMetaObjectImpl impl
 			String figisDomain = ((FigisGeographicEntityImpl) this.entities.get(0)).getFigisDomain();
 			
 			if (figisDomain != null && bbox != null) {
+												
+				//build xy center
+				double centerX = (bbox.getMaxX() + bbox.getMinX()) / 2;
+				double centerY = (bbox.getMaxY() + bbox.getMinY()) / 2;
 				
 				if (this.collection().matches("vme")){
 					
@@ -87,10 +91,6 @@ public class FigisGeographicMetaObjectImpl extends GeographicMetaObjectImpl impl
 					
 					DateTime jtime = new DateTime(temporalExtent.getEndTime().getTime(), DateTimeZone.UTC);
 					String lastYear = jtime.year().getAsString();
-					
-					//build xy center
-					double centerX = (bbox.getMaxX() + bbox.getMinX()) / 2;
-					double centerY = (bbox.getMaxY() + bbox.getMinY()) / 2;
 					
 					// build the link
 					String globalType = null;
@@ -120,7 +120,9 @@ public class FigisGeographicMetaObjectImpl extends GeographicMetaObjectImpl impl
 						resource = this.figisViewerResourceBaseUrl+ "/" + figisDomain
 								+ ".html?" + this.collection + "=" + ((FigisGeographicEntityImpl) this.entities.get(0)).getFigisViewerId()
 								+ "&extent=" + bbox.getMinX() + "," + bbox.getMinY() + ","
-								+ bbox.getMaxX() + "," + bbox.getMaxY() + "&prj=4326";		
+											 + bbox.getMaxX() + "," + bbox.getMaxY()
+								+ "&center=" + centerX + "," + centerY
+								+ "&prj=4326";		
 					}		
 				}
 	
