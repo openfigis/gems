@@ -9,7 +9,7 @@ import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.Arrays;
 import java.util.HashMap;
-import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -42,7 +42,7 @@ public class VmeCodelistParser implements CodelistParser{
 	
 	public Set<GeographicEntity> getCodelist(GemsConfig config) {
 		
-		Set<GeographicEntity> vmeCodelist = new HashSet<GeographicEntity>();
+		Set<GeographicEntity> vmeCodelist = new LinkedHashSet<GeographicEntity>();
 		
 		String owner = Utils.whoIsOwner(config);
 		

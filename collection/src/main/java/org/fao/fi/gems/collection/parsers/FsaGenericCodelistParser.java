@@ -9,7 +9,7 @@ import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.Arrays;
 import java.util.HashMap;
-import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -61,7 +61,7 @@ public abstract class FsaGenericCodelistParser implements CodelistParser {
 		String owner = Utils.whoIsOwner(config);
 		String collection = config.getSettings().getPublicationSettings().getCollectionType();
 		
-		Set<GeographicEntity> fsaCodelist = new HashSet<GeographicEntity>();
+		Set<GeographicEntity> fsaCodelist = new LinkedHashSet<GeographicEntity>();
 		
 		DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
 		DocumentBuilder dBuilder = null;

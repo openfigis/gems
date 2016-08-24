@@ -6,7 +6,7 @@ package org.fao.fi.gems.collection.parsers;
 import java.net.URL;
 import java.util.Arrays;
 import java.util.HashMap;
-import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
@@ -49,7 +49,7 @@ public class SpeciesCodelistParser implements CodelistParser{
 		List<String> styleColorList = Arrays.asList(styleColors);
 		
 		//parse codelist
-		Set<GeographicEntity> codelist = new HashSet<GeographicEntity>();
+		Set<GeographicEntity> codelist = new LinkedHashSet<GeographicEntity>();
 		try {
 
 			String specieslist = config.getSettings().getPublicationSettings().getCodelistURL();
