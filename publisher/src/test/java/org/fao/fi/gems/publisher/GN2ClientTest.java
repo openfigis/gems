@@ -13,6 +13,7 @@ import org.junit.BeforeClass;
 import org.junit.Ignore;
 import org.junit.Test;
 
+@Ignore
 public class GN2ClientTest {
 	
 	static GNClient client;
@@ -39,29 +40,6 @@ public class GN2ClientTest {
 	}
 	
 	@Test
-	@Ignore
-	public void searchMetadata() throws Exception{	
-		GNMetadata md = MetadataPublisher.checkMetadataExistence(client, MD_ID);
-		Assert.assertEquals(MD_ID, md.getUUID());
-		System.out.println(md.getId());
-	}
-	
-	@Test
-	@Ignore
-	public void deleteMetadata() throws Exception{
-		GNMetadata md = MetadataPublisher.checkMetadataExistence(client, MD_ID);
-		client.deleteMetadata(md.getId());
-	}
-	
-	@Test
-	@Ignore
-	public void insertMetadata() throws Exception{	
-		MD_FILE = getResourceFile(MD_ID+".xml");
-		GNMetadata md = MetadataPublisher.checkMetadataExistence(client, MD_ID);
-		client.updateMetadata(md.getId(), MD_FILE);
-	}
-	
-	@Test
 	public void testConnection() throws Exception{
 		
 		HTTPUtils connection = new HTTPUtils(GN_USERNAME, GN_PASSWORD);
@@ -76,7 +54,26 @@ public class GN2ClientTest {
 	}
 	
 	@Test
-	@Ignore
+	public void searchMetadata() throws Exception{	
+		GNMetadata md = MetadataPublisher.checkMetadataExistence(client, MD_ID);
+		Assert.assertEquals(MD_ID, md.getUUID());
+		System.out.println(md.getId());
+	}
+	
+	@Test
+	public void deleteMetadata() throws Exception{
+		GNMetadata md = MetadataPublisher.checkMetadataExistence(client, MD_ID);
+		client.deleteMetadata(md.getId());
+	}
+	
+	@Test
+	public void insertMetadata() throws Exception{	
+		MD_FILE = getResourceFile(MD_ID+".xml");
+		GNMetadata md = MetadataPublisher.checkMetadataExistence(client, MD_ID);
+		client.updateMetadata(md.getId(), MD_FILE);
+	}
+	
+	@Test
 	public void updateMetadata() throws Exception{
 		MD_FILE = getResourceFile(MD_ID+".xml");
 		GNMetadata md = MetadataPublisher.checkMetadataExistence(client, MD_ID);
