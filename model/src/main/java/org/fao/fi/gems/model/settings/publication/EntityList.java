@@ -3,7 +3,7 @@
  */
 package org.fao.fi.gems.model.settings.publication;
 
-import java.util.List;
+import java.util.LinkedList;
 
 /**
  * EntityList
@@ -13,29 +13,29 @@ import java.util.List;
  */
 public class EntityList {
 	
-	private List<String> include;
-	private List<String> exclude;
+	private LinkedList<String> include;
+	private LinkedList<String> exclude;
 	
 	
 	public EntityList(){}
 
 
-	public List<String> getInclude() {
+	public LinkedList<String> getInclude() {
 		return include;
 	}
 
 
-	public void setInclude(List<String> include) {
+	public void setInclude(LinkedList<String> include) {
 		this.include = include;
 	}
 
 
-	public List<String> getExclude() {
+	public LinkedList<String> getExclude() {
 		return exclude;
 	}
 
 
-	public void setExclude(List<String> exclude) {
+	public void setExclude(LinkedList<String> exclude) {
 		this.exclude = exclude;
 	};
 	

@@ -9,10 +9,9 @@ import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.Arrays;
 import java.util.HashMap;
-import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import org.fao.fi.gems.codelist.CodelistParser;
 import org.fao.fi.gems.collection.properties.EezProperty;
@@ -38,11 +37,11 @@ import com.google.gson.stream.JsonReader;
  */
 public class EezCodelistParser implements CodelistParser{
 
-	public Set<GeographicEntity> getCodelist(GemsConfig config) {
+	public LinkedHashSet<GeographicEntity> getCodelist(GemsConfig config) {
 		
 		String owner = Utils.whoIsOwner(config);
 		
-		Set<GeographicEntity> eezCodelist = new HashSet<GeographicEntity>();
+		LinkedHashSet<GeographicEntity> eezCodelist = new LinkedHashSet<GeographicEntity>();
 		
 		JsonReader reader = null;
 		try {

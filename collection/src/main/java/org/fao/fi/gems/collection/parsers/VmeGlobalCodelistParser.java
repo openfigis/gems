@@ -6,11 +6,10 @@ package org.fao.fi.gems.collection.parsers;
 import java.net.URISyntaxException;
 import java.util.Arrays;
 import java.util.HashMap;
-import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import org.fao.fi.gems.codelist.CodelistParser;
 import org.fao.fi.gems.collection.properties.VmeProperty;
@@ -32,9 +31,9 @@ import org.fao.fi.gems.util.Utils;
 public class VmeGlobalCodelistParser implements CodelistParser{
 
 	@Override
-	public Set<GeographicEntity> getCodelist(GemsConfig config) {
+	public LinkedHashSet<GeographicEntity> getCodelist(GemsConfig config) {
 		
-		Set<GeographicEntity> vmeCodelist = new HashSet<GeographicEntity>();
+		LinkedHashSet<GeographicEntity> vmeCodelist = new LinkedHashSet<GeographicEntity>();
 		
 		String owner = Utils.whoIsOwner(config);
 		

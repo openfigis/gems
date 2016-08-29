@@ -7,9 +7,10 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
+import java.util.LinkedHashSet;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import org.fao.fi.gems.codelist.CodelistParser;
 import org.fao.fi.gems.feature.FeatureTypeProperty;
@@ -43,7 +44,7 @@ public class Gems {
 
 	private static Logger LOGGER = LoggerFactory.getLogger(Gems.class);
 
-	static Set<GeographicEntity> set = null;
+	static LinkedHashSet<GeographicEntity> set = null;
 	
 	
 	/**
@@ -86,9 +87,9 @@ public class Gems {
 		
 		EntityList entities = config.getSettings().getPublicationSettings().getEntities();
 		if(entities != null){
-			List<String> include = entities.getInclude();
-			List<String> exclude = entities.getExclude();
-			List<String> todo = null;
+			LinkedList<String> include = entities.getInclude();
+			LinkedList<String> exclude = entities.getExclude();
+			LinkedList<String> todo = null;
 			if(include != null){
 				if(include.size() > 0){
 					if(exclude != null){
@@ -96,7 +97,7 @@ public class Gems {
 							LOGGER.info("Publication Scope = SUBSET");
 							LOGGER.info("List of included entities = "+include.toString());
 						}else{
-							todo = new ArrayList<String>();
+							todo = new LinkedList<String>();
 							todo.addAll(include);
 							for(String entity : exclude){
 								todo.remove(entity);
