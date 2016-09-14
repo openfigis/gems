@@ -13,6 +13,7 @@ import org.junit.BeforeClass;
 import org.junit.Ignore;
 import org.junit.Test;
 
+
 @Ignore
 public class GN2ClientTest {
 	
@@ -21,8 +22,8 @@ public class GN2ClientTest {
 	static File MD_FILE;
 	
 	static String GN_URL = "url";
-	static String GN_USERNAME = "username";
-	static String GN_PASSWORD = "password";
+	static String GN_USERNAME = "user";
+	static String GN_PASSWORD = "pwd";
 	
 	
 	@BeforeClass
@@ -49,8 +50,9 @@ public class GN2ClientTest {
 		GNMetadata md = MetadataPublisher.checkMetadataExistence(client, MD_ID);
 		String serviceURL = "http://www.fao.org/geonetwork/srv/eng/metadata.edit!?id="+md.getId();
 		String response = connection.get(serviceURL);
-		System.out.println(response);
-		System.out.println(connection.getLastHttpStatus());
+		
+		Assert.assertEquals(200, connection.getLastHttpStatus());
+		Assert.assertNotNull(response);
 	}
 	
 	@Test
