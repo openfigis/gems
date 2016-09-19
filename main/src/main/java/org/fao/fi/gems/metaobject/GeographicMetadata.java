@@ -512,7 +512,7 @@ public class GeographicMetadata extends DefaultMetadata {
 			wfsResource1.setProtocol(GemsResourceProtocol.OGC_WFS_1_0_0_GETFEATURE.protocol());
 			wfsResource1.setName(new SimpleInternationalString(object.targetLayerName()));
 			wfsResource1.setDescription(new SimpleInternationalString(
-					"GIS data (WFS - GML)"));
+					"GIS data download (WFS - GML)"));
 			wfsResource1.setFunction(OnLineFunction.DOWNLOAD);
 			resources.add(wfsResource1);
 
@@ -532,7 +532,7 @@ public class GeographicMetadata extends DefaultMetadata {
 			wfsResource2.setProtocol(GemsResourceProtocol.OGC_WFS_1_0_0_GETFEATURE.protocol());
 			wfsResource2.setName(new SimpleInternationalString(object.targetLayerName()));
 			wfsResource2.setDescription(new SimpleInternationalString(
-					"GIS data (WFS - Shapefile)"));
+					"GIS data download (WFS - ESRI Shapefile)"));
 			wfsResource2.setFunction(OnLineFunction.DOWNLOAD);
 			resources.add(wfsResource2);
 
