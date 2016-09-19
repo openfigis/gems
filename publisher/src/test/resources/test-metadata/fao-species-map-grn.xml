@@ -628,7 +628,7 @@
                   <gco:CharacterString>The terms and conditions are available at http://www.fao.org/contact-us/terms/en</gco:CharacterString>
                </gmd:useLimitation>
                <gmd:useLimitation>
-                  <gco:CharacterString>Usage subject to mandatory citation: © FAO, 2016. Aquatic Species Distribution Maps. FAO aquatic species distribution map of Macruronus magellanicus. In: FAO - Fisheries and Aquaculture Department (FI) [online]. Rome. Updated 2016-08-24 [Cited &lt;DATE&gt;] http://www.fao.org/geonetwork/srv/en/main.home?uuid=fao-species-map-grn</gco:CharacterString>
+                  <gco:CharacterString>Usage subject to mandatory citation: © FAO, 2016. Aquatic Species Distribution Maps. FAO aquatic species distribution map of Macruronus magellanicus. In: FAO - Fisheries and Aquaculture Department (FI) [online]. Rome. Updated 2016-08-24 [Cited &lt;DATE&gt;] http://www.fao.org/geonetwork/srv/eng/main.home?uuid=fao-species-map-grn</gco:CharacterString>
                </gmd:useLimitation>
                <gmd:useLimitation>
                   <gco:CharacterString>Disclaimer: The designations employed and the presentation of material in the map(s) are for illustration only and do not imply the expression of any opinion whatsoever on the part of FAO concerning the legal or constitutional status of any country, territory or sea area or concerning the delimitation of frontiers or boundaries.</gco:CharacterString>
@@ -722,13 +722,13 @@
                         <gmd:URL>http://www.fao.org/figis/geoserver/species/ows?service=WFS&amp;request=GetFeature&amp;version=1.0.0&amp;typeName=SPECIES_DIST_GRN</gmd:URL>
                      </gmd:linkage>
                      <gmd:protocol>
-                        <gco:CharacterString>OGC:WFS-1.0.0-http-get-feature</gco:CharacterString>
+                        <gco:CharacterString>WWW:LINK-1.0-http--link</gco:CharacterString>
                      </gmd:protocol>
                      <gmd:name>
                         <gco:CharacterString>SPECIES_DIST_GRN</gco:CharacterString>
                      </gmd:name>
                      <gmd:description>
-                        <gco:CharacterString>GIS data (WFS - GML)</gco:CharacterString>
+                        <gco:CharacterString>GIS data download (WFS - GML)</gco:CharacterString>
                      </gmd:description>
                      <gmd:function>
                         <gmd:CI_OnLineFunctionCode codeList="http://www.isotc211.org/2005/resources/codeList.xml#CI_OnLineFunctionCode"
@@ -743,13 +743,13 @@
                         <gmd:URL>http://www.fao.org/figis/geoserver/species/ows?service=WFS&amp;request=GetFeature&amp;version=1.0.0&amp;typeName=SPECIES_DIST_GRN&amp;outputFormat=SHAPE-ZIP&amp;format_options=filename%3AFAO_SPECIES_DIST_GRN.zip</gmd:URL>
                      </gmd:linkage>
                      <gmd:protocol>
-                        <gco:CharacterString>OGC:WFS-1.0.0-http-get-feature</gco:CharacterString>
+                        <gco:CharacterString>WWW:LINK-1.0-http--link</gco:CharacterString>
                      </gmd:protocol>
                      <gmd:name>
                         <gco:CharacterString>SPECIES_DIST_GRN</gco:CharacterString>
                      </gmd:name>
                      <gmd:description>
-                        <gco:CharacterString>GIS data (WFS - Shapefile)</gco:CharacterString>
+                        <gco:CharacterString>GIS data download (WFS - ESRI Shapefile)</gco:CharacterString>
                      </gmd:description>
                      <gmd:function>
                         <gmd:CI_OnLineFunctionCode codeList="http://www.isotc211.org/2005/resources/codeList.xml#CI_OnLineFunctionCode"
@@ -761,7 +761,7 @@
                <gmd:onLine>
                   <gmd:CI_OnlineResource>
                      <gmd:linkage>
-                        <gmd:URL>http://www.fao.org/geonetwork/srv/en/csw?service=CSW&amp;request=GetRecordById&amp;Version=2.0.2&amp;elementSetName=full&amp;outputSchema=http%3A//www.isotc211.org/2005/gmd&amp;id=fao-species-map-grn</gmd:URL>
+                        <gmd:URL>http://www.fao.org/geonetwork/srv/eng/csw?service=CSW&amp;request=GetRecordById&amp;Version=2.0.2&amp;elementSetName=full&amp;outputSchema=http%3A//www.isotc211.org/2005/gmd&amp;id=fao-species-map-grn</gmd:URL>
                      </gmd:linkage>
                      <gmd:protocol>
                         <gco:CharacterString>WWW:LINK-1.0-http--link</gco:CharacterString>

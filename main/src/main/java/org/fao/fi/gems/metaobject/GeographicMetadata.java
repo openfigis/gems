@@ -450,7 +450,10 @@ public class GeographicMetadata extends DefaultMetadata {
 		biblioRef += "[Cited <DATE>] ";
 		
 		if(mdBiblioRef.getScope().matches("DATASET")){
-			biblioRef += Utils.getHTMLMetadataURL(object.config().getSettings().getMetadataCatalogueSettings().getUrl(), object.metaIdentifier());
+			biblioRef += Utils.getHTMLMetadataURL(object.config().getSettings()
+					.getMetadataCatalogueSettings().getUrl(), object.config()
+					.getSettings().getMetadataCatalogueSettings().getVersion(),
+					object.metaIdentifier());
 		}else if(mdBiblioRef.getScope().matches("COLLECTION")){
 			biblioRef += object.template().getCollectionURL();
 		}
@@ -509,7 +512,7 @@ public class GeographicMetadata extends DefaultMetadata {
 					+ object.config().getSettings().getGeographicServerSettings().getTargetWorkspace()
 					+ "/ows?service=WFS&request=GetFeature&version=1.0.0"
 					+ "&typeName=" + object.targetLayerName()));
-			wfsResource1.setProtocol(GemsResourceProtocol.OGC_WFS_1_0_0_GETFEATURE.protocol());
+			wfsResource1.setProtocol(GemsResourceProtocol.W3C_HTTP_1_0_LINK.protocol());
 			wfsResource1.setName(new SimpleInternationalString(object.targetLayerName()));
 			wfsResource1.setDescription(new SimpleInternationalString(
 					"GIS data download (WFS - GML)"));
@@ -529,7 +532,7 @@ public class GeographicMetadata extends DefaultMetadata {
 					+ "&outputFormat=SHAPE-ZIP" + "&format_options=filename%3A"
 					+ shpFileName + ".zip"));
 
-			wfsResource2.setProtocol(GemsResourceProtocol.OGC_WFS_1_0_0_GETFEATURE.protocol());
+			wfsResource2.setProtocol(GemsResourceProtocol.W3C_HTTP_1_0_LINK.protocol());
 			wfsResource2.setName(new SimpleInternationalString(object.targetLayerName()));
 			wfsResource2.setDescription(new SimpleInternationalString(
 					"GIS data download (WFS - ESRI Shapefile)"));

@@ -75,6 +75,7 @@ public class DataPublisher {
 	List<String> existingLayers;
 	
 	String geonetworkBaseURL;
+	String geonetworkVersion;
 
 
 	/**
@@ -105,6 +106,7 @@ public class DataPublisher {
 		this.existingLayers = GSReader.getLayers().getNames();
 
 		this.geonetworkBaseURL = catalogueSettings.getUrl();
+		this.geonetworkVersion = catalogueSettings.getVersion();
 		
 	}
 
@@ -296,7 +298,7 @@ public class DataPublisher {
 						this.geonetworkBaseURL, object.metaIdentifier()));
 		final GSMetadataLinkInfoEncoder mde2 = new GSMetadataLinkInfoEncoder(
 				"text/html", "ISO19115:2003", Utils.getHTMLMetadataURL(
-						this.geonetworkBaseURL, object.metaIdentifier()));
+						this.geonetworkBaseURL, this.geonetworkVersion, object.metaIdentifier()));
 		fte.addMetadataLinkInfo(mde1);
 		fte.addMetadataLinkInfo(mde2);
 		

@@ -106,7 +106,7 @@ public final class Utils {
 	 */
 	public static String getXMLMetadataURL(String gnBaseURL, String mdIdentifier) {
 
-		String metadataURL = gnBaseURL + "/srv/en/" + "csw?service=CSW"
+		String metadataURL = gnBaseURL + "/srv/eng/" + "csw?service=CSW"
 				+ "&request=GetRecordById" + "&Version=2.0.2"
 				+ "&elementSetName=full" + "&outputSchema=" + Namespaces.GMD.replaceAll(":", "%3A")
 				+ "&id=" + mdIdentifier;
@@ -121,11 +121,17 @@ public final class Utils {
 	 * @param mdIdentifier
 	 * @return the metadata URL
 	 */
-	public static String getHTMLMetadataURL(String gnBaseURL,
+	public static String getHTMLMetadataURL(String gnBaseURL, String gnVersion,
 			String mdIdentifier) {
 
-		String metadataURL = gnBaseURL + "/srv/en/main.home?uuid="
-				+ mdIdentifier;
+		String metadataURL = gnBaseURL;
+		
+		if(gnVersion.startsWith("2")){
+			metadataURL += "/srv/eng/main.home?uuid=";
+		}else if(gnVersion.startsWith("3")){
+			metadataURL += "/srv/eng/catalog.search#/metadata/";
+		}
+		metadataURL += mdIdentifier;
 		return metadataURL;
 	}
 
