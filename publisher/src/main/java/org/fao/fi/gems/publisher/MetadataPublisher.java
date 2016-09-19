@@ -30,7 +30,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import it.geosolutions.geonetwork.GNClient;
-import it.geosolutions.geonetwork.GN2Client;
+import it.geosolutions.geonetwork.GN26Client;
+import it.geosolutions.geonetwork.GN28Client;
 import it.geosolutions.geonetwork.GN3Client;
 import it.geosolutions.geonetwork.util.GNInsertConfiguration;
 import it.geosolutions.geonetwork.util.GNPriv;
@@ -71,8 +72,10 @@ public class MetadataPublisher {
 		// geonetwork connection
 		this.gnBaseURL = catalogueSettings.getUrl();
 		this.gnVersion = catalogueSettings.getVersion();
-		if(this.gnVersion.startsWith("2")){
-			client = new GN2Client(this.gnBaseURL, catalogueSettings.getUser(), catalogueSettings.getPassword());
+		if(this.gnVersion.startsWith("2.6")){
+			client = new GN26Client(this.gnBaseURL, catalogueSettings.getUser(), catalogueSettings.getPassword());
+		}else if(this.gnVersion.startsWith("2.8")){
+			client = new GN28Client(this.gnBaseURL, catalogueSettings.getUser(), catalogueSettings.getPassword());
 		}else if(this.gnVersion.startsWith("3")){
 			client = new GN3Client(this.gnBaseURL, catalogueSettings.getUser(), catalogueSettings.getPassword());
 		}else{

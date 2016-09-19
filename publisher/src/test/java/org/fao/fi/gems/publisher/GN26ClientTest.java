@@ -4,9 +4,9 @@ import java.io.File;
 import java.net.URISyntaxException;
 
 import it.geosolutions.geonetwork.GNClient;
-import it.geosolutions.geonetwork.GN2Client;
+import it.geosolutions.geonetwork.GN26Client;
 import it.geosolutions.geonetwork.util.GNSearchResponse.GNMetadata;
-import it.geosolutions.geonetwork.util.HTTPUtils;
+import it.geosolutions.geonetwork.util.GNInsertConfiguration;
 
 import org.junit.Assert;
 import org.junit.BeforeClass;
@@ -14,17 +14,22 @@ import org.junit.Ignore;
 import org.junit.Test;
 
 
+/**
+ * Geonetwork-Manager tests on GN 2.6 instance
+ * 
+ * @author eblondel
+ *
+ */
 @Ignore
-public class GN2ClientTest {
+public class GN26ClientTest {
 	
 	static GNClient client;
 	static String MD_ID;
 	static File MD_FILE;
 	
 	static String GN_URL = "url";
-	static String GN_USERNAME = "user";
-	static String GN_PASSWORD = "pwd";
-	
+	static String GN_USERNAME = "username";
+	static String GN_PASSWORD = "password";
 	
 	@BeforeClass
 	static public void configure(){
@@ -33,26 +38,11 @@ public class GN2ClientTest {
 		String url = GN_URL;
 		String user = GN_USERNAME;
 		String pwd = GN_PASSWORD;
-		client = new GN2Client(url, user, pwd);
+		client = new GN26Client(url, user, pwd);
 		
 		//metadata example
 		MD_ID = "fao-species-map-grn";
 		
-	}
-	
-	@Test
-	public void testConnection() throws Exception{
-		
-		HTTPUtils connection = new HTTPUtils(GN_USERNAME, GN_PASSWORD);
-		connection.setIgnoreResponseContentOnSuccess(false);
-		connection.setXmlContentType("application/xml");
-
-		GNMetadata md = MetadataPublisher.checkMetadataExistence(client, MD_ID);
-		String serviceURL = "http://www.fao.org/geonetwork/srv/eng/metadata.edit!?id="+md.getId();
-		String response = connection.get(serviceURL);
-		
-		Assert.assertEquals(200, connection.getLastHttpStatus());
-		Assert.assertNotNull(response);
 	}
 	
 	@Test
@@ -71,8 +61,12 @@ public class GN2ClientTest {
 	@Test
 	public void insertMetadata() throws Exception{	
 		MD_FILE = getResourceFile(MD_ID+".xml");
-		GNMetadata md = MetadataPublisher.checkMetadataExistence(client, MD_ID);
-		client.updateMetadata(md.getId(), MD_FILE);
+		GNInsertConfiguration cfg = new GNInsertConfiguration();
+		cfg.setCategory("datasets");
+		cfg.setGroup("1"); // group 1 is usually "all"
+		cfg.setStyleSheet("_none_");
+		cfg.setValidate(Boolean.FALSE);
+		client.insertMetadata(cfg, MD_FILE);
 	}
 	
 	@Test
