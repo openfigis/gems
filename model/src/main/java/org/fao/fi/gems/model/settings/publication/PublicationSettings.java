@@ -21,6 +21,8 @@ public class PublicationSettings{
 	private boolean actionData;
 	private boolean actionMetadata;
 	
+	private boolean linkedOpenData;
+	
 	private String codelistURL;
 	private String codelistParser;
 
@@ -90,6 +92,22 @@ public class PublicationSettings{
 	 */
 	public void setActionMetadata(boolean actionMetadata) {
 		this.actionMetadata = actionMetadata;
+	}
+
+
+	/**
+	 * @return the linkedOpenData
+	 */
+	public boolean isLinkedOpenData() {
+		return linkedOpenData;
+	}
+
+
+	/**
+	 * @param isLinkedOpenData
+	 */
+	public void setLinkedOpenData(boolean isLinkedOpenData) {
+		this.linkedOpenData = isLinkedOpenData;
 	}
 
 

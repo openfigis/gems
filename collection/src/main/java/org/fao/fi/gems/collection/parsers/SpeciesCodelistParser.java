@@ -139,13 +139,15 @@ public class SpeciesCodelistParser implements CodelistParser{
 						properties.put(SpeciesProperty.FIGIS, Arrays.asList(FigisId));
 						
 						//FLOD & WoRMS (inherited from FLOD)
-						FLODSpeciesEntity flodEntity = new FLODSpeciesEntity(alphacode);
-						if(flodEntity.content() != null){
-							properties.put(SpeciesProperty.FLOD, Arrays.asList(flodEntity.authorityUri()));
-							
-							if(flodEntity.wormsAphiaID() != null){//control because not all species in FLOD have worms info
-								properties.put(SpeciesProperty.WORMS, Arrays.asList(flodEntity.wormsAphiaID(), flodEntity.wormsScientificName()));
-							}	
+						if(config.getSettings().getPublicationSettings().isLinkedOpenData()) {
+							FLODSpeciesEntity flodEntity = new FLODSpeciesEntity(alphacode);
+							if(flodEntity.content() != null){
+								properties.put(SpeciesProperty.FLOD, Arrays.asList(flodEntity.authorityUri()));
+								
+								if(flodEntity.wormsAphiaID() != null){//control because not all species in FLOD have worms info
+									properties.put(SpeciesProperty.WORMS, Arrays.asList(flodEntity.wormsAphiaID(), flodEntity.wormsScientificName()));
+								}	
+							}
 						}
 						
 						//Others (habitat, style)

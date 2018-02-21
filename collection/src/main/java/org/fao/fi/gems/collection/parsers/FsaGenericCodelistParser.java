@@ -148,11 +148,13 @@ public abstract class FsaGenericCodelistParser implements CodelistParser {
 							Map<GeographicMetaObjectProperty, List<String>> properties = new HashMap<GeographicMetaObjectProperty, List<String>>();
 							properties.put(FsaProperty.FAO, Arrays.asList(Utils.buildMetadataIdentifier(owner, collection, fsa)));
 							
-							FLODFsaEntity flodEntity = new FLODFsaEntity(fsa);
-							if(flodEntity.content() != null){
-								properties.put(FsaProperty.FLOD, Arrays.asList(flodEntity.authorityUri()));
+							if(config.getSettings().getPublicationSettings().isLinkedOpenData()) {
+								FLODFsaEntity flodEntity = new FLODFsaEntity(fsa);
+								if(flodEntity.content() != null){
+									properties.put(FsaProperty.FLOD, Arrays.asList(flodEntity.authorityUri()));
+								}
 							}
-							
+								
 							//Fsa name & abstract
 							String fsaName = null;
 							URL fsURL = new URL("http://www.fao.org/fishery/xml/area/Area" + majorFsa);

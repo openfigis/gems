@@ -103,11 +103,13 @@ public class RfbCodelistParser implements CodelistParser{
 						properties.put(RfbProperty.FIGIS, Arrays.asList(fid));
 						
 						//FLOD
-						FLODRfbEntity flodEntity = new FLODRfbEntity(rfb);
-						if(flodEntity.content() != null){
-							properties.put(RfbProperty.FLOD, Arrays.asList(flodEntity.authorityUri()));
+						if(config.getSettings().getPublicationSettings().isLinkedOpenData()) {
+							FLODRfbEntity flodEntity = new FLODRfbEntity(rfb);
+							if(flodEntity.content() != null){
+								properties.put(RfbProperty.FLOD, Arrays.asList(flodEntity.authorityUri()));
+							}
 						}
-						
+							
 						//Style
 						properties.put(RfbProperty.STYLE, Arrays.asList(style));
 						

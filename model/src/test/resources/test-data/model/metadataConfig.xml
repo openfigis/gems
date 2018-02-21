@@ -105,7 +105,10 @@
 			<!-- actions -->
 			<action>PUBLISH</action>
 			<actionData>true</actionData>					
-			<actionMetadata>true</actionMetadata>					
+			<actionMetadata>true</actionMetadata>
+			
+			<!-- LOD interaction -->
+			<linkedOpenData>false</linkedOpenData>					
 
 			<!-- reference list for batch process -->
 			<codelistURL>http://www.organization.org/codelist</codelistURL>
