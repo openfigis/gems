@@ -51,7 +51,7 @@
 		
 		<!-- dependency versions -->
 		<version.sis>0.6-jdk7</version.sis>
-		<version.geotk>4.0.4</version.geotk>
+		<version.geotk>4.0-M4</version.geotk>
 		<version.gsman>1.7-SNAPSHOT</version.gsman>
 		<version.gnman>1.4-SNAPSHOT</version.gnman>
 		<version.jersey>2.13</version.jersey>
