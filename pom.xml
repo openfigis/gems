@@ -46,12 +46,12 @@
 	<!-- PROPERTIES -->
 	<properties>
 		<!-- gems -->
-		<gems.version>1.3-SNAPSHOT</gems.version>
+		<gems.version>1.3.0</gems.version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		
 		<!-- dependency versions -->
 		<version.sis>0.6-jdk7</version.sis>
-		<version.geotk>4.0-M4</version.geotk>
+		<version.geotk>4.0.4</version.geotk>
 		<version.gsman>1.7-SNAPSHOT</version.gsman>
 		<version.gnman>1.4-SNAPSHOT</version.gnman>
 		<version.jersey>2.13</version.jersey>
@@ -236,7 +236,17 @@
 	<!-- Repositories -->
 	<repositories>
 	
-		<!-- Apache -->
+		<!--  Nexus Geomatys -->
+		<repository>
+      		<id>geomatys</id>
+      		<name>Geomatys public repository</name>
+      		<url>http://nexus.geomatys.com/repository/geotoolkit</url>
+      		<snapshots>
+        		<enabled>true</enabled>
+      		</snapshots>
+    	</repository>
+	
+		<!-- Apache 
 		<repository>
 			<id>apache.snapshots</id>
 			<name>Apache Snapshot Repository</name>
@@ -244,18 +254,17 @@
 			<snapshots>
 				<enabled>true</enabled>
 			</snapshots>
-		</repository>
-
-		<!-- Geotoolkit -->
+		</repository>-->
+		<!-- Geotoolkit 
 		<repository>
-			<!-- Not needed for "*-geoapi-3.0" versions -->
+		 Not needed for "*-geoapi-3.0" versions 
 			<id>geotoolkit</id>
 			<name>Geotk repository</name>
 			<url>http://maven.geotoolkit.org/</url>
 			<snapshots>
 				<enabled>true</enabled>
 			</snapshots>
-		</repository>
+		</repository>-->
 
 		<!-- Geosolutions -->
 		<repository>
